@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const Room = require('../models/room-model');
 
-router.route('/').post(async (req, res) => {
+router.route('/createroom').post(async (req, res) => {
     try {
         const {user1id, user2id} = req.body;
         const existing1 = await Room.findOne({ user1id});
