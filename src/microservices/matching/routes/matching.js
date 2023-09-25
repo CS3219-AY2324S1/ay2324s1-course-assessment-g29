@@ -6,7 +6,7 @@ const MatchingService = require('../service/matching');
 
 const matchingService = new MatchingService();
 
-const collabService = "http://localhost:4000/room/createroom/"
+const collabService = "http://localhost:4000/room/createroom"
 
 router.route('/').post(async (req, res) => {
     if (matchingService.isEmpty()) {
