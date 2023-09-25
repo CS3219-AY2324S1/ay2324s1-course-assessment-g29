@@ -16,7 +16,7 @@ router.route('/').post(async (req, res) => {
     } else {
         const userid = matchingService.popQueue();
         if (userid) {
-            //await axios.post(collabServiceUrl, {user1Id: userid, user2Id: req.params.userid})
+            //await axios.post(collabServiceUrl, {user1id: userid, user1id: req.body.userid})
             res.json(`Matched with ${userid}`);
         } else {
             res.json(`No one is in the queue.`);
