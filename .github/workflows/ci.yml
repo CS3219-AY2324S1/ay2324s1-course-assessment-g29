@@ -30,6 +30,9 @@ jobs:
       - name: Run Standard Style Check
         run: npx standard
 
+      - name: Build
+        run: npm run build --if-present
+
       - name: Run Tests
         run: npm test # jest
       #   run: npm run test-ci # need to set up test-ci in package.json
