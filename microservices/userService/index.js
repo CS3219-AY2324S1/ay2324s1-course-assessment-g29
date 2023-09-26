@@ -36,7 +36,7 @@ function validateFields (reqBody, requiredFields) {
 };
 
 // User registration route
-app.post('/register', async (req, res) => {
+app.post('/user/register', async (req, res) => {
   try {
     validateFields(req.body, ['name', 'username', 'email', 'password'])
     const { name, username, email, password } = req.body
@@ -55,7 +55,7 @@ app.post('/register', async (req, res) => {
   }
 })
 
-app.post('/updateName', async (req, res) => {
+app.post('/user/updateName', async (req, res) => {
   try {
     validateFields(req.body, ['uid', 'name'])
     const { uid, name } = req.body
@@ -68,7 +68,7 @@ app.post('/updateName', async (req, res) => {
   }
 })
 
-app.post('/updatePassword', async (req, res) => {
+app.post('/user/updatePassword', async (req, res) => {
   try {
     validateFields(req.body, ['uid', 'password'])
     const { uid, password } = req.body
@@ -81,7 +81,7 @@ app.post('/updatePassword', async (req, res) => {
   }
 })
 
-app.post('/updatePicture', async (req, res) => {
+app.post('/user/updatePicture', async (req, res) => {
   // TODO: Store photo in Firestore
   try {
     validateFields(req.body, ['uid', 'photoUrl'])
@@ -95,7 +95,7 @@ app.post('/updatePicture', async (req, res) => {
   }
 })
 
-app.post('/deregister', async (req, res) => {
+app.post('/user/deregister', async (req, res) => {
   // TODO: Store photo in Firestore
   try {
     validateFields(req.body, ['uid'])
