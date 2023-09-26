@@ -12,16 +12,21 @@ router.route('/').post(async (req, res) => {
     if (matchingService.isEmpty()) {
         console.log("Joining Queue");
         matchingService.joinQueue("user1");
-        res.json(`Waiting for another person to join the queue`);
+        return res.json(`Waiting for another person to join the queue`);
     } else {
         const userid = matchingService.popQueue();
         if (userid) {
-            //await axios.post(collabServiceUrl, {user1id: userid, user1id: req.body.userid})
-            res.json(`Matched with ${userid}`);
+            const result = await axios.post(collabServiceUrl, {user1id: userid, user1id: req.body.userid})
+            if (result) {
+                return res.json({message: `Matched with ${userid}`});
+            } else {
+                return res.json(message: 'unexpected error, please rejoin the queue')
+            }
+            
         } else {
             res.json(`No one is in the queue.`);
         }
-    }
+    }  
 });
 
 module.exports = router;
