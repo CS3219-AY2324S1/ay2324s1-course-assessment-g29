@@ -8,52 +8,68 @@ const port = process.env.PORT || 2000;
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
-const users = {};
-const roomToBroadCaster = {};
+const roomIdToSocketId = {};
+const socketToUserId = {};
 const socketToRoom = {};
 
-/*
- * Removes disconnected user from arrays above
- *
- * @param {String} id Socket.Id of disconnected user
- *
- */
-function removeDisconnectedID(id) {
-
-    const roomID = socketToRoom[id];
-    socketToRoom[id] = null;
-    const newList = !users[roomID] ? []: users[roomID].filter(socket => socket !== id);
-    users[roomID] = newList;
+function disconnectFromSocket(socketid) {
+  const roomId = socketToRoom[socketid];
+  socketToRoom[socketid] = null;
+  socketToUserId[socketid] = null;
+  const newArray = roomIdToSocketId[roomId].filter(socket2id => socket2id !== socketid);
+  roomIdToSocketId[roomId] = newArray;
 }
 
 io.on('connection', (socket) => {
     
-    socket.on('join collab', ({ userid, roomid }, callback) => {
-        const { error, user } = addUser({ id: socket.id , name , roomid });
-    
-        if(error) return callback(error);
-    
-        socket.join(user.room);
-    
-        socket.emit('message', { user: 'admin', text: `Welcome to the room ${user.name}!`});
-        socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
-    
-        io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
-    
-        callback();
-      });
-
-    
-    socket.on('disconnect', () => {
-        
-        const user = removeUser(socket.id);
-
-        if(user) {
-        io.to(user.room).emit('message', { user: 'Admin', text: `${user.name} has left.` });
+    socket.on('join room', ({ userid, roomid }, callback) => {
+      try {
+        if (!roomIdToSocket[roomid]) {
+          //still waiting for match
+          const newUserList = [socket.id];
+          roomIdToSocketId[roomid] = newUserList;
+          socketToUserId[socket.id] = userid; 
+          socketToRoom[socket.id] = roomid;
+          callback();
+          
+        } else {
+          const socket1id = roomIdToSocketId[roomid][0];
+          roomIdToSocketId[roomid].push(socket.id);
+          socketToRoom[socket.id] = roomid;
+          socketToUserId[socket.id] = userid; 
+          io.to(socket1id).emit('matching success', {matchedUserId: userid});
+          io.to(socket.id).emit('matching success', {matchedUserId: socketToUserId[socket1id]});
+          callback();
         }
-        const collabId = roomToCollab[socketToRoom[socket.id]];
-        removeDisconnectedID(socket.id);
-        socket.to(collabId).emit("disconnectPeer", socket.id);
+
+      } catch (error) {
+        return callback(error);
+      }
+    });
+
+    socket.on('message', ({ userid, message }, callback) => {
+      try {
+        const roomId = socketToRoom[socket.id];
+        for (const socket2id in roomIdToSocketId[roomId]) {
+          if (socket2id != socket.id) {
+            io.to(socket2id).emit('message', {message});
+          }
+        }
+        callback();
+      } catch (error) {
+        return callback(error);
+      }
+    });
+
+
+    socket.on('disconnect', () => {
+      const roomId = socketToRoom[socket.id];
+      for (const socket2id in roomIdToSocketId[roomId]) {
+        if (socket2id != socket.id) {
+          io.to(socket2id).emit('DisconnectPeer');
+        }
+      }
+      disconnectFromSocket(socket.id);
     })
 });
 

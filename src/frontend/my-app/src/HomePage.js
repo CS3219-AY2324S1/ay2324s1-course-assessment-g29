@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { setRoomId } from './MatchingSlice'
+import { setRoomId, setUserId } from './MatchingSlice'
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Container';
@@ -32,6 +32,7 @@ function HomePage(props) {
             });
 
             dispatch(setRoomId(response.data.roomId))
+            dispatch(setUserId(userId));
             setSuccessMessage(response.data.message);
             setShowSuccessAlert(true);
             navigate('/collab')
