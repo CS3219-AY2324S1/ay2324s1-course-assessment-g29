@@ -14,25 +14,25 @@ function HomePage(props) {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [userId, setUserId] = useState('');
+    const [currentUserId, setCurrentUserId] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const joinQueue = async () => {
-        if (!userId) {
+        if (!currentUserId) {
             setErrorMessage('Enter a user id first')
             setShowErrorAlert(true);
             return;
         }
-        console.log("hel")
         try {
             console.log("Try Matching")
             const response = await axios.post('http://localhost:4000/match/', {
-                user1id: userId,
+                user1id: currentUserId,
             });
 
-            dispatch(setRoomId(response.data.roomId))
-            dispatch(setUserId(userId));
+            dispatch(setRoomId(response.data.roomId));
+            
+            dispatch(setUserId(currentUserId));
             setSuccessMessage(response.data.message);
             setShowSuccessAlert(true);
             navigate('/collab')
@@ -55,7 +55,7 @@ function HomePage(props) {
                 ) : (<></>)}
                 
                 <Box mt={2}>
-                <TextField value={userId} onChange={(e) => setUserId(e.target.value)} id="outlined-basic" label="UserId" variant="outlined" />
+                <TextField value={currentUserId} onChange={(e) => setCurrentUserId(e.target.value)} id="outlined-basic" label="UserId" variant="outlined" />
                 <Button variant="contained" onClick={joinQueue}>Start Match</Button>
                 </Box>
             </Container>
