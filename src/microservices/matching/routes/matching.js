@@ -6,19 +6,18 @@ const MatchingService = require('../service/matching');
 
 const matchingService = new MatchingService();
 
-const collabServiceUrl = "http://localhost:4000/room/"
+const collabServiceUrl = "http://localhost:8000/room/"
 
 router.route('/').post(async (req, res) => {
     if (matchingService.isEmpty()) {
         console.log("Joining Queue");
-        const {userid} = req.body;
-        matchingService.joinQueue(userid);
+        const {user1id} = req.body;
+        matchingService.joinQueue(user1id);
         try {
             //getting roomID
-            const result = await axios.post(collabServiceUrl+"createroom", {user1id: userid});
+            const result = await axios.post(collabServiceUrl+"createroom", {user1id});
             res.status(200).json({roomId: result.data.roomId, message: `Waiting for another person to join the queue`});
         } catch (error) {
-            console.log(error);
             return res.status(400).json({message: error.response.data.message})
         }
     } else {

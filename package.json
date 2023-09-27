@@ -5,5 +5,8 @@
   },
   "scripts": {
     "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "react": "^18.2.0"
   }
 }
