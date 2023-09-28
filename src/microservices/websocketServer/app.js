@@ -16,12 +16,11 @@ function disconnectFromSocket(socketid) {
   const roomId = socketToRoom[socketid];
   socketToRoom[socketid] = null;
   socketToUserId[socketid] = null;
-  const newArray = roomIdToSocketId[roomId].filter(socket2id => socket2id !== socketid);
+  const newArray = roomIdToSocketId[roomId]?roomIdToSocketId[roomId].filter(socket2id => socket2id !== socketid): null;
   roomIdToSocketId[roomId] = newArray;
 }
 
 io.on('connection', (socket) => {
-    console.log(`new user ${socket.id}`)
     socket.on('JoinRoom', ({ userid, roomid }, callback) => {
       console.log(`user ${userid} joining room ${roomid}`)
       try {
@@ -56,10 +55,13 @@ io.on('connection', (socket) => {
       }
     });
 
-    socket.on('Message', ({ userid, message }, callback) => {
+    socket.on('Message', ({ message }, callback) => {
       try {
+        console.log(socket.id)
+        console.log(message)
         const roomId = socketToRoom[socket.id];
-        for (const socket2id in roomIdToSocketId[roomId]) {
+        for (const index in roomIdToSocketId[roomId]) {
+          const socket2id = roomIdToSocketId[roomId][index]
           if (socket2id != socket.id) {
             io.to(socket2id).emit('Message', {message});
           }
@@ -72,8 +74,10 @@ io.on('connection', (socket) => {
 
 
     socket.on('disconnect', () => {
+      console.log('disconnecting other peer')
       const roomId = socketToRoom[socket.id];
-      for (const socket2id in roomIdToSocketId[roomId]) {
+      for (const index in roomIdToSocketId[roomId]) {
+        const socket2id = roomIdToSocketId[roomId][index]
         if (socket2id != socket.id) {
           io.to(socket2id).emit('DisconnectPeer');
         }

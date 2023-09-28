@@ -1,10 +1,11 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import io from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux'
 import ScrollToBottom from 'react-scroll-to-bottom';
 import Alert from '@mui/material/Alert';
 import Button from "@mui/material/Button";
 import Card from '@mui/material/Card';
+import Grid from "@mui/material/Grid";
 import SendIcon from '@mui/icons-material/Send';
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -26,20 +27,20 @@ function CollabPage () {
     const [errorMessage, setErrorMessage] = useState('');
     const [isMatched, setIsMatched] = useState(false);
     const [message, setMessage] = useState('');
-    const [messages, setMessages] = useState(false);
+    const [messages, setMessages] = useState([]);
     const userid = useSelector(selectUserid);
     const matchedUserid = useSelector(selectMatchedUserid);
     const roomid = useSelector(selectRoomid);
     const dispatch = useDispatch();
 
-    let socket;
+    const socket = useRef();
 
     useEffect(() => {
-        socket = io(SOCKETSERVER, connectionOptions);
+        socket.current = io(SOCKETSERVER, connectionOptions);
 
-        socket.on('connect', () => {
+        socket.current.on('connect', () => {
             console.log('connecting to websocket server');
-            socket.emit('JoinRoom', {userid, roomid} , (error) => {
+            socket.current.emit('JoinRoom', {userid, roomid} , (error) => {
                 if(error) {
                     alert(error);
                 }
@@ -47,60 +48,46 @@ function CollabPage () {
             console.log('joined waiting room');
         });
 
-        socket.on("MatchSuccess", ({ matchedUserId }) => {
+        //disconnect from socket when component unmounts
+        return () => {
+            if (socket.current) {
+                socket.current.disconnect();
+                socket.current.off();
+            }
+        
+        }
+
+    }, [userid, roomid, dispatch]);  
+
+    useEffect(() => {
+        
+        socket.current.on("MatchSuccess", ({ matchedUserId }) => {
             setIsMatched(true);
             dispatch(setMatchedUserId(matchedUserId));
         });
 
-        socket.on('Message', (message) => {
-            setMessages(messages => [ ...messages, message]);
+        socket.current.on('Message', (message) => {
+            const messageString = `${matchedUserid} : ${message.message}`;
+            setMessages(messages => [ ...messages, messageString]);
+            console.log(messageString)
         });
 
-        socket.on('DisconnectPeer', (message) => {
+        socket.current.on('DisconnectPeer', (message) => {
+            console.log('Hi')
             setErrorMessage('Peer has disconnected')
             setShowErrorAlert(true);
         });
 
-        //disconnect from socket when component unmounts
-        return () => {
-            socket.disconnect();
-
-            socket.off();
-        }
-
-    }, []);  
+    }, [messages, dispatch]);  
 
     const sendMessage = (event) => {
         event.preventDefault();
-    
+        const messageString = `${userid} : ${message}`;
+        setMessages(messages => [ ...messages, messageString]);
         if (message) {
-            socket.emit('Message', message, () => setMessage(''));
+            socket.current.emit('Message', {message}, () => setMessage(''));
         }
     } 
-    
-    const chatComponent = () => {
-        return (
-            <>
-                <Card>
-                    <ScrollToBottom className="messages">
-                            {messages.map((message, i) => <div key={i}><Typography>{message}</Typography></div>)}
-                    </ScrollToBottom>
-                    <TextField
-                        id="outlined-multiline-flexible"
-                        label="Send A Message"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        multiline
-                        maxRows={4}
-                    />
-                    <Button variant="contained" onClick={sendMessage} endIcon={<SendIcon />}>
-                        Send
-                    </Button>
-                    <br />
-                </Card>
-            </>
-        )
-    }
 
     return (
         <>
@@ -110,9 +97,34 @@ function CollabPage () {
         { isMatched ? 
             <>
                 <Container>
-                    <Typography variant="h3" component="h2">
-                        Matched with : {matchedUserid}
-                    </Typography>
+                    <Grid>
+                        <Typography variant="h3" component="h2">
+                            Matched with : {matchedUserid}
+                        </Typography>
+                    </Grid>
+                    <Grid>
+                        <Card>
+                            <ScrollToBottom className="messages">
+                            {messages.map((message, i) => (
+                                <div key={i}>
+                                <Typography>{message}</Typography>
+                                </div>
+                            ))}
+                            </ScrollToBottom>
+                            <TextField
+                                id="outlined-multiline-flexible"
+                                label="Send A Message"
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                multiline
+                                maxRows={4}
+                            />
+                            <Button variant="contained" onClick={sendMessage} endIcon={<SendIcon />}>
+                                Send
+                            </Button>
+                            <br />
+                        </Card>
+                    </Grid>
                 </Container>
             </>
             :
