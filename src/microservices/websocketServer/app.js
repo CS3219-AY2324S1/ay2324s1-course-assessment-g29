@@ -39,12 +39,16 @@ io.on('connection', (socket) => {
         const roomSockets = roomIdToSocketId[roomid];
         const filtered = roomSockets.filter(socket2id => socket2id !== socket.id);
         if (filtered.length > 0) {
-          const socket1id = roomIdToSocketId[roomid][0];
-          roomIdToSocketId[roomid].push(socket.id);
+          const socket1id = filtered[0];
+          const filtered2 = roomSockets.filter(socket2id => socket2id == socket.id);
+          if (filtered2 == 0) {
+            roomIdToSocketId[roomid].push(socket.id);
+          }
           socketToRoom[socket.id] = roomid;
           socketToUserId[socket.id] = userid; 
           io.to(socket1id).emit('MatchSuccess', {matchedUserId: userid});
           io.to(socket.id).emit('MatchSuccess', {matchedUserId: socketToUserId[socket1id]});
+          console.log(`Match Success between ${userid} and ${socketToUserId[socket1id]}`)
           callback();
         } else {
           callback();
@@ -63,6 +67,7 @@ io.on('connection', (socket) => {
         for (const index in roomIdToSocketId[roomId]) {
           const socket2id = roomIdToSocketId[roomId][index]
           if (socket2id != socket.id) {
+            console.log("hi")
             io.to(socket2id).emit('Message', {message});
           }
         }

@@ -30,6 +30,8 @@ function CollabPage () {
     const [messages, setMessages] = useState([]);
     const userid = useSelector(selectUserid);
     const matchedUserid = useSelector(selectMatchedUserid);
+    const matchedUseridRef = useRef(matchedUserid);
+    const [localMatchedId, setLocalMatchedId] = useState('')
     const roomid = useSelector(selectRoomid);
     const dispatch = useDispatch();
 
@@ -48,28 +50,33 @@ function CollabPage () {
             console.log('joined waiting room');
         });
 
+        socket.current.on("MatchSuccess", ({ matchedUserId }) => {
+            setIsMatched(true);
+            dispatch(setMatchedUserId(matchedUserId));
+            matchedUseridRef.current = matchedUserId;
+            console.log(matchedUserId)
+        
+        });
+
         //disconnect from socket when component unmounts
         return () => {
             if (socket.current) {
                 socket.current.disconnect();
+                dispatch(setMatchedUserId(''))
+                matchedUseridRef.current = '';
                 socket.current.off();
             }
         
         }
 
-    }, [userid, roomid, dispatch]);  
+    }, [SOCKETSERVER]);  
 
     useEffect(() => {
         
-        socket.current.on("MatchSuccess", ({ matchedUserId }) => {
-            setIsMatched(true);
-            dispatch(setMatchedUserId(matchedUserId));
-        });
 
         socket.current.on('Message', (message) => {
-            const messageString = `${matchedUserid} : ${message.message}`;
+            const messageString = `${matchedUseridRef.current} : ${message.message}`;
             setMessages(messages => [ ...messages, messageString]);
-            console.log(messageString)
         });
 
         socket.current.on('DisconnectPeer', (message) => {
@@ -78,7 +85,7 @@ function CollabPage () {
             setShowErrorAlert(true);
         });
 
-    }, [messages, dispatch]);  
+    }, []);  
 
     const sendMessage = (event) => {
         event.preventDefault();
