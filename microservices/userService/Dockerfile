@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your Express.js app is listening on
-EXPOSE 3000
+EXPOSE 3001
 
 # Command to run the application
-CMD ["node", "index.js"]
+CMD ["node", "userService.js"]
