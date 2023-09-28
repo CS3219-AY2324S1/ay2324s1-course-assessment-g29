@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import axios from 'axios';
+import axios from 'axios'
 
-
-function Signup() {
+function Signup () {
   const [displayName, setDisplayName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -10,10 +9,9 @@ function Signup() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
   const checkPasswords = (password1, password2) => {
-    if (password1 != password2) {
-      throw new Error("Passwords do not match")
+    if (password1 !== password2) {
+      throw new Error('Passwords do not match')
     }
-    return
   }
   const handleSignUp = async (e) => {
     e.preventDefault()
@@ -21,7 +19,7 @@ function Signup() {
     try {
       checkPasswords(password, passwordConfirmation)
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:3001/user/register', { name: displayName, username: username, email: email, password: password })
+        axios.post('http://localhost:3001/user/register', { name: displayName, username, email, password })
           .then((response) => {
             console.log('Signup successful')
           })

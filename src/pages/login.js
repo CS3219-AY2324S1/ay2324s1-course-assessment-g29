@@ -1,9 +1,9 @@
 import { initFirebase } from 'configs/firebase.js'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
-function Login() {
+function Login () {
   const app = initFirebase()
   console.log(app)
   const auth = getAuth()
@@ -23,10 +23,10 @@ function Login() {
     }
   }
 
-  let navigate = useNavigate();
+  const navigate = useNavigate()
   const routeChangeSignup = () => {
-    let path = '/signup';
-    navigate(path);
+    const path = '/signup'
+    navigate(path)
   }
 
   return (
