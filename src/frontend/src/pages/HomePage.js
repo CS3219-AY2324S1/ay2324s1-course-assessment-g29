@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { setRoomId, setUserId } from './MatchingSlice'
+import { setRoomId, setUserId } from '../redux/MatchingSlice'
 import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Container';

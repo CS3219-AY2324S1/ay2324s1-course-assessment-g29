@@ -1,8 +1,8 @@
 import { Container } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './Navbar'
-import HomePage from './HomePage';
-import CollabPage from './CollabPage';
+import Navbar from './components/Navbar'
+import HomePage from './pages/HomePage';
+import CollabPage from './pages/CollabPage';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Navbar/>
         <Container>
           <Routes>
-            <Route path="/" exact element={<HomePage />} />
+            <Route path="/home" exact element={<HomePage />} />
             <Route path="/collab" exact element={<CollabPage/>}/>
           </Routes>
       </Container>

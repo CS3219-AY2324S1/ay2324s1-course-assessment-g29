@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  matchingservice:
+    build:
+      context: ./src/microservices/matching
+      dockerfile: dockerfile-matching
+    networks:
+      - some-net
+    ports:
+      - '4000:4000' 
+      
+  collabservice:
+    build:
+      context: ./src/microservices/collabService
+      dockerfile: dockerfile-collab
+    networks:
+      - some-net
+    ports:
+      - '8000:8000'
+
+  websocketserver:
+    build:
+      context: ./src/microservices/websocketServer
+      dockerfile: dockerfile-websocket
+    networks:
+      - some-net
+    ports:
+      - '2000:2000'  
+
+  frontend:
+    build:
+      context: ./src/frontend/
+      dockerfile: dockerfile-frontend
+    ports:
+     - '3000:3000'  
+    networks:
+      - some-net
+
+networks:
+  some-net:
+    name: peerprep_network
