@@ -10,8 +10,8 @@ const collabServiceUrl = "http://localhost:8000/room/"
 
 router.route('/').post(async (req, res) => {
     if (matchingService.isEmpty()) {
-        console.log("Joining Queue");
         const {user1id} = req.body;
+        console.log(`${user1id} Joining Queue`);
         matchingService.joinQueue(user1id);
         try {
             //getting roomID
@@ -22,8 +22,14 @@ router.route('/').post(async (req, res) => {
         }
     } else {
         const user1id = matchingService.popQueue();
+        const user2id = req.body.user1id;
+        if (user1id == user2id) {
+            //same person rejoin
+            matchingService.joinQueue(user1id);
+            return res.status(200).json({message: "Waiting for another person to join the queue"});
+        }
+        console.log(`${user2id} joining room with ${user1id}`)
         if (user1id) {
-            const user2id = req.body.userid;
             try {
                 const result = await axios.post(collabServiceUrl+"joinroom", {user1id, user2id})
                 res.status(200).json({roomId: result.data.roomId, message: `Matched with ${user1id}`});

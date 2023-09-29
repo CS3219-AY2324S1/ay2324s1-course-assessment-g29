@@ -2,15 +2,17 @@ const express = require('express');
 const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
+const cors = require('cors');
 const port = process.env.PORT || 2000;
 
-
-  const app = express();
-  const server = createServer(app);
-  const io = new Server(server);
-  const roomIdToSocketId = {};
-  const socketToUserId = {};
-  const socketToRoom = {};
+const collabServiceUrl = "http://localhost:8000/room/"
+const app = express();
+app.use(cors());
+const server = createServer(app);
+const io = new Server(server);
+const roomIdToSocketId = {};
+const socketToUserId = {};
+const socketToRoom = {};
 
 function disconnectFromSocket(socketid) {
   const roomId = socketToRoom[socketid];
@@ -78,7 +80,7 @@ io.on('connection', (socket) => {
     });
 
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
       console.log('disconnecting other peer')
       const roomId = socketToRoom[socket.id];
       for (const index in roomIdToSocketId[roomId]) {
