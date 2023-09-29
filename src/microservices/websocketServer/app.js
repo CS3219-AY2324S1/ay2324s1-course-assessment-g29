@@ -5,7 +5,6 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const port = process.env.PORT || 2000;
 
-const collabServiceUrl = "http://localhost:8000/room/"
 const app = express();
 app.use(cors());
 const server = createServer(app);

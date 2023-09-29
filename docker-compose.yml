@@ -5,6 +5,8 @@ services:
     build:
       context: ./src/microservices/matching
       dockerfile: dockerfile-matching
+    depends_on:
+      - collabservice
     networks:
       - some-net
     ports:
@@ -32,6 +34,10 @@ services:
     build:
       context: ./src/frontend/
       dockerfile: dockerfile-frontend
+    depends_on:
+      - collabservice
+      - websocketserver
+      - matchingservice
     ports:
      - '3000:3000'  
     networks:
