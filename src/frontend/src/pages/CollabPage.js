@@ -131,17 +131,17 @@ function CollabPage () {
               </Card>
             </Grid>
           </Container>
-          </>
+        </>
         : (
-        <>
+          <>
           <Container>
             <Typography variant='h3' component='h2'>
               Awaiting Match
             </Typography>
             <CircularProgress />
           </Container>
-        </>
-        )}
+          </>
+          )}
     </>
   )
 }
