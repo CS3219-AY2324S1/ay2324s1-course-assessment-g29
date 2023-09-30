@@ -43,7 +43,7 @@ router.route('/leaveroom').post(async (req, res) => {
     const existing1 = await Room.findOneAndRemove({ user1id: userid })
     if (existing1) {
       return res.status(200).json({ message: 'Successfully left room' })
-    } 
+    }
     const existing2 = await Room.findOne({ user2id: userid })
     if (existing2) {
       existing2.user1id = existing2.user2id
