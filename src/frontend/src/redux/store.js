@@ -1,5 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { combineReducers } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import matchReducer from './MatchingSlice'
 import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
@@ -10,7 +9,7 @@ const persistConfig = {
   storage: storageSession
 }
 
-const rootReducer = combineReducers({ 
+const rootReducer = combineReducers({
   match: matchReducer
 })
 
@@ -21,5 +20,5 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: [thunk]
 })
-  
+
 export const persistor = persistStore(store)

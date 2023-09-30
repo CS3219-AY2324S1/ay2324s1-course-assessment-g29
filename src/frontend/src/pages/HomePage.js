@@ -38,23 +38,23 @@ function HomePage () {
       setErrorMessage(error.message)
       setShowErrorAlert(true)
     }
-  }  
+  }
   return (
     <>
       <Container>
-        {showSuccessAlert ? 
-          (
+        {showSuccessAlert 
+          ? (
             <Alert onClose={() => setShowSuccessAlert(false)}>{successMessage}</Alert>
-          ) : 
-          (
+          ) 
+          : (
             <>
             </>
-            )}
-        {showErrorAlert ? 
-          (
+          )}
+        {showErrorAlert 
+          ? (
             <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          ) : 
-          (
+          ) 
+          : (
             <>
             </>
           )}        

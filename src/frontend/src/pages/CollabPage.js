@@ -40,7 +40,7 @@ function CollabPage () {
 
     socket.current.on('connect', () => {
       console.log('connecting to websocket server')
-      socket.current.emit('JoinRoom', {userid, roomid}, (error) => { 
+      socket.current.emit('JoinRoom', { userid, roomid }, (error) => {
         if (error) {
           setErrorMessage(error)
           setShowErrorAlert(true)
@@ -70,7 +70,7 @@ function CollabPage () {
   useEffect(() => {
     socket.current.on('Message', (message) => {
       const messageString = `${matchedUseridRef.current} : ${message.message}`
-      setMessages(messages => [ ...messages, messageString])
+      setMessages(messages => [...messages, messageString])
     })
 
     socket.current.on('DisconnectPeer', (message) => {
@@ -85,22 +85,24 @@ function CollabPage () {
     const messageString = `${userid} : ${message}`
     setMessages(messages => [...messages, messageString])
     if (message) {
-      socket.current.emit('Message', {message}, () => setMessage(''))
+      socket.current.emit('Message', { message }, () => setMessage(''))
     }
   }
 
   return (
     <>
-      { showErrorAlert ? 
-        (
+      {showErrorAlert
+        ? (
           <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-        ) : 
+        ) 
+        : 
         (
           <>
           </>
         )
       }
-      { isMatched ? 
+      {isMatched 
+        ? 
         <>
           <Container>
             <Grid>
