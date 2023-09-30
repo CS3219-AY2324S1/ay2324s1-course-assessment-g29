@@ -100,14 +100,15 @@ function CollabPage () {
           </>
           )}
       {isMatched
-        ? <>
-          <Container>
-            <Grid>
-              <Typography variant='h3' component='h2'>
-                Matched with : {matchedUserid}
-              </Typography>
-            </Grid>
-            <Grid>
+        ? (
+          <>
+            <Container>
+              <Grid>
+                <Typography variant='h3' component='h2'>
+                  Matched with : {matchedUserid}
+                </Typography>
+              </Grid>
+              <Grid>
               <Card>
                 <ScrollToBottom className='messages'>
                   {messages.map((message, i) => (
@@ -129,9 +130,9 @@ function CollabPage () {
                 </Button>
                 <br />
               </Card>
-            </Grid>
-          </Container>
-        </>
+              </Grid>
+            </Container>
+          </>)
         : (
           <>
             <Container>
