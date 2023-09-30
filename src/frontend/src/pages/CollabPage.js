@@ -109,30 +109,31 @@ function CollabPage () {
                 </Typography>
               </Grid>
               <Grid>
-              <Card>
-                <ScrollToBottom className='messages'>
-                  {messages.map((message, i) => (
-                    <div key={i}>
-                      <Typography>{message}</Typography>
-                    </div>
-                  ))}
-                </ScrollToBottom>
-                <TextField
-                  id='outlined-multiline-flexible'
-                  label='Send A Message'
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  multiline
-                  maxRows={4}
-                />
-                <Button variant='contained' onClick={sendMessage} endIcon={<SendIcon />}>
-                  Send
-                </Button>
-                <br />
-              </Card>
+                <Card>
+                  <ScrollToBottom className='messages'>
+                    {messages.map((message, i) => (
+                      <div key={i}>
+                        <Typography>{message}</Typography>
+                      </div>
+                    ))}
+                  </ScrollToBottom>
+                  <TextField
+                    id='outlined-multiline-flexible'
+                    label='Send A Message'
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    multiline
+                    maxRows={4}
+                  />
+                  <Button variant='contained' onClick={sendMessage} endIcon={<SendIcon />}>
+                    Send
+                  </Button>
+                  <br />
+                </Card>
               </Grid>
             </Container>
-          </>)
+          </>
+          )
         : (
           <>
             <Container>
