@@ -12,7 +12,7 @@ const Model = require('../models/model')
 router.post('/post', async (req, res) => {
   const data = new Model({
     name: req.body.name,
-    description: req.body.description,
+    description: req.body.description
   })
 
   try {
