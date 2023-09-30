@@ -94,16 +94,14 @@ function CollabPage () {
       {showErrorAlert
         ? (
           <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-        ) 
-        : 
-        (
+          )
+        :
+          (
           <>
           </>
-        )
-      }
-      {isMatched 
-        ? 
-        <>
+          )}
+      {isMatched
+        ? <>
           <Container>
             <Grid>
               <Typography variant='h3' component='h2'>
@@ -124,7 +122,7 @@ function CollabPage () {
                   label='Send A Message'
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  multiline 
+                  multiline
                   maxRows={4}
                 />
                 <Button variant='contained' onClick={sendMessage} endIcon={<SendIcon />}>
@@ -141,7 +139,7 @@ function CollabPage () {
             <Typography variant='h3' component='h2'>
               Awaiting Match
             </Typography>
-            <CircularProgress/>
+            <CircularProgress />
           </Container>
         </>
       }

@@ -1,6 +1,5 @@
 const express = require('express')
 const { createServer } = require('node:http')
-const { join } = require('node:path')
 const { Server } = require('socket.io')
 const cors = require('cors')
 const port = process.env.PORT || 2000
@@ -13,11 +12,11 @@ const roomIdToSocketId = {}
 const socketToUserId = {}
 const socketToRoom = {}
 
-function disconnectFromSocket(socketid) {
+function disconnectFromSocket (socketid) {
   const roomId = socketToRoom[socketid]
   socketToRoom[socketid] = null
   socketToUserId[socketid] = null
-  const newArray = roomIdToSocketId[roomId]?roomIdToSocketId[roomId].filter(socket2id => socket2id !== socketid): null
+  const newArray = roomIdToSocketId[roomId] ? roomIdToSocketId[roomId].filter(socket2id => socket2id !== socketid) : null
   roomIdToSocketId[roomId] = newArray
 }
 
@@ -38,8 +37,8 @@ io.on('connection', (socket) => {
       const filtered = roomSockets.filter(socket2id => socket2id !== socket.id)
       if (filtered.length > 0) {
         const socket1id = filtered[0]
-        const filtered2 = roomSockets.filter(socket2id => socket2id == socket.id)
-        if (filtered2 == 0) {
+        const filtered2 = roomSockets.filter(socket2id => socket2id === socket.id)
+        if (filtered2 === 0) {
           roomIdToSocketId[roomid].push(socket.id)
         }
         socketToRoom[socket.id] = roomid
@@ -63,7 +62,7 @@ io.on('connection', (socket) => {
       const roomId = socketToRoom[socket.id]
       for (const index in roomIdToSocketId[roomId]) {
         const socket2id = roomIdToSocketId[roomId][index]
-        if (socket2id != socket.id) {
+        if (socket2id !== socket.id) {
           console.log('hi')
           io.to(socket2id).emit('Message', { message })
         }
@@ -74,13 +73,12 @@ io.on('connection', (socket) => {
     }
   })
 
-
   socket.on('disconnect', async () => {
     console.log('disconnecting other peer')
     const roomId = socketToRoom[socket.id]
     for (const index in roomIdToSocketId[roomId]) {
       const socket2id = roomIdToSocketId[roomId][index]
-      if (socket2id != socket.id) {
+      if (socket2id !== socket.id) {
         io.to(socket2id).emit('DisconnectPeer')
       }
     }
