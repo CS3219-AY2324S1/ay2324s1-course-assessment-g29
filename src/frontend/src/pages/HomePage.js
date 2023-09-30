@@ -45,21 +45,21 @@ function HomePage () {
         {showSuccessAlert
           ? (
             <Alert onClose={() => setShowSuccessAlert(false)}>{successMessage}</Alert>
-          ) 
+            )
           :
-          (
+            (
             <>
             </>
-          )}
+            )}
         {showErrorAlert
           ? (
             <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
+            )
           :
-          (
+            (
             <>
             </>
-          )}
+            )}
         <Box mt={2}>
           <TextField value={currentUserId} onChange={(e) => setCurrentUserId(e.target.value)} id='outlined-basic' label='UserId' variant='outlined' />
           <Button variant='contained' onClick={joinQueue}>Start Match</Button>

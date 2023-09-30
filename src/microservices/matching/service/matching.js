@@ -1,23 +1,23 @@
 const Queue = require('queue-fifo')
 
 class MatchingService {
-  constructor() {
+  constructor () {
     this.userQueue = new Queue()
   }
 
-  joinQueue(userid) {
+  joinQueue (userid) {
     this.userQueue.enqueue(userid)
   }
 
-  popQueue() {
+  popQueue () {
     if (this.isEmpty()) {
       // Return null or another appropriate value when the queue is empty
-        return null
+      return null
     }
     return this.userQueue.dequeue()
   }
 
-  isEmpty() {
+  isEmpty () {
     return this.userQueue.isEmpty()
   }
 }

@@ -45,17 +45,17 @@ router.route('/leaveroom').post(async (req, res) => {
       return res.status(200).json({ message: 'Successfully left room' })
     } 
     const existing2 = await Room.findOne({ user2id: userid })
-    if (existing2)  {
+    if (existing2) {
       existing2.user1id = existing2.user2id
       existing2.user2id = ''
       await existing2.save()
       return res.status(200).json({ message: 'Successfully left room' })
     }
     return res.status(200).json({ message: 'Successfully left room' })
-    } catch (error) {
-      console.log(error)
-      res.status(400).json({ message:'Unexpected Error' })
-    }
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({ message: 'Unexpected Error' })
+  }
 })
 
 module.exports = router

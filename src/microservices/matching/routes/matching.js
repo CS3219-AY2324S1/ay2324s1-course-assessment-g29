@@ -38,7 +38,7 @@ router.route('/').post(async (req, res) => {
       } catch (error) {
         console.log(error)
         return res.status(400).json({ message: error.response.data.message })
-      }    
+      }
     } else {
       res.status(400).json('Unexpected error. Please rejoin queue.')
     }

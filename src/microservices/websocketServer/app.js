@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
         socketToUserId[socket.id] = userid
         socketToRoom[socket.id] = roomid
         callback()
-      } 
+      }
       const roomSockets = roomIdToSocketId[roomid]
       const filtered = roomSockets.filter(socket2id => socket2id !== socket.id)
       if (filtered.length > 0) {
