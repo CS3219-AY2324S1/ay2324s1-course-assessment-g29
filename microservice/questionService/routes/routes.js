@@ -9,7 +9,7 @@ module.exports = router
 const Model = require('../models/model')
 
 // Post Method
-router.post('/post', async (req, res) => {
+router.post('/question/post', async (req, res) => {
   const data = new Model({
     name: req.body.name,
     description: req.body.description
@@ -24,7 +24,7 @@ router.post('/post', async (req, res) => {
 })
 
 // Get all Method
-router.get('/getAll', async (req, res) => {
+router.get('/question/getAll', async (req, res) => {
   try {
     const data = await Model.find()
     res.json(data)
@@ -34,7 +34,7 @@ router.get('/getAll', async (req, res) => {
 })
 
 // Get by Name Method
-router.get('/getOne/:name', async (req, res) => {
+router.get('/question/getOne/:name', async (req, res) => {
   try {
     const data = await Model.find({ name: req.params.name })
     res.json(data)
@@ -44,7 +44,7 @@ router.get('/getOne/:name', async (req, res) => {
 })
 
 // Update by Name Method
-router.patch('/update/:name', async (req, res) => {
+router.patch('/question/update/:name', async (req, res) => {
   try {
     const name = req.params.name
     const updatedData = req.body
@@ -63,7 +63,7 @@ router.patch('/update/:name', async (req, res) => {
 })
 
 // Delete by Name Method
-router.delete('/delete/:name', async (req, res) => {
+router.delete('/question/delete/:name', async (req, res) => {
   try {
     const name = req.params.name
     const data = await Model.findOneAndDelete({ name: name })
