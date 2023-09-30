@@ -95,8 +95,7 @@ function CollabPage () {
         ? (
           <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
           )
-        :
-          (
+        : (
           <>
           </>
           )}
@@ -133,7 +132,7 @@ function CollabPage () {
             </Grid>
           </Container>
           </>
-        :
+        : (
         <>
           <Container>
             <Typography variant='h3' component='h2'>
@@ -142,7 +141,7 @@ function CollabPage () {
             <CircularProgress />
           </Container>
         </>
-      }
+        )}
     </>
   )
 }

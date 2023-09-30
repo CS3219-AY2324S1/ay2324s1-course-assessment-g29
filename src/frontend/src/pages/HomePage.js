@@ -46,8 +46,7 @@ function HomePage () {
           ? (
             <Alert onClose={() => setShowSuccessAlert(false)}>{successMessage}</Alert>
             )
-          :
-            (
+          : (
             <>
             </>
             )}
@@ -55,8 +54,7 @@ function HomePage () {
           ? (
             <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
             )
-          :
-            (
+          : (
             <>
             </>
             )}
