@@ -7,7 +7,7 @@ const port = process.env.PORT || 8000
 app.use(cors())
 app.use(express.json())
 // Load environment variables from .env
-require('dotenv').config();
+require('dotenv').config()
 // connect to MongoDB database
 const uri = process.env.MONGODB_URI
 mongoose.connect(uri, {
