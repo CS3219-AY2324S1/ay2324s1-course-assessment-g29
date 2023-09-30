@@ -1,18 +1,18 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const dataSchema = new mongoose.Schema({
   name: {
     required: true,
-    type: String,
+    type: String
   },
   description: {
     required: true,
-    type: String,
+    type: String
   },
   tag: {
     required: false,
-    type: Array,
+    type: Array
   },
 });
 
-module.exports = mongoose.model("Data", dataSchema);
+module.exports = mongoose.model('Data', dataSchema);
