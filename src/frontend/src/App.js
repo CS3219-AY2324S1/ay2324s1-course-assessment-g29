@@ -1,24 +1,23 @@
-import { Container } from '@mui/material';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Container } from '@mui/material'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import HomePage from './pages/HomePage';
-import CollabPage from './pages/CollabPage';
+import HomePage from './pages/HomePage'
+import CollabPage from './pages/CollabPage'
 
-function App() {
+function App () {
   return (
     <>
       <BrowserRouter>
-        <Navbar/>
+        <Navbar />
         <Container>
           <Routes>
-            <Route path="/home" exact element={<HomePage />} />
-            <Route path="/collab" exact element={<CollabPage/>}/>
+            <Route path='/home' exact element={<HomePage />} />
+            <Route path='/collab' exact element={<CollabPage />}/>
           </Routes>
-      </Container>
+        </Container>
       </BrowserRouter>
     </>
-    
-  );
+  )
 }
 
-  export default App;
+export default App
