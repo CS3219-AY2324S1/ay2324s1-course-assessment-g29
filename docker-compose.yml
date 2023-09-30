@@ -1,9 +1,18 @@
 version: '3.7'
 
 services:
+  userservice:
+    build:
+      context: ./microservices/userService
+      dockerfile: Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '3001:3001' 
+
   matchingservice:
     build:
-      context: ./src/microservices/matching
+      context: ./microservices/matchingService
       dockerfile: dockerfile-matching
     depends_on:
       - collabservice
@@ -14,7 +23,7 @@ services:
       
   collabservice:
     build:
-      context: ./src/microservices/collabService
+      context: ./microservices/collabService
       dockerfile: dockerfile-collab
     networks:
       - some-net
@@ -23,7 +32,7 @@ services:
 
   websocketserver:
     build:
-      context: ./src/microservices/websocketServer
+      context: ./microservices/websocketServer
       dockerfile: dockerfile-websocket
     networks:
       - some-net
@@ -32,7 +41,7 @@ services:
 
   frontend:
     build:
-      context: ./src/frontend/
+      context: ./frontend/
       dockerfile: dockerfile-frontend
     depends_on:
       - collabservice
