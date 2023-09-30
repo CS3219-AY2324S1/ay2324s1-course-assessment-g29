@@ -131,7 +131,7 @@ function CollabPage () {
               </Card>
             </Grid>
           </Container>
-          </>
+        </>
         : (
           <>
             <Container>
