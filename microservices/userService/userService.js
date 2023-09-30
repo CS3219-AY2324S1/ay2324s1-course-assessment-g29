@@ -2,7 +2,9 @@
 const express = require('express')
 const app = express()
 app.use(express.json())
-const port = process.env.PORT || 3000
+const cors = require('cors')
+app.use(cors())
+const port = process.env.PORT || 3001
 
 // Set up firebase
 const admin = require('firebase-admin')
@@ -39,6 +41,7 @@ function validateFields (reqBody, requiredFields) {
 app.post('/user/register', async (req, res) => {
   try {
     validateFields(req.body, ['name', 'username', 'email', 'password'])
+    console.log('Received')
     const { name, username, email, password } = req.body
     const userRecord = await admin.auth().createUser({
       uid: username,
