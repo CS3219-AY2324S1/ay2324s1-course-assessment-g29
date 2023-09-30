@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const dataSchema = new mongoose.Schema({
   name: {
@@ -12,7 +12,7 @@ const dataSchema = new mongoose.Schema({
   tag: {
     required: false,
     type: Array
-  },
-});
+  }
+})
 
-module.exports = mongoose.model('Data', dataSchema);
+module.exports = mongoose.model('Data', dataSchema)
