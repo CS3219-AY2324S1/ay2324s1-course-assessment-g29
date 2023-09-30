@@ -8,5 +8,7 @@
   },
   "dependencies": {
     "react": "^18.2.0"
+    "firebase": "^10.4.0",
+    "firebase-admin": "^11.10.1"
   }
 }
