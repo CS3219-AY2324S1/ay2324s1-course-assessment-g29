@@ -11,15 +11,15 @@ import Container from '@mui/material/Container'
 import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
-import { selectRoomid, selectUserid, selectMatchedUserid, setMatchedUserId } from '../redux/MatchingSlice'  
+import { selectRoomid, selectUserid, selectMatchedUserid, setMatchedUserId } from '../redux/MatchingSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
 const connectionOptions = {
   'force new connection': true,
-  'reconnectionAttempts': 'Infinity', 
-  'timeout': 10000,                  
-  'transports': ['websocket']
+  reconnectionAttempts: 'Infinity',
+  timeout: 10000,
+  transports: ['websocket']
 }
 
 function CollabPage () {
@@ -33,7 +33,6 @@ function CollabPage () {
   const matchedUseridRef = useRef(matchedUserid)
   const roomid = useSelector(selectRoomid)
   const dispatch = useDispatch()
-  
   const socket = useRef()
 
   useEffect(() => {
@@ -41,7 +40,7 @@ function CollabPage () {
 
     socket.current.on('connect', () => {
       console.log('connecting to websocket server')
-      socket.current.emit('JoinRoom', {userid, roomid}, (error) => {
+      socket.current.emit('JoinRoom', {userid, roomid}, (error) => { 
         if (error) {
           setErrorMessage(error)
           setShowErrorAlert(true)
@@ -57,44 +56,50 @@ function CollabPage () {
       console.log(matchedUserId)
     })
 
-    //disconnect from socket when component unmounts
+    // disconnect from socket when component unmounts
     return () => {
-        if (socket.current) {
-            socket.current.disconnect()
-            dispatch(setMatchedUserId(''))
-            matchedUseridRef.current = ''
-            socket.current.off()
-        }
+      if (socket.current) {
+        socket.current.disconnect()
+        dispatch(setMatchedUserId(''))
+        matchedUseridRef.current = ''
+        socket.current.off()
+      }
     }
-}, [SOCKETSERVER])
+  }, [SOCKETSERVER])
 
   useEffect(() => {
     socket.current.on('Message', (message) => {
-    const messageString = `${matchedUseridRef.current} : ${message.message}`
-    setMessages(messages => [ ...messages, messageString])
-  })
+      const messageString = `${matchedUseridRef.current} : ${message.message}`
+      setMessages(messages => [ ...messages, messageString])
+    })
 
-  socket.current.on('DisconnectPeer', (message) => {
-    console.log('Hi')
-    setErrorMessage('Peer has disconnected')
-    setShowErrorAlert(true)
-  })
-  }, [])  
+    socket.current.on('DisconnectPeer', (message) => {
+      console.log('Hi')
+      setErrorMessage('Peer has disconnected')
+      setShowErrorAlert(true)
+    })
+  }, [])
 
   const sendMessage = (event) => {
     event.preventDefault()
     const messageString = `${userid} : ${message}`
-    setMessages(messages => [ ...messages, messageString])
+    setMessages(messages => [...messages, messageString])
     if (message) {
-        socket.current.emit('Message', {message}, () => setMessage(''))
+      socket.current.emit('Message', {message}, () => setMessage(''))
     }
-  } 
+  }
 
   return (
     <>
-      { showErrorAlert ? (
-        <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-      ) : (<></>)}
+      { showErrorAlert ? 
+        (
+          <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
+        ) : 
+        (
+          <>
+          </>
+        )
+      }
       { isMatched ? 
         <>
           <Container>

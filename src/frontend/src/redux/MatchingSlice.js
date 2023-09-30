@@ -5,28 +5,28 @@ export const matchingSlice = createSlice({
   initialState: {
     roomid: '',
     userid: '',
-    matchedUserid: '',
+    matchedUserid: ''
   },
   reducers: {
     setRoomId: (state, action) => {
-        state.roomid = action.payload;
+      state.roomid = action.payload
     },
     setUserId: (state, action) => {
-      state.userid = action.payload;
+      state.userid = action.payload
     },
     setMatchedUserId: (state, action) => {
-      state.matchedUserid = action.payload;
-    },
-  },
+      state.matchedUserid = action.payload
+    }
+  }
 })
 
 // Action creators are generated for each case reducer function
-export const { setRoomId , setUserId, setMatchedUserId } = matchingSlice.actions
+export const { setRoomId, setUserId, setMatchedUserId } = matchingSlice.actions
 
-export const selectRoomid = (state) => state.match.roomid;
+export const selectRoomid = (state) => state.match.roomid
 
-export const selectUserid = (state) => state.match.userid;
+export const selectUserid = (state) => state.match.userid
 
-export const selectMatchedUserid = (state) => state.match.matchedUserid;
+export const selectMatchedUserid = (state) => state.match.matchedUserid
 
 export default matchingSlice.reducer

@@ -1,15 +1,15 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const port = process.env.PORT || 4000;
+const express = require('express')
+const cors = require('cors')
+const app = express()
+const port = process.env.PORT || 4000
 
-app.use(cors());
-app.use(express.json());
+app.use(cors())
+app.use(express.json())
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.send('Hello World!'))
 
-const matchingServiceRouter = require('./routes/matching');
+const matchingServiceRouter = require('./routes/matching')
 
-app.use('/match', matchingServiceRouter);
+app.use('/match', matchingServiceRouter)
 
-app.listen(port, () => console.log(`Express app running on port ${port}!`));
+app.listen(port, () => console.log(`Express app running on port ${port}!`))

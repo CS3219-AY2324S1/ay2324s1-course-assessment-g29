@@ -12,7 +12,7 @@ function App () {
         <Container>
           <Routes>
             <Route path='/home' exact element={<HomePage />} />
-            <Route path='/collab' exact element={<CollabPage />}/>
+            <Route path='/collab' exact element={<CollabPage />} />
           </Routes>
         </Container>
       </BrowserRouter>
