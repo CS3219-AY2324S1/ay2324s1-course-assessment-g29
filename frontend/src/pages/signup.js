@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Signup () {
@@ -7,6 +10,8 @@ function Signup () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const checkPasswords = (password1, password2) => {
     if (password1 !== password2) {
@@ -21,7 +26,16 @@ function Signup () {
       return new Promise((resolve, reject) => {
         axios.post('http://localhost:3001/user/register', { name: displayName, username, email, password })
           .then((response) => {
+            const userCredentials = response.data
+            const userid = userCredentials.user.uid
+            dispatch(setUserid(userid))
+            const displayName = userCredentials.user.displayName
+            dispatch(setDisplayname(displayName))
+            const useremail = userCredentials.user.email
+            dispatch(setStateEmail(useremail))
+            dispatch(setLoginStatus(true))
             console.log('Signup successful')
+            navigate('/home')
           })
       })
     } catch (error) {

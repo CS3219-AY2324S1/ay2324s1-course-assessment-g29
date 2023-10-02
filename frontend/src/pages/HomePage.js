@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { setRoomId, setUserId } from '../redux/MatchingSlice'
+import { selectUserid, selectDisplayname, selectEmail } from '../redux/UserSlice'
+import { setRoomId } from '../redux/MatchingSlice'
 import axios from 'axios'
 import Alert from '@mui/material/Alert'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
+import Card from '@mui/material/Card'
 import Container from '@mui/material/Container'
 
 function HomePage () {
@@ -14,23 +15,19 @@ function HomePage () {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [currentUserId, setCurrentUserId] = useState('')
+  const userid = useSelector(selectUserid)
+  const email = useSelector(selectEmail)
+  const displayName = useSelector(selectDisplayname)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const joinQueue = async () => {
-    if (!currentUserId) {
-      setErrorMessage('Enter a user id first')
-      setShowErrorAlert(true)
-      return
-    }
     try {
       console.log('Try Matching')
       const response = await axios.post('http://localhost:4000/match/', {
-        user1id: currentUserId
+        user1id: userid
       })
       dispatch(setRoomId(response.data.roomId))
-      dispatch(setUserId(currentUserId))
       setSuccessMessage(response.data.message)
       setShowSuccessAlert(true)
       navigate('/collab')
@@ -58,8 +55,18 @@ function HomePage () {
             <>
             </>
             )}
+        <Card>
+          <Typography>
+            Name: {displayName}
+          </Typography>
+          <Typography>
+            UserId: {userid}
+          </Typography>
+          <Typography>
+            Email: {email}
+          </Typography>
+        </Card>
         <Box mt={2}>
-          <TextField value={currentUserId} onChange={(e) => setCurrentUserId(e.target.value)} id='outlined-basic' label='UserId' variant='outlined' />
           <Button variant='contained' onClick={joinQueue}>Start Match</Button>
         </Box>
       </Container>

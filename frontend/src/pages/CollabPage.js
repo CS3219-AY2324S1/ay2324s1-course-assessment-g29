@@ -11,7 +11,8 @@ import Container from '@mui/material/Container'
 import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
-import { selectRoomid, selectUserid, selectMatchedUserid, setMatchedUserId } from '../redux/MatchingSlice'
+import { selectUserid } from '../redux/UserSlice'
+import { selectRoomid, selectMatchedUserid, setMatchedUserId } from '../redux/MatchingSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
