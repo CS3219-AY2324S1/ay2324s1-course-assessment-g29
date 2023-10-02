@@ -4,7 +4,7 @@ services:
   userservice:
     build:
       context: ./microservices/userService
-      dockerfile: Dockerfile
+      dockerfile: userService.Dockerfile
     networks:
       - some-net
     ports:
@@ -13,7 +13,7 @@ services:
   matchingservice:
     build:
       context: ./microservices/matchingService
-      dockerfile: dockerfile-matching
+      dockerfile: matchingService.Dockerfile
     depends_on:
       - collabservice
     networks:
@@ -24,7 +24,7 @@ services:
   collabservice:
     build:
       context: ./microservices/collabService
-      dockerfile: dockerfile-collab
+      dockerfile: collabService.Dockerfile
     networks:
       - some-net
     ports:
@@ -33,7 +33,7 @@ services:
   websocketserver:
     build:
       context: ./microservices/websocketServer
-      dockerfile: dockerfile-websocket
+      dockerfile: websocketServer.Dockerfile
     networks:
       - some-net
     ports:
@@ -42,7 +42,7 @@ services:
   frontend:
     build:
       context: ./frontend/
-      dockerfile: dockerfile-frontend
+      dockerfile: frontend.Dockerfile
     depends_on:
       - collabservice
       - websocketserver

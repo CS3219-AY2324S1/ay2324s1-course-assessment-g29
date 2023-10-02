@@ -4,14 +4,11 @@ FROM node:20
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if present) to the container
-COPY package*.json ./
-
-# Install application dependencies
-RUN npm install
-
 # Copy the rest of the application code to the container
 COPY . .
+
+# Install application dependencies
+RUN yarn install --production
 
 # Expose the port your Express.js app is listening on
 EXPOSE 3001
