@@ -1,12 +1,15 @@
 import { initFirebase } from '../configs/firebase.js'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
 import { useNavigate } from 'react-router-dom'
 
 function Login () {
   const app = initFirebase()
   console.log(app)
   const auth = getAuth()
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,9 +18,17 @@ function Login () {
     e.preventDefault()
 
     try {
-      await signInWithEmailAndPassword(auth, email, password)
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password)
       // User is logged in
+      const userid = userCredentials.user.uid
+      dispatch(setUserid(userid))
+      const displayName = userCredentials.user.displayName
+      dispatch(setDisplayname(displayName))
+      const useremail = userCredentials.user.email
+      dispatch(setStateEmail(useremail))
+      dispatch(setLoginStatus(true))
       console.log('Login successful')
+      navigate('/home')
     } catch (error) {
       console.error('Login error:', error)
     }

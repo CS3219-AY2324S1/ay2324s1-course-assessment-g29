@@ -47,6 +47,7 @@ services:
       - collabservice
       - websocketserver
       - matchingservice
+      - userservice
     ports:
      - '3000:3000'  
     networks:
