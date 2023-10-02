@@ -23,6 +23,7 @@ function App () {
                   <Route path='/' element={<Navigate to='/home' replace />} />
                   <Route path='/home' exact element={<HomePage />} />
                   <Route path='/collab' exact element={<CollabPage />} />
+                  <Route path="/question/:questionId" element={<CodeEditorPage/>}/>
                   <Route path='*' element={<Navigate to='/home' />} />
                 </>
                 )

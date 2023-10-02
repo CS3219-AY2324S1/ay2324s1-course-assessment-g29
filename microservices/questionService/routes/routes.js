@@ -51,7 +51,7 @@ router.patch('/question/update/:name', async (req, res) => {
     const options = { new: true } // whether to return the updated data
 
     const result = await Model.findOneAndUpdate(
-      { name: name },
+      { name },
       updatedData,
       options
     )
@@ -66,7 +66,7 @@ router.patch('/question/update/:name', async (req, res) => {
 router.delete('/question/delete/:name', async (req, res) => {
   try {
     const name = req.params.name
-    const data = await Model.findOneAndDelete({ name: name })
+    const data = await Model.findOneAndDelete({ name })
     res.send(`Document with ${data.name} has been deleted.`)
   } catch (error) {
     res.status(400).json({ message: error.message })

@@ -4,13 +4,13 @@ import { Chip } from "@mui/material";
 function getColourbyDifficulty(difficulty) {
     switch (difficulty) {
     case 'Hard':
-      return 'red';
+      return 'red'
     case 'Medium':
-      return 'orange';
+      return 'orange'
     case 'Easy':
-      return 'green';
+      return 'green'
     default:
-      return 'black';
+      return 'black'
     }
 }
  
@@ -19,8 +19,8 @@ export const QuestionComponent = ({questionId}) => {
   const [question , setQuestion] = useState("Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.");
   const [questionNo, setQuestionNo] = useState(123);
   const [questionTitle, setQuestionTitle] = useState("Two Sum");
-  const [tags, setTags] = useState(["Array", "Hash Table"]);
-  const [difficulty, setDifficulty] = useState("Hard");
+  const [tags, setTags] = useState(["Array", "Hash Table"])
+  const [difficulty, setDifficulty] = useState("Hard")
 
     // TODO: Fetch question data from backend using QuestionId
     // useEffect(() => {
