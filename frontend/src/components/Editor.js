@@ -3,31 +3,31 @@ import { Select, MenuItem, InputLabel, FormControl, Card } from '@mui/material'
 import CodeMirror from '@uiw/react-codemirror'
 import { materialLightInit } from '@uiw/codemirror-theme-material'
 import { python } from '@codemirror/lang-python'
-import { java, javaLanguage } from '@codemirror/lang-java'
+import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
 
 function determineLanguage (selectedLanguage) {
-    if (selectedLanguage === 'python') {
-        return [python({ jsx: true })]
-    } else if (selectedLanguage === 'java') {
-        return [java({ jsx: true })]
-    } else if (selectedLanguage === 'C++') {
-        return [cpp({ jsx: true })]
-    }
+  if (selectedLanguage === 'python') {
+    return [python({ jsx: true })]
+  } else if (selectedLanguage === 'java') {
+    return [java({ jsx: true })]
+  } else if (selectedLanguage === 'C++') {
+    return [cpp({ jsx: true })]
+  }
 }
 
 function startingCode (language) {
-    if (language === 'python') {
-        return '## Write down your solutions here\n'
-    } else if (language === 'java') {
-        return '/* Write down your solutions here */\n'
-    } else if (language === 'C++') {
-        return '/* Write down your solutions here */\n'
-    }
-} 
+  if (language === 'python') {
+    return '## Write down your solutions here\n'
+  } else if (language === 'java') {
+    return '/* Write down your solutions here */\n'
+  } else if (language === 'C++') {
+    return '/* Write down your solutions here */\n'
+  }
+}
 
 export const Editor = () => {
-  const [languages, setLanguages] = useState(['python', 'java', 'C++'])
+  const [languages] = useState(['python', 'java', 'C++'])
   const [selectedLanguage, setSelectedLanguage] = useState('')
   const [code, setCode] = useState('Please choose a language to begin!\n')
 
@@ -49,7 +49,7 @@ export const Editor = () => {
         height: '100%',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
       }}
     >
       <Card
@@ -57,7 +57,7 @@ export const Editor = () => {
           width: '100%',
           height: '100%',
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'column'
         }}
       >
         <FormControl style={{ width: '50%' }}>
@@ -82,8 +82,8 @@ export const Editor = () => {
               caret: '#c6c6c6',
               fontFamily: 'monospace',
               foreground: '#75baff',
-              lineHighlight: '#8a91991a',
-            },
+              lineHighlight: '#8a91991a'
+            }
           })}
           extensions={determineLanguage(selectedLanguage)}
         />

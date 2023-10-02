@@ -7,6 +7,7 @@ import Login from './pages/login'
 import Signup from './pages/signup'
 import HomePage from './pages/HomePage'
 import CollabPage from './pages/CollabPage'
+import CodeEditorPage from './pages/CodeEditorPage'
 
 function App () {
   const loginStatus = useSelector(selectLoginstatus)
@@ -23,7 +24,7 @@ function App () {
                   <Route path='/' element={<Navigate to='/home' replace />} />
                   <Route path='/home' exact element={<HomePage />} />
                   <Route path='/collab' exact element={<CollabPage />} />
-                  <Route path="/question/:questionId" element={<CodeEditorPage/>}/>
+                  <Route path='/question/:questionId' element={<CodeEditorPage />} />
                   <Route path='*' element={<Navigate to='/home' />} />
                 </>
                 )
