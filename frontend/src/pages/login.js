@@ -9,7 +9,8 @@ function Login () {
   const app = initFirebase()
   console.log(app)
   const auth = getAuth()
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -33,8 +34,7 @@ function Login () {
       console.error('Login error:', error)
     }
   }
-
-  const navigate = useNavigate()
+  
   const routeChangeSignup = () => {
     const path = '/signup'
     navigate(path)

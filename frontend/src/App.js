@@ -17,23 +17,23 @@ function App () {
         <Navbar />
         <Container>
           <Routes>
-            {loginStatus ? (
-              <>
-                <Route path='/' element={<Navigate to="/home" replace />} />
-                <Route path='/home' exact element={<HomePage />} />
-                <Route path='/collab' exact element={<CollabPage />} />
-                <Route path='*' element={<Navigate to="/home" />}  />
-              </>
-              )
+            {loginStatus 
+              ? (
+                <>
+                  <Route path='/' element={<Navigate to='/home' replace />} />
+                  <Route path='/home' exact element={<HomePage />} />
+                  <Route path='/collab' exact element={<CollabPage />} />
+                  <Route path='*' element={<Navigate to='/home' />} />
+                </>
+                )
               : (
                 <>
                   <Route path='/' Component={Login} />
                   <Route path='/signup' Component={Signup} />
-                  <Route path='' element={<Navigate to="/" />} />
-                  <Route path='*' element={<Navigate to="/" />}  />
+                  <Route path='' element={<Navigate to='/' />} />
+                  <Route path='*' element={<Navigate to='/' />} />
                 </>
-            )}
-            
+              )}
           </Routes>
         </Container>
       </BrowserRouter>

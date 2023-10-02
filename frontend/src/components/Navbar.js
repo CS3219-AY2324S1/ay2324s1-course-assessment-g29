@@ -25,7 +25,7 @@ function Navbar () {
   const displayName = useSelector(selectDisplayname)
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  
+
   const handleLogout = (event) => {
     dispatch(setUserid(''))
     dispatch(setDisplayname(''))
@@ -140,12 +140,12 @@ function Navbar () {
               </Button>
             ))}
           </Box>
-          { loginStatus && (
+          {loginStatus && (
             <>
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title='Open settings'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={ displayName } src='/static/images/avatar/2.jpg' />
+                    <Avatar alt={displayName} src='/static/images/avatar/2.jpg' />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -176,7 +176,7 @@ function Navbar () {
                 </Menu>
               </Box>
             </>
-            )}
+          )}
         </Toolbar>
       </Container>
     </AppBar>

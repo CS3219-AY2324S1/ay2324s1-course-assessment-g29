@@ -36,7 +36,6 @@ function Signup () {
             dispatch(setLoginStatus(true))
             console.log('Signup successful')
             navigate('/home')
-
           })
       })
     } catch (error) {
