@@ -1,9 +1,9 @@
 import { initFirebase } from '../configs/firebase.js'
-import { getAuth, signInWithEmailAndPassword } from '../firebase/auth'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function Login () {
+function Login() {
   const app = initFirebase()
   console.log(app)
   const auth = getAuth()
