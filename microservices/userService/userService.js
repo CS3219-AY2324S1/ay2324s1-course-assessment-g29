@@ -19,7 +19,7 @@ const db = admin.firestore()
 const userCollection = db.collection('users')
 
 // Set up other dependencies
-function validateFields (reqBody, requiredFields) {
+function validateFields(reqBody, requiredFields) {
   const missingFields = []
   for (const field of requiredFields) {
     if (!(field in reqBody)) {
@@ -117,11 +117,10 @@ app.get('/user/getLanguage/:uid', async (req, res) => {
   }
 })
 
-app.delete('/user/deregister', async (req, res) => {
+app.delete('/user/deregister/:uid', async (req, res) => {
   try {
-    validateFields(req.body, ['uid'])
-    const { uid } = req.body
-    await admin.auth().deleteUser(uid)
+    await admin.auth().deleteUser(req.params.uid)
+    await userCollection.doc(req.params.uid).delete();
     res.status(200).json({ message: 'User deregistered successfully' })
   } catch (error) {
     res.status(400).json({ error: error.message })
