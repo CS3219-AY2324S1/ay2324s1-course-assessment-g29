@@ -17,7 +17,7 @@ function App () {
         <Navbar />
         <Container>
           <Routes>
-            {loginStatus 
+            {loginStatus
               ? (
                 <>
                   <Route path='/' element={<Navigate to='/home' replace />} />
@@ -33,7 +33,7 @@ function App () {
                   <Route path='' element={<Navigate to='/' />} />
                   <Route path='*' element={<Navigate to='/' />} />
                 </>
-              )}
+                )}
           </Routes>
         </Container>
       </BrowserRouter>
