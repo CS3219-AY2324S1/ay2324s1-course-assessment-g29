@@ -10,6 +10,7 @@
     "start": "react-scripts start"
   },
   "dependencies": {
+    "react": "^18.2.0",
     "axios": "^1.5.1",
     "firebase": "^10.4.0",
     "firebase-admin": "^11.10.1",

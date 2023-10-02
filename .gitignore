@@ -1,6 +1,9 @@
 # Configs
 configs/
 
+#.env
+microservices/collabService/.env
+
 # OS specific
 .DS_Store
 
