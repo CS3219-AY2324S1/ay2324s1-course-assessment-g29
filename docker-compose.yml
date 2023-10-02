@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  userservice:
+    build:
+      context: ./microservices/userService
+      dockerfile: userService.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '3001:3001' 
+
+  matchingservice:
+    build:
+      context: ./microservices/matchingService
+      dockerfile: matchingService.Dockerfile
+    depends_on:
+      - collabservice
+    networks:
+      - some-net
+    ports:
+      - '4000:4000' 
+      
+  collabservice:
+    build:
+      context: ./microservices/collabService
+      dockerfile: collabService.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '8000:8000'
+
+  websocketserver:
+    build:
+      context: ./microservices/websocketServer
+      dockerfile: websocketServer.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '2000:2000'  
+
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: frontend.Dockerfile
+    depends_on:
+      - collabservice
+      - websocketserver
+      - matchingservice
+      - userservice
+    ports:
+     - '3000:3000'  
+    networks:
+      - some-net
+
+networks:
+  some-net:
+    name: peerprep_network
