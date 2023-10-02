@@ -16,13 +16,24 @@ function determineLanguage(selectedLanguage) {
     }
 }
 
+function startingCode(language) {
+    if (language === "python") {
+        return "## Write down your solutions here\n";
+    } else if (language === "java") {
+        return "/* Write down your solutions here */\n";
+    } else if (language === "C++") {
+        return "/* Write down your solutions here */\n";
+    }
+} 
+
 export const Editor = () => {
   const [languages, setLanguages] = useState(["python", "java", "C++"]);
   const [selectedLanguage, setSelectedLanguage] = useState("");
-  const [code, setCode] = useState("## Write down your solutions here\n");
+  const [code, setCode] = useState("Please choose a language to begin!\n");
 
   const handleLanguageChange = (e) => {
     const selectedValue = e.target.value;
+    setCode(startingCode(selectedValue));
     setSelectedLanguage(selectedValue); // Update the selected language state
   };
 
