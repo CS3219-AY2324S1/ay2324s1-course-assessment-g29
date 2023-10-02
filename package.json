@@ -6,12 +6,6 @@
     "web-vitals": "^3.4.0"
   },
   "scripts": {
-<<<<<<< HEAD
-    "test": "jest --passWithNoTests"
-  },
-  "dependencies": {
-    "react": "^18.2.0"
-=======
     "test": "jest --passWithNoTests",
     "start": "react-scripts start"
   },
@@ -41,6 +35,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
->>>>>>> 2bdfc491cfa322af7870146faa94089624b27780
   }
 }
