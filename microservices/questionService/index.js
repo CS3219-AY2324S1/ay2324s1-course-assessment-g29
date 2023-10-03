@@ -30,4 +30,4 @@ database.once('connected', () => {
 // Import route file
 const routes = require('./routes/routes')
 
-app.use('/api', routes)
+app.use('/question', routes)
