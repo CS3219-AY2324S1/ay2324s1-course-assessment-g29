@@ -10,6 +10,15 @@ services:
     ports:
       - '3001:3001' 
 
+  questionservice:
+    build:
+      context: ./microservices/questionService
+      dockerfile: questionService.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '3002:3002' 
+
   matchingservice:
     build:
       context: ./microservices/matchingService
