@@ -4,5 +4,5 @@
     },
     "include": [
         "src"
-    ]
+, "frontend/src/pages/CodeEditorPage.js", "frontend/src/components/Editor.js"    ]
 }
