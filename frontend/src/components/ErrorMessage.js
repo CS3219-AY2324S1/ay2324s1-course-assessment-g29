@@ -15,7 +15,7 @@ function ErrorMessage () {
   return (
     <>
       {showErrorAlert &&
-        <Alert severity='error' onClose={closeErrorAlert}>Error: {errorMessage}</Alert> }
+        <Alert severity='error' onClose={closeErrorAlert}>Error: {errorMessage}</Alert>}
     </>
   )
 }
