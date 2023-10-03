@@ -3,8 +3,8 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
+import { setErrorMessage, setShowError } from '../redux/ErrorSlice.js'
 import { useNavigate } from 'react-router-dom'
-import Alert from '@mui/material/Alert'
 
 function LoginPage () {
   const app = initFirebase()
@@ -15,9 +15,6 @@ function LoginPage () {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -35,8 +32,8 @@ function LoginPage () {
       console.log('Login successful')
       navigate('/home')
     } catch (error) {
-      setErrorMessage(error.message) // TODO handle firebase errors (give better descriptions)
-      setShowErrorAlert(true)
+      dispatch(setErrorMessage(error.message)) // TODO handle firebase errors (give better descriptions)
+      dispatch(setShowError(true))
     }
   }
 
@@ -47,14 +44,6 @@ function LoginPage () {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      {showErrorAlert
-        ? (
-          <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
-        : (
-          <>
-          </>
-          )}
       <h2>Login</h2>
       <form onSubmit={handleLogin} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <input

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
+import { setShowError, setErrorMessage } from '../redux/ErrorSlice.js'
 import { useNavigate } from 'react-router-dom'
-import Alert from '@mui/material/Alert'
 import axios from 'axios'
 
 function SignupPage () {
@@ -11,8 +11,6 @@ function SignupPage () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -49,25 +47,17 @@ function SignupPage () {
           console.log('Signup successful')
           navigate('/home')
         }).catch((error) => {
-          setErrorMessage(error.message) // TODO Handle axios errors
-          setShowErrorAlert(true)
+          dispatch(setErrorMessage(error.message)) // TODO Handle axios errors
+          dispatch(setShowError(true))
         })
     } catch (error) {
-      setErrorMessage(error.message)
-      setShowErrorAlert(true)
+      dispatch(setErrorMessage(error.message))
+      dispatch(setShowError(true))
     }
   }
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      {showErrorAlert
-        ? (
-          <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
-        : (
-          <>
-          </>
-          )}
       <h2>Sign up for a PeerPrep account!</h2>
       <form onSubmit={handleSignUp} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <input

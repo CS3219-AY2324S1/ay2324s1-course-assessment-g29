@@ -5,7 +5,6 @@ import { Editor } from '../components/Editor'
 import { Box } from '@mui/system'
 import { QuestionComponent } from '../components/QuestionComponent'
 import ScrollToBottom from 'react-scroll-to-bottom'
-import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -16,6 +15,7 @@ import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
 import { selectRoomid, selectMatchedUserid, setMatchedUserId, selectQuestionData } from '../redux/MatchingSlice'
+import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -27,8 +27,6 @@ const connectionOptions = {
 }
 
 function CollabPage () {
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const [isMatched, setIsMatched] = useState(false)
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
@@ -39,7 +37,6 @@ function CollabPage () {
   const questionData = useSelector(selectQuestionData)
   const dispatch = useDispatch()
   const socket = useRef()
-  console.log('QuestionData', questionData)
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
@@ -48,8 +45,8 @@ function CollabPage () {
       console.log('connecting to websocket server')
       socket.current.emit('JoinRoom', { userid, roomid }, (error) => {
         if (error) {
-          setErrorMessage(error)
-          setShowErrorAlert(true)
+          dispatch(setErrorMessage(error))
+          dispatch(setShowError(true))
         }
       })
       console.log('joined waiting room')
@@ -80,9 +77,8 @@ function CollabPage () {
     })
 
     socket.current.on('DisconnectPeer', (message) => {
-      console.log('Hi')
-      setErrorMessage('Peer has disconnected')
-      setShowErrorAlert(true)
+      dispatch(setErrorMessage('Peer has disconnected'))
+      dispatch(setShowError(true))
     })
   }, [])
 
@@ -97,14 +93,6 @@ function CollabPage () {
 
   return (
     <>
-      {showErrorAlert
-        ? (
-          <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
-        : (
-          <>
-          </>
-          )}
       {isMatched
         ? (
           <>

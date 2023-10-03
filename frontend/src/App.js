@@ -1,8 +1,10 @@
 import { Container } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { selectLoginstatus } from './redux/UserSlice'
+import { selectShowError } from './redux/ErrorSlice'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import ErrorMessage from './components/ErrorMessage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
@@ -11,11 +13,13 @@ import CodeEditorPage from './pages/CodeEditorPage'
 
 function App () {
   const loginStatus = useSelector(selectLoginstatus)
+  const showErrorAlert = useSelector(selectShowError)
 
   return (
     <>
       <BrowserRouter>
         <Navbar />
+        {showErrorAlert && <ErrorMessage />}
         <Container>
           <Routes>
             {loginStatus
