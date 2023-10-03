@@ -8,13 +8,13 @@ router.route('/createroom').post(async (req, res) => {
     console.log(`${user1id} creating room`)
     await Room.findOneAndRemove({ user1id })
     await Room.findOneAndDelete({ user2id: user1id })
-    var questionData
+    let questionData
     await axios.get('http://questionservice:3002/question/getRandom')
       .then((response) => {
         questionData = response.data
       })
     const matchResult = await Room.create({ user1id, questionData })
-    res.status(200).json({ roomId: matchResult._id, message: 'Room succesfully created!', questionData: questionData })
+    res.status(200).json({ roomId: matchResult._id, message: 'Room succesfully created!', questionData })
   } catch (error) {
     console.log(error)
     res.status(400).json({ message: 'Unexpected Error' })
@@ -35,7 +35,7 @@ router.route('/joinroom').post(async (req, res) => {
       const questionData = existing3.questionData
       existing3.user2id = user2id
       await existing3.save()
-      return res.status(200).json({ roomId, message: `Matching with ${user1id}! Joining Room`, questionData: questionData })
+      return res.status(200).json({ roomId, message: `Matching with ${user1id}! Joining Room`, questionData })
     }
   } catch (error) {
     console.log(error)

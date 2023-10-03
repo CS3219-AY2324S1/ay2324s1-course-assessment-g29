@@ -46,7 +46,7 @@ router.get('/getOne/:name', async (req, res) => {
 // Get random
 router.get('/getRandom', async (req, res) => {
   try {
-    var data
+    let data
     await Model.aggregate().sample(1).replaceRoot({ question: '$$ROOT' }).then((res) => {
       data = res[0]
     })
