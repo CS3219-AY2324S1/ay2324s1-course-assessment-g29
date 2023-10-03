@@ -2,16 +2,28 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
 import { useNavigate } from 'react-router-dom'
+import Alert from '@mui/material/Alert'
 import axios from 'axios'
 
-function Signup () {
+function SignupPage() {
   const [displayName, setDisplayName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [showErrorAlert, setShowErrorAlert] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const requireAllNonNull = () => {
+    const requiredFields = [displayName, username, email, password, passwordConfirmation]
+    requiredFields.forEach((x, i) => {
+      if (x == '') {
+        throw new Error('All fields cannot be empty')
+      }
+    })
+  }
 
   const checkPasswords = (password1, password2) => {
     if (password1 !== password2) {
@@ -22,30 +34,41 @@ function Signup () {
     e.preventDefault()
 
     try {
+      requireAllNonNull()
       checkPasswords(password, passwordConfirmation)
-      return new Promise((resolve, reject) => {
-        axios.post('http://localhost:3001/user/register', { name: displayName, username, email, password })
-          .then((response) => {
-            const userCredentials = response.data
-            const userid = userCredentials.user.uid
-            dispatch(setUserid(userid))
-            const displayName = userCredentials.user.displayName
-            dispatch(setDisplayname(displayName))
-            const useremail = userCredentials.user.email
-            dispatch(setStateEmail(useremail))
-            dispatch(setLoginStatus(true))
-            console.log('Signup successful')
-            navigate('/home')
-          })
-      })
+      axios.post('http://localhost:3001/user/register', { name: displayName, username, email, password })
+        .then((response) => {
+          const userCredentials = response.data
+          const userid = userCredentials.user.uid
+          dispatch(setUserid(userid))
+          const displayName = userCredentials.user.displayName
+          dispatch(setDisplayname(displayName))
+          const useremail = userCredentials.user.email
+          dispatch(setStateEmail(useremail))
+          dispatch(setLoginStatus(true))
+          console.log('Signup successful')
+          navigate('/home')
+        }).catch((error) => {
+          setErrorMessage(error.message) // TODO Handle axios errors
+          setShowErrorAlert(true)
+        })
     } catch (error) {
-      console.error('Signup error:', error)
+      setErrorMessage(error.message)
+      setShowErrorAlert(true)
     }
   }
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      <h2>Login</h2>
+      {showErrorAlert
+        ? (
+          <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
+        )
+        : (
+          <>
+          </>
+        )}
+      <h2>Sign up for a PeerPrep account!</h2>
       <form onSubmit={handleSignUp} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <input
           type='text'
@@ -83,4 +106,4 @@ function Signup () {
   )
 }
 
-export default Signup
+export default SignupPage
