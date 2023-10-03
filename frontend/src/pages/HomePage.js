@@ -10,7 +10,7 @@ import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Container from '@mui/material/Container'
 
-function HomePage() {
+function HomePage () {
   const [showErrorAlert, setShowErrorAlert] = useState(false)
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
@@ -28,7 +28,7 @@ function HomePage() {
         user1id: userid
       })
       dispatch(setRoomId(response.data.roomId))
-      dispatch(setQuestionData(response.data.questionData['question']))
+      dispatch(setQuestionData(response.data.questionData.question))
       setSuccessMessage(response.data.message)
       setShowSuccessAlert(true)
       navigate('/collab')
@@ -43,19 +43,19 @@ function HomePage() {
         {showSuccessAlert
           ? (
             <Alert onClose={() => setShowSuccessAlert(false)}>{successMessage}</Alert>
-          )
+            )
           : (
             <>
             </>
-          )}
+            )}
         {showErrorAlert
           ? (
             <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
+            )
           : (
             <>
             </>
-          )}
+            )}
         <Card>
           <Typography>
             Name: {displayName}

@@ -6,7 +6,7 @@ import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../red
 import { useNavigate } from 'react-router-dom'
 import Alert from '@mui/material/Alert'
 
-function LoginPage() {
+function LoginPage () {
   const app = initFirebase()
   console.log(app)
   const auth = getAuth()
@@ -50,11 +50,11 @@ function LoginPage() {
       {showErrorAlert
         ? (
           <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-        )
+          )
         : (
           <>
           </>
-        )}
+          )}
       <h2>Login</h2>
       <form onSubmit={handleLogin} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <input

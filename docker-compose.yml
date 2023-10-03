@@ -48,19 +48,19 @@ services:
     ports:
       - '2000:2000'  
 
-  # frontend:
-  #   build:
-  #     context: ./frontend/
-  #     dockerfile: frontend.Dockerfile
-  #   depends_on:
-  #     - collabservice
-  #     - websocketserver
-  #     - matchingservice
-  #     - userservice
-  #   ports:
-  #    - '3000:3000'  
-  #   networks:
-  #     - some-net
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: frontend.Dockerfile
+    depends_on:
+      - collabservice
+      - websocketserver
+      - matchingservice
+      - userservice
+    ports:
+     - '3000:3000'  
+    networks:
+      - some-net
 
 networks:
   some-net:

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Alert from '@mui/material/Alert'
 import axios from 'axios'
 
-function SignupPage() {
+function SignupPage () {
   const [displayName, setDisplayName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -19,7 +19,7 @@ function SignupPage() {
   const requireAllNonNull = () => {
     const requiredFields = [displayName, username, email, password, passwordConfirmation]
     requiredFields.forEach((x, i) => {
-      if (x == '') {
+      if (x === '') {
         throw new Error('All fields cannot be empty')
       }
     })
@@ -63,11 +63,11 @@ function SignupPage() {
       {showErrorAlert
         ? (
           <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-        )
+          )
         : (
           <>
           </>
-        )}
+          )}
       <h2>Sign up for a PeerPrep account!</h2>
       <form onSubmit={handleSignUp} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
         <input

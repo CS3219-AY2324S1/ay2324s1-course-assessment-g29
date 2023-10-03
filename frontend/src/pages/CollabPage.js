@@ -26,7 +26,7 @@ const connectionOptions = {
   transports: ['websocket']
 }
 
-function CollabPage() {
+function CollabPage () {
   const [showErrorAlert, setShowErrorAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isMatched, setIsMatched] = useState(false)
@@ -39,7 +39,7 @@ function CollabPage() {
   const questionData = useSelector(selectQuestionData)
   const dispatch = useDispatch()
   const socket = useRef()
-  console.log("QuestionData", questionData)
+  console.log('QuestionData', questionData)
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
@@ -100,11 +100,11 @@ function CollabPage() {
       {showErrorAlert
         ? (
           <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-        )
+          )
         : (
           <>
           </>
-        )}
+          )}
       {isMatched
         ? (
           <>
@@ -154,7 +154,7 @@ function CollabPage() {
               </Grid>
             </Container>
           </>
-        )
+          )
         : (
           <>
             <Container>
@@ -164,7 +164,7 @@ function CollabPage() {
               <CircularProgress />
             </Container>
           </>
-        )}
+          )}
     </>
   )
 }

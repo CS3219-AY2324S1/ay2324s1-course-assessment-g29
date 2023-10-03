@@ -9,7 +9,7 @@ import HomePage from './pages/HomePage'
 import CollabPage from './pages/CollabPage'
 import CodeEditorPage from './pages/CodeEditorPage'
 
-function App() {
+function App () {
   const loginStatus = useSelector(selectLoginstatus)
 
   return (
@@ -27,7 +27,7 @@ function App() {
                   <Route path='/question/:questionId' element={<CodeEditorPage />} />
                   <Route path='*' element={<Navigate to='/home' />} />
                 </>
-              )
+                )
               : (
                 <>
                   <Route path='/' exact element={<LoginPage />} />
@@ -35,7 +35,7 @@ function App() {
                   <Route path='' element={<Navigate to='/' />} />
                   <Route path='*' element={<Navigate to='/' />} />
                 </>
-              )}
+                )}
           </Routes>
         </Container>
       </BrowserRouter>

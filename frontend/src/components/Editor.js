@@ -6,7 +6,7 @@ import { python } from '@codemirror/lang-python'
 import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
 
-function determineLanguage(selectedLanguage) {
+function determineLanguage (selectedLanguage) {
   if (selectedLanguage === 'Python') {
     return [python({ jsx: true })]
   } else if (selectedLanguage === 'Java') {
@@ -16,7 +16,7 @@ function determineLanguage(selectedLanguage) {
   }
 }
 
-function startingCode(language) {
+function startingCode (language) {
   if (language === 'Python') {
     return '## Write down your solutions here\n'
   } else if (language === 'Java') {

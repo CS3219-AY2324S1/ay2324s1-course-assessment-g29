@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Chip } from '@mui/material'
 
-function getColourbyDifficulty(difficulty) {
+function getColourbyDifficulty (difficulty) {
   switch (difficulty) {
     case 'Hard':
       return 'red'
@@ -15,11 +15,11 @@ function getColourbyDifficulty(difficulty) {
 }
 
 export const QuestionComponent = (questionData) => {
-  const data = questionData['questionData']
-  const [question] = useState(data['description'] || 'Question Description')
+  const data = questionData.questionData
+  const [question] = useState(data.description || 'Question Description')
   const [questionNo] = useState(1) // TODO update QuestionService to support
-  const [questionTitle] = useState(data['name'] || 'Question Title')
-  const [tags] = useState(data['tag'] || [])
+  const [questionTitle] = useState(data.name || 'Question Title')
+  const [tags] = useState(data.tag || [])
   const [difficulty] = useState('Easy') // TODO update QuestionService to support
 
   return (
