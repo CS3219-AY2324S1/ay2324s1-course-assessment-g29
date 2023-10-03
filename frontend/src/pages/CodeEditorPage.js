@@ -4,6 +4,8 @@ import { Box } from '@mui/system'
 import { QuestionComponent } from '../components/QuestionComponent'
 import { useParams } from 'react-router-dom'
 
+// TODO: remove if not necessary?
+
 const CodeEditorPage = () => {
   const { questionId } = useParams()
   console.log('Question ID: ' + questionId)

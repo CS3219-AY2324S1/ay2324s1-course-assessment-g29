@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Room = require('../models/room-model')
+const axios = require('axios')
 
 router.route('/createroom').post(async (req, res) => {
   try {
@@ -7,8 +8,13 @@ router.route('/createroom').post(async (req, res) => {
     console.log(`${user1id} creating room`)
     await Room.findOneAndRemove({ user1id })
     await Room.findOneAndDelete({ user2id: user1id })
-    const matchResult = await Room.create({ user1id })
-    res.status(200).json({ roomId: matchResult._id, message: 'Room succesfully created!' })
+    var questionData
+    await axios.get('http://questionservice:3002/question/getRandom')
+      .then((response) => {
+        questionData = response.data
+      })
+    const matchResult = await Room.create({ user1id, questionData })
+    res.status(200).json({ roomId: matchResult._id, message: 'Room succesfully created!', questionData: questionData })
   } catch (error) {
     console.log(error)
     res.status(400).json({ message: 'Unexpected Error' })
@@ -26,9 +32,10 @@ router.route('/joinroom').post(async (req, res) => {
       return res.status(400).json({ message: 'Invalid Match' })
     } else {
       const roomId = existing3._id
+      const questionData = existing3.questionData
       existing3.user2id = user2id
       await existing3.save()
-      return res.status(200).json({ roomId, message: `Matching with ${user1id}! Joining Room` })
+      return res.status(200).json({ roomId, message: `Matching with ${user1id}! Joining Room`, questionData: questionData })
     }
   } catch (error) {
     console.log(error)

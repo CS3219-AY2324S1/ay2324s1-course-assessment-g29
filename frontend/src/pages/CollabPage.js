@@ -1,6 +1,9 @@
 import { React, useState, useEffect, useRef } from 'react'
 import io from 'socket.io-client'
 import { useSelector, useDispatch } from 'react-redux'
+import { Editor } from '../components/Editor'
+import { Box } from '@mui/system'
+import { QuestionComponent } from '../components/QuestionComponent'
 import ScrollToBottom from 'react-scroll-to-bottom'
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
@@ -12,7 +15,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
-import { selectRoomid, selectMatchedUserid, setMatchedUserId } from '../redux/MatchingSlice'
+import { selectRoomid, selectMatchedUserid, setMatchedUserId, selectQuestionData } from '../redux/MatchingSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -23,7 +26,7 @@ const connectionOptions = {
   transports: ['websocket']
 }
 
-function CollabPage () {
+function CollabPage() {
   const [showErrorAlert, setShowErrorAlert] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [isMatched, setIsMatched] = useState(false)
@@ -33,8 +36,10 @@ function CollabPage () {
   const matchedUserid = useSelector(selectMatchedUserid)
   const matchedUseridRef = useRef(matchedUserid)
   const roomid = useSelector(selectRoomid)
+  const questionData = useSelector(selectQuestionData)
   const dispatch = useDispatch()
   const socket = useRef()
+  console.log("QuestionData", questionData)
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
@@ -95,14 +100,29 @@ function CollabPage () {
       {showErrorAlert
         ? (
           <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
+        )
         : (
           <>
           </>
-          )}
+        )}
       {isMatched
         ? (
           <>
+            <div style={{ width: '100%', height: '70%', paddingTop: '1rem' }}>
+              <Box
+                display='flex'
+                flexDirection='row'
+                justifyContent='center'
+                alignItems='start'
+              >
+                <div style={{ width: '50%' }}>
+                  <QuestionComponent questionData={questionData} />
+                </div>
+                <div style={{ width: '50%', height: '100%' }}>
+                  <Editor />
+                </div>
+              </Box>
+            </div>
             <Container>
               <Grid>
                 <Typography variant='h3' component='h2'>
@@ -134,7 +154,7 @@ function CollabPage () {
               </Grid>
             </Container>
           </>
-          )
+        )
         : (
           <>
             <Container>
@@ -144,7 +164,7 @@ function CollabPage () {
               <CircularProgress />
             </Container>
           </>
-          )}
+        )}
     </>
   )
 }
