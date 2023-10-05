@@ -15,13 +15,8 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 })
 
-// const db = admin.firestore(); // For profile picture sprint 2?
-// const userCollection = 'users';
-
-app.post('/test', (req, res) => {
-  console.log(req.body)
-  res.json({ requestBody: req.body }) // <==== req.body will be a parsed JSON object
-})
+const db = admin.firestore()
+const userCollection = db.collection('users')
 
 // Set up other dependencies
 function validateFields (reqBody, requiredFields) {
@@ -37,6 +32,8 @@ function validateFields (reqBody, requiredFields) {
   }
 };
 
+const supportedLanguages = ['Python', 'Java', 'C', 'C++', 'C#', 'JavaScript']
+
 // User registration route
 app.post('/user/register', async (req, res) => {
   try {
@@ -51,6 +48,11 @@ app.post('/user/register', async (req, res) => {
       displayName: name
       // photoURL: '' // init photoURL as empty string
     })
+    const docRef = userCollection.doc(username)
+    await docRef.set({
+      language: [supportedLanguages[0]]
+    })
+
     res.status(201).json({ message: 'User registered successfully', user: userRecord })
   } catch (error) {
     console.log()
@@ -84,26 +86,41 @@ app.post('/user/updatePassword', async (req, res) => {
   }
 })
 
-app.post('/user/updatePicture', async (req, res) => {
-  // TODO: Store photo in Firestore
+app.post('/user/updateLanguage', async (req, res) => {
   try {
-    validateFields(req.body, ['uid', 'photoUrl'])
-    const { uid, photoUrl } = req.body
-    const userRecord = await admin.auth().updateUser(uid, {
-      photoURL: photoUrl
-    })
-    res.status(200).json({ message: 'Profile picture updated successfully!', user: userRecord })
+    validateFields(req.body, ['uid', 'languages'])
+    const { uid, languages } = req.body
+
+    if (!languages.every(val => supportedLanguages.includes(val))) {
+      throw new Error('Languages chosen are not supported.')
+    }
+
+    const docRef = userCollection.doc(uid)
+    await docRef.set({ language: languages })
+
+    res.status(200).json({ message: 'Language updated successfully!' })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
 })
 
-app.post('/user/deregister', async (req, res) => {
-  // TODO: Store photo in Firestore
+app.get('/user/getLanguage/:uid', async (req, res) => {
   try {
-    validateFields(req.body, ['uid'])
-    const { uid } = req.body
-    await admin.auth().deleteUser(uid)
+    const docRef = userCollection.doc(req.params.uid)
+    const doc = await docRef.get()
+    if (!doc.exists) {
+      throw new Error(`User does not exist: ${req.params.uid}`)
+    }
+    res.status(200).json({ languages: doc.data().language })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+})
+
+app.delete('/user/deregister/:uid', async (req, res) => {
+  try {
+    await admin.auth().deleteUser(req.params.uid)
+    await userCollection.doc(req.params.uid).delete()
     res.status(200).json({ message: 'User deregistered successfully' })
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -113,34 +130,3 @@ app.post('/user/deregister', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
 })
-
-/*
-// User login route
-// TODO: Move to FE and use getAuth
-app.post('/login', async (req, res) => {
-    try {
-        const { identifier, password } = req.body;
-        const isEmail = validator.validate(identifier);
-        var userRecord;
-        if (isEmail) {
-            userRecord = await admin.auth().getUserByEmail(identifier);
-        } else {
-            userRecord = await admin.auth().getUser(identifier);
-        }
-        // Verify user's password here, if necessary
-        // Return JWT token or session information upon successful login
-        console.log(userRecord)
-        res.status(200).json({ message: 'User logged in successfully', user: userRecord });
-    } catch (error) {
-        console.log(error);
-        res.status(401).json({ error: 'Invalid credentials' });
-    }
-});
-
-// User logout route
-// TODO: Move to FE
-app.post('/logout', (req, res) => {
-    // Implement logout logic here (e.g., invalidate tokens or clear sessions)
-    res.status(200).json({ message: 'User logged out successfully' });
-});
-*/
