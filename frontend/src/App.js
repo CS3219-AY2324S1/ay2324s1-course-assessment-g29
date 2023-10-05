@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { Container } from '@mui/material'
-import { useSelector } from 'react-redux'
-import { selectLoginstatus } from './redux/UserSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { useCookies } from 'react-cookie'
+import { selectLoginstatus, setLoginStatus, setUserid } from './redux/UserSlice'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Login from './pages/login'
@@ -10,7 +12,22 @@ import CollabPage from './pages/CollabPage'
 import CodeEditorPage from './pages/CodeEditorPage'
 
 function App () {
-  const loginStatus = useSelector(selectLoginstatus)
+
+  const loginStatus = useSelector(selectLoginstatus);
+  const [cookies, setCookie, removeCookie] = useCookies(['Peerprep'])
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (loginStatus === false) {
+      let userId = cookies.uid
+      if (userId) {
+        console.log(userId)
+        dispatch(setUserid(userId))
+        dispatch(setLoginStatus(true))
+        // fetch user details in following code
+      }
+    }
+  }, [])
 
   return (
     <>

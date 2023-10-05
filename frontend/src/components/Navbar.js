@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useCookies } from 'react-cookie';
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectLoginstatus, selectDisplayname, setUserid, setStateEmail, setDisplayname, setLoginStatus } from '../redux/UserSlice'
@@ -23,6 +24,7 @@ function Navbar () {
   const [anchorElUser, setAnchorElUser] = useState(null)
   const loginStatus = useSelector(selectLoginstatus)
   const displayName = useSelector(selectDisplayname)
+  const [cookies, setCookie, removeCookie] = useCookies(['cookieName']);
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -32,6 +34,7 @@ function Navbar () {
     dispatch(setStateEmail(''))
     dispatch(setLoginStatus(false))
     setAnchorElUser(null)
+    removeCookie('uid')
     navigate('/')
   }
 

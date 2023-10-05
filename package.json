@@ -10,14 +10,14 @@
     "start": "react-scripts start"
   },
   "dependencies": {
-    "react": "^18.2.0",
     "axios": "^1.5.1",
     "firebase": "^10.4.0",
     "firebase-admin": "^11.10.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "yarn": "^1.22.19"
   },
   "name": "ay2324s1-course-assessment-g29",
   "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6BOvYMwN) # AssignmentTemplate",

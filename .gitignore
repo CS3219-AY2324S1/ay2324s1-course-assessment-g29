@@ -3,6 +3,7 @@ configs/
 
 #.env
 microservices/collabService/.env
+microservices/questionService/_env.crash
 
 # OS specific
 .DS_Store

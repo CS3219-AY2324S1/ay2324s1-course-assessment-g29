@@ -1,5 +1,6 @@
 import { initFirebase } from '../configs/firebase.js'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { useCookies } from 'react-cookie';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
@@ -14,6 +15,7 @@ function Login () {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [cookies, setCookie, removeCookie] = useCookies(['Peerprep']);  
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -29,6 +31,7 @@ function Login () {
       dispatch(setStateEmail(useremail))
       dispatch(setLoginStatus(true))
       console.log('Login successful')
+      setCookie('uid', userid, { path: '/' })
       navigate('/home')
     } catch (error) {
       console.error('Login error:', error)
