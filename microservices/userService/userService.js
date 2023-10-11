@@ -117,6 +117,18 @@ app.get('/user/getLanguage/:uid', async (req, res) => {
   }
 })
 
+app.get('/user/:uid', async (req, res) => {
+  try {
+    admin.auth()
+      .getUser(req.params.uid)
+      .then((userRecord) => {
+        res.status(200).json({ userData: userRecord.toJSON() })
+      })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+})
+
 app.delete('/user/deregister/:uid', async (req, res) => {
   try {
     await admin.auth().deleteUser(req.params.uid)
