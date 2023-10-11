@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const editorSlice = createSlice({
   name: 'editor',
   initialState: {
-    code: 'Please choose a language to begin!\n',
+    code: 'Please choose a language to begin!\n'
   },
   reducers: {
     setCode: (state, action) => {

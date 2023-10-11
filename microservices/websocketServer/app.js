@@ -39,7 +39,6 @@ io.on('connection', (socket) => {
         const socket1id = filtered[0]
         const filtered2 = roomSockets.filter(socket2id => socket2id === socket.id)
         if (filtered2.length === 0) {
-          console.log("sup")
           roomIdToSocketId[roomid].push(socket.id)
         }
         socketToRoom[socket.id] = roomid

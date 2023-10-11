@@ -28,13 +28,12 @@ function startingCode (language) {
   }
 }
 
-export const Editor = ({socketRef, code}) => {
-
+export const Editor = ({socketRef}) => {
   const dispatch = useDispatch()
   const reduxCode = useSelector(selectCode)
   const [languages] = useState(['Python', 'Java', 'C++'])
   const [selectedLanguage, setSelectedLanguage] = useState('')
-  
+
   const handleLanguageChange = (e) => {
     const selectedValue = e.target.value
     setCode(startingCode(selectedValue))
@@ -44,8 +43,8 @@ export const Editor = ({socketRef, code}) => {
   const handleCodeChange = (value, data) => {
     console.log('Code changed to:', value)
     dispatch(setCode(value))
-    socketRef.current.emit('CodeChange', {code: value}, (error) => {
-      console.log(error);
+    socketRef.current.emit('CodeChange', { code: value }, (error) => {
+      console.log(error)
     })
   }
 
