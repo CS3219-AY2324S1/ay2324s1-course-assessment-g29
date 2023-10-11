@@ -16,6 +16,7 @@ import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
 import { selectRoomid, selectMatchedUserid, setMatchedUserId, selectQuestionData } from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
+import { selectCode, setCode } from '../redux/EditorSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -76,6 +77,10 @@ function CollabPage () {
       setMessages(messages => [...messages, messageString])
     })
 
+    socket.current.on('CodeChange', (code) => {
+      dispatch(setCode(code.code))
+    })
+
     socket.current.on('DisconnectPeer', (message) => {
       dispatch(setErrorMessage('Peer has disconnected'))
       dispatch(setShowError(true))
@@ -107,7 +112,7 @@ function CollabPage () {
                   <QuestionComponent questionData={questionData} />
                 </div>
                 <div style={{ width: '50%', height: '100%' }}>
-                  <Editor />
+                  <Editor socketRef={socket} />
                 </div>
               </Box>
             </div>
