@@ -7,7 +7,7 @@ app.use(cors())
 const port = process.env.PORT || 3001
 
 // Set up firebase
-require('dotenv').config({ path: 'configs/.env' });
+require('dotenv').config({ path: 'configs/.env' })
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -15,8 +15,8 @@ const firebaseConfig = {
   storageBucket: process.env.STORAGE_BUCKET,
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
   appId: process.env.APP_ID,
-  measurementId: process.env.MEASUREMENT_ID,
-};
+  measurementId: process.env.MEASUREMENT_ID
+}
 console.log(firebaseConfig)
 const firebase = require('firebase/app')
 const firebaseApp = firebase.initializeApp(firebaseConfig)
@@ -35,7 +35,7 @@ const db = admin.firestore()
 const userCollection = db.collection('users')
 
 // Set up other dependencies
-function validateFields(reqBody, requiredFields) {
+function validateFields (reqBody, requiredFields) {
   const missingFields = []
   for (const field of requiredFields) {
     if (!(field in reqBody)) {
