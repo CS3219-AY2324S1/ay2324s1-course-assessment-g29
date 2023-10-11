@@ -17,7 +17,7 @@ router.route('/').post(async (req, res) => {
       console.log('hi')
       const result = await axios.post(collabServiceUrl + 'createroom', { user1id })
       console.log(result)
-      res.status(200).json({ roomId: result.data.roomId, message: 'Waiting for another person to join the queue' })
+      res.status(200).json({ roomId: result.data.roomId, message: 'Waiting for another person to join the queue', questionData: result.data.questionData })
     } catch (error) {
       console.log(error)
       return res.status(400).json({ message: error.response.data.message })
@@ -34,7 +34,7 @@ router.route('/').post(async (req, res) => {
     if (user1id) {
       try {
         const result = await axios.post(collabServiceUrl + 'joinroom', { user1id, user2id })
-        res.status(200).json({ roomId: result.data.roomId, message: `Matched with ${user1id}` })
+        res.status(200).json({ roomId: result.data.roomId, message: `Matched with ${user1id}`, questionData: result.data.questionData })
       } catch (error) {
         console.log(error)
         return res.status(400).json({ message: error.response.data.message })

@@ -3,9 +3,10 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
+import { setErrorMessage, setShowError } from '../redux/ErrorSlice.js'
 import { useNavigate } from 'react-router-dom'
 
-function Login () {
+function LoginPage () {
   const app = initFirebase()
   console.log(app)
   const auth = getAuth()
@@ -31,7 +32,8 @@ function Login () {
       console.log('Login successful')
       navigate('/home')
     } catch (error) {
-      console.error('Login error:', error)
+      dispatch(setErrorMessage(error.message)) // TODO handle firebase errors (give better descriptions)
+      dispatch(setShowError(true))
     }
   }
 
@@ -64,4 +66,4 @@ function Login () {
   )
 }
 
-export default Login
+export default LoginPage

@@ -1,8 +1,10 @@
 import { React, useState, useEffect, useRef } from 'react'
 import io from 'socket.io-client'
 import { useSelector, useDispatch } from 'react-redux'
+import { Editor } from '../components/Editor'
+import { Box } from '@mui/system'
+import { QuestionComponent } from '../components/QuestionComponent'
 import ScrollToBottom from 'react-scroll-to-bottom'
-import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -12,7 +14,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
-import { selectRoomid, selectMatchedUserid, setMatchedUserId } from '../redux/MatchingSlice'
+import { selectRoomid, selectMatchedUserid, setMatchedUserId, selectQuestionData } from '../redux/MatchingSlice'
+import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -24,8 +27,6 @@ const connectionOptions = {
 }
 
 function CollabPage () {
-  const [showErrorAlert, setShowErrorAlert] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const [isMatched, setIsMatched] = useState(false)
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
@@ -33,6 +34,7 @@ function CollabPage () {
   const matchedUserid = useSelector(selectMatchedUserid)
   const matchedUseridRef = useRef(matchedUserid)
   const roomid = useSelector(selectRoomid)
+  const questionData = useSelector(selectQuestionData)
   const dispatch = useDispatch()
   const socket = useRef()
 
@@ -43,8 +45,8 @@ function CollabPage () {
       console.log('connecting to websocket server')
       socket.current.emit('JoinRoom', { userid, roomid }, (error) => {
         if (error) {
-          setErrorMessage(error)
-          setShowErrorAlert(true)
+          dispatch(setErrorMessage(error))
+          dispatch(setShowError(true))
         }
       })
       console.log('joined waiting room')
@@ -75,9 +77,8 @@ function CollabPage () {
     })
 
     socket.current.on('DisconnectPeer', (message) => {
-      console.log('Hi')
-      setErrorMessage('Peer has disconnected')
-      setShowErrorAlert(true)
+      dispatch(setErrorMessage('Peer has disconnected'))
+      dispatch(setShowError(true))
     })
   }, [])
 
@@ -92,17 +93,24 @@ function CollabPage () {
 
   return (
     <>
-      {showErrorAlert
-        ? (
-          <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
-        : (
-          <>
-          </>
-          )}
       {isMatched
         ? (
           <>
+            <div style={{ width: '100%', height: '70%', paddingTop: '1rem' }}>
+              <Box
+                display='flex'
+                flexDirection='row'
+                justifyContent='center'
+                alignItems='start'
+              >
+                <div style={{ width: '50%' }}>
+                  <QuestionComponent questionData={questionData} />
+                </div>
+                <div style={{ width: '50%', height: '100%' }}>
+                  <Editor />
+                </div>
+              </Box>
+            </div>
             <Container>
               <Grid>
                 <Typography variant='h3' component='h2'>

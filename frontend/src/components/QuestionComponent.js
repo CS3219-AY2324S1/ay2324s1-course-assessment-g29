@@ -14,27 +14,13 @@ function getColourbyDifficulty (difficulty) {
   }
 }
 
-export const QuestionComponent = ({ questionId }) => {
-  const [question] = useState('Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice. You can return the answer in any order.')
-  const [questionNo] = useState(123)
-  const [questionTitle] = useState('Two Sum')
-  const [tags] = useState(['Array', 'Hash Table'])
-  const [difficulty] = useState('Hard')
-
-  // TODO: Fetch question data from backend using QuestionId
-  // useEffect(() => {
-  //   if (questionId) {
-  //     fetch(`/api/questions/${questionId}`)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         setQuestionData(data)
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error fetching question data:', error)
-  //         setQuestionData(null)
-  //       })
-  //   }
-  // }, [questionId])
+export const QuestionComponent = (questionData) => {
+  const data = questionData.questionData
+  const [question] = useState(data.description || 'Question Description')
+  const [questionNo] = useState(1) // TODO update QuestionService to support
+  const [questionTitle] = useState(data.name || 'Question Title')
+  const [tags] = useState(data.tag || [])
+  const [difficulty] = useState('Easy') // TODO update QuestionService to support
 
   return (
     <div style={{ padding: '1rem' }}>

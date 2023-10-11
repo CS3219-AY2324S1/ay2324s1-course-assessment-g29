@@ -7,9 +7,9 @@ import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
 
 function determineLanguage (selectedLanguage) {
-  if (selectedLanguage === 'python') {
+  if (selectedLanguage === 'Python') {
     return [python({ jsx: true })]
-  } else if (selectedLanguage === 'java') {
+  } else if (selectedLanguage === 'Java') {
     return [java({ jsx: true })]
   } else if (selectedLanguage === 'C++') {
     return [cpp({ jsx: true })]
@@ -17,9 +17,9 @@ function determineLanguage (selectedLanguage) {
 }
 
 function startingCode (language) {
-  if (language === 'python') {
+  if (language === 'Python') {
     return '## Write down your solutions here\n'
-  } else if (language === 'java') {
+  } else if (language === 'Java') {
     return '/* Write down your solutions here */\n'
   } else if (language === 'C++') {
     return '/* Write down your solutions here */\n'
@@ -27,7 +27,7 @@ function startingCode (language) {
 }
 
 export const Editor = () => {
-  const [languages] = useState(['python', 'java', 'C++'])
+  const [languages] = useState(['Python', 'Java', 'C++'])
   const [selectedLanguage, setSelectedLanguage] = useState('')
   const [code, setCode] = useState('Please choose a language to begin!\n')
 
