@@ -8,33 +8,32 @@ const matchingService = new MatchingService()
 const collabServiceUrl = 'http://collabservice:8000/room/'
 
 router.route('/').post(async (req, res) => {
-  if (matchingService.isEmpty()) {
-    const { user1id } = req.body
-    console.log(`${user1id} Joining Queue`)
-    matchingService.joinQueue(user1id)
+  const { userid, difficulty, programmingLanguages } = req.body
+  matchingService.checkRequeue(userid)
+  if (matchingService.isEmpty(difficulty, programmingLanguages)) {
+    const user1id = userid
+    console.log(`${user1id} Joining ${difficulty} Queue`)
+    matchingService.joinQueue(difficulty, programmingLanguages, user1id)
     try {
       // getting roomID
-      console.log('hi')
       const result = await axios.post(collabServiceUrl + 'createroom', { user1id })
-      console.log(result)
       res.status(200).json({ roomId: result.data.roomId, message: 'Waiting for another person to join the queue', questionData: result.data.questionData })
     } catch (error) {
       console.log(error)
       return res.status(400).json({ message: error.response.data.message })
     }
   } else {
-    const user1id = matchingService.popQueue()
-    const user2id = req.body.user1id
-    if (user1id === user2id) {
-      // same person rejoin
-      matchingService.joinQueue(user1id)
-      return res.status(200).json({ message: 'Waiting for another person to join the queue' })
+    const user2id = userid
+    const user = matchingService.popQueue(difficulty, programmingLanguages)
+    const user1id = user.userid
+    if (!user2id) {
+      res.status(400).json('Unexpected error. Please rejoin queue.')
     }
     console.log(`${user2id} joining room with ${user1id}`)
-    if (user1id) {
+    if (user2id) {
       try {
         const result = await axios.post(collabServiceUrl + 'joinroom', { user1id, user2id })
-        res.status(200).json({ roomId: result.data.roomId, message: `Matched with ${user1id}`, questionData: result.data.questionData })
+        res.status(200).json({ roomId: result.data.roomId, message: `Matched with ${user2id}`, questionData: result.data.questionData })
       } catch (error) {
         console.log(error)
         return res.status(400).json({ message: error.response.data.message })

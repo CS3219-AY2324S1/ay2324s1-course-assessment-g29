@@ -29,6 +29,7 @@ function LoginPage () {
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
       dispatch(setLoginStatus(true))
+      console.log(userCredentials)
       console.log('Login successful')
       navigate('/home')
     } catch (error) {

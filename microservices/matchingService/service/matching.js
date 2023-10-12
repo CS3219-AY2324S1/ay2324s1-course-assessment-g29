@@ -1,24 +1,143 @@
-const Queue = require('queue-fifo')
-
 class MatchingService {
   constructor () {
-    this.userQueue = new Queue()
+    this.EasyQueue = []
+    this.MediumQueue = []
+    this.HardQueue = []
   }
 
-  joinQueue (userid) {
-    this.userQueue.enqueue(userid)
+  checkRequeue (useridCheck) {
+    // need to check whether its a requeue
+    let user
+    for (let i = 0; i < this.EasyQueue.length; i++) {
+      user = this.EasyQueue[i]
+      if (user.userid === useridCheck) {
+        this.EasyQueue.splice(i, 1);
+        return true
+      }
+    }
+    for (let i = 0; i < this.MediumQueue.length; i++) {
+      user = this.MediumQueue[i]
+      if (user.userid === useridCheck) {
+        this.MediumQueue.splice(i, 1);
+        return true
+      }
+    }
+    for (let i = 0; i < this.HardQueue.length; i++) {
+      user = this.HardQueue[i]
+      if (user.userid === useridCheck) {
+        this.HardQueue.splice(i, 1);
+        return true
+      }
+    }
+    return false
   }
 
-  popQueue () {
-    if (this.isEmpty()) {
-      // Return null or another appropriate value when the queue is empty
+  findMatchingLanguages (user1Languages, user2Languages) {
+    let matchingLanguages = []
+    for (const language of user2Languages) {
+      if (user1Languages.includes(language)) {
+        matchingLanguages = [ ...matchingLanguages, language]
+      }
+    }
+    return matchingLanguages;
+  }
+
+  isEmpty (difficulty, languages) {
+    if (difficulty == 'Easy') {
+      for (const user of this.EasyQueue) {
+        const prefLanguages = user.languages
+        const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
+        if (matchingLanguages.length > 0) {
+          return false
+        }
+      }
+      return true
+    } else if (difficulty == 'Normal') {
+      for (const user of this.MediumQueue) {
+        const prefLanguages = user.languages
+        const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
+        if (matchingLanguages.length > 0) {
+          return false
+        }
+      }
+      return true
+    } else {
+      for (const user of this.HardQueue) {
+        const prefLanguages = user.languages
+        const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
+        if (matchingLanguages.length > 0) {
+          return false
+        }
+      }
+      return true
+    }
+  }
+
+  joinQueue (difficulty, languages, userid) {
+    const newUser = {userid, languages}
+    if (difficulty == 'Easy') {
+      this.EasyQueue.push(newUser)
+      console.log(this.EasyQueue)
+    } else if (difficulty == 'Normal') {
+      this.MediumQueue.push(newUser)
+    } else if (difficulty == 'Hard') {
+      this.HardQueue.push(newUser)
+    }
+  }
+
+  popQueue (difficulty, languages) {
+    let foundMatching = false;
+    if (difficulty == 'Easy') {
+      for (let i = 0; i < this.EasyQueue.length; i++) {
+        const user = this.EasyQueue[i]
+        const prefLanguages = user.languages
+        for (const language of languages) {
+          if (prefLanguages.includes(language)) {
+            foundMatching = true
+            break
+          }
+        }
+        if (foundMatching) {
+          const matchedUser = this.EasyQueue.splice(i, 1)[0];
+          return matchedUser
+        }
+      }
+      return null
+    } else if (difficulty == 'Normal') {
+      for (let i = 0; i < this.MediumQueue.length; i++) {
+          const user = this.MediumQueue[i]
+          const prefLanguages = user.languages
+          
+          for (const language of languages) {
+            if (prefLanguages.includes(language)) {
+              foundMatching = true
+              break
+            }
+          }
+          if (foundMatching) {
+            const matchedUser = this.MediumQueue.splice(i, 1)[0];
+            return matchedUser
+          }
+        }
+        return null
+    } else if (difficulty == 'Hard') {
+      for (let i = 0; i < this.HardQueue.length; i++) {
+        const user = this.HardQueue[i]
+        const prefLanguages = user.languages
+        
+        for (const language of  languages) {
+          if (prefLanguages.includes(language)) {
+            foundMatching = true
+            break
+          }
+        }
+        if (foundMatching) {
+          const matchedUser = this.HardQueue.splice(i, 1)[0];
+          return matchedUser
+        }
+      }
       return null
     }
-    return this.userQueue.dequeue()
-  }
-
-  isEmpty () {
-    return this.userQueue.isEmpty()
   }
 }
 
