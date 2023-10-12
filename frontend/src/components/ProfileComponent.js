@@ -16,13 +16,13 @@ function Profile () {
   useEffect(() => {
     axios.get(`http://localhost:3001/user/getLanguage/${userid}`)
       .then((response) => {
-          console.log(response)
-          const userLanguages = response.data.languages
-          dispatch(setPreferredLanguages(userLanguages))
-        }).catch((error) => {
-          dispatch(setErrorMessage(error.message))
-          dispatch(setShowError(true))
-        })
+        console.log(response)
+        const userLanguages = response.data.languages
+        dispatch(setPreferredLanguages(userLanguages))
+      }).catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
   }, [])
 
   return (
@@ -40,16 +40,13 @@ function Profile () {
         <Typography>
           Preferred Languages:
         </Typography>
-        { preferredLanguages && preferredLanguages.map((language) => {
+        {preferredLanguages && preferredLanguages.map((language) => {
           return (
-            <>
-              <Typography>
-                {language}
-              </Typography>
-            </>
+            <Typography>
+              {language}
+            </Typography>
           )
-          })
-        }
+        })}
       </Card>
     </>
   )

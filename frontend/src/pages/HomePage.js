@@ -3,7 +3,6 @@ import Profile from '../components/ProfileComponent'
 import MatchingComponent from '../components/MatchingComponent'
 
 function HomePage () {
-
   return (
     <>
       <Container>

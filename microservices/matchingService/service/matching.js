@@ -11,21 +11,21 @@ class MatchingService {
     for (let i = 0; i < this.EasyQueue.length; i++) {
       user = this.EasyQueue[i]
       if (user.userid === useridCheck) {
-        this.EasyQueue.splice(i, 1);
+        this.EasyQueue.splice(i, 1)
         return true
       }
     }
     for (let i = 0; i < this.MediumQueue.length; i++) {
       user = this.MediumQueue[i]
       if (user.userid === useridCheck) {
-        this.MediumQueue.splice(i, 1);
+        this.MediumQueue.splice(i, 1)
         return true
       }
     }
     for (let i = 0; i < this.HardQueue.length; i++) {
       user = this.HardQueue[i]
       if (user.userid === useridCheck) {
-        this.HardQueue.splice(i, 1);
+        this.HardQueue.splice(i, 1)
         return true
       }
     }
@@ -33,17 +33,17 @@ class MatchingService {
   }
 
   findMatchingLanguages (user1Languages, user2Languages) {
-    let matchingLanguages = []
+    const matchingLanguages = []
     for (const language of user2Languages) {
       if (user1Languages.includes(language)) {
         matchingLanguages.push(language)
       }
     }
-    return matchingLanguages;
+    return matchingLanguages
   }
 
   isEmpty (difficulty, languages) {
-    if (difficulty == 'Easy') {
+    if (difficulty === 'Easy') {
       for (const user of this.EasyQueue) {
         const prefLanguages = user.languages
         const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
@@ -52,7 +52,7 @@ class MatchingService {
         }
       }
       return true
-    } else if (difficulty == 'Normal') {
+    } else if (difficulty === 'Normal') {
       for (const user of this.MediumQueue) {
         const prefLanguages = user.languages
         const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
@@ -74,20 +74,20 @@ class MatchingService {
   }
 
   joinQueue (difficulty, languages, userid) {
-    const newUser = {userid, languages}
-    if (difficulty == 'Easy') {
+    const newUser = { userid, languages }
+    if (difficulty === 'Easy') {
       this.EasyQueue.push(newUser)
       console.log(this.EasyQueue)
-    } else if (difficulty == 'Normal') {
+    } else if (difficulty === 'Normal') {
       this.MediumQueue.push(newUser)
-    } else if (difficulty == 'Hard') {
+    } else if (difficulty ==='Hard') {
       this.HardQueue.push(newUser)
     }
   }
 
   popQueue (difficulty, languages) {
-    let foundMatching = false;
-    if (difficulty == 'Easy') {
+    let foundMatching = false
+    if (difficulty === 'Easy') {
       for (let i = 0; i < this.EasyQueue.length; i++) {
         const user = this.EasyQueue[i]
         const prefLanguages = user.languages
@@ -98,41 +98,41 @@ class MatchingService {
           }
         }
         if (foundMatching) {
-          const matchedUser = this.EasyQueue.splice(i, 1)[0];
+          const matchedUser = this.EasyQueue.splice(i, 1)[0]
           return matchedUser
         }
       }
       return null
-    } else if (difficulty == 'Normal') {
+    } else if (difficulty === 'Normal') {
       for (let i = 0; i < this.MediumQueue.length; i++) {
-          const user = this.MediumQueue[i]
-          const prefLanguages = user.languages
-          
-          for (const language of languages) {
-            if (prefLanguages.includes(language)) {
-              foundMatching = true
-              break
-            }
-          }
-          if (foundMatching) {
-            const matchedUser = this.MediumQueue.splice(i, 1)[0];
-            return matchedUser
-          }
-        }
-        return null
-    } else if (difficulty == 'Hard') {
-      for (let i = 0; i < this.HardQueue.length; i++) {
-        const user = this.HardQueue[i]
+        const user = this.MediumQueue[i]
         const prefLanguages = user.languages
-        
-        for (const language of  languages) {
+
+        for (const language of languages) {
           if (prefLanguages.includes(language)) {
             foundMatching = true
             break
           }
         }
         if (foundMatching) {
-          const matchedUser = this.HardQueue.splice(i, 1)[0];
+          const matchedUser = this.MediumQueue.splice(i, 1)[0]
+          return matchedUser
+        }
+      }
+      return null
+    } else if (difficulty === 'Hard') {
+      for (let i = 0; i < this.HardQueue.length; i++) {
+        const user = this.HardQueue[i]
+        const prefLanguages = user.languages
+
+        for (const language of languages) {
+          if (prefLanguages.includes(language)) {
+            foundMatching = true
+            break
+          }
+        }
+        if (foundMatching) {
+          const matchedUser = this.HardQueue.splice(i, 1)[0]
           return matchedUser
         }
       }
