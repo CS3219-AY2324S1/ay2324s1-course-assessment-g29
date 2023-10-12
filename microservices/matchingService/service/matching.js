@@ -36,7 +36,7 @@ class MatchingService {
     let matchingLanguages = []
     for (const language of user2Languages) {
       if (user1Languages.includes(language)) {
-        matchingLanguages = [ ...matchingLanguages, language]
+        matchingLanguages.push(language)
       }
     }
     return matchingLanguages;
