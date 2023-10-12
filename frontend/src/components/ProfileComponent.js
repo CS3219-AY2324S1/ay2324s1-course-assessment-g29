@@ -40,9 +40,9 @@ function Profile () {
         <Typography>
           Preferred Languages:
         </Typography>
-        {preferredLanguages && preferredLanguages.map((language) => {
+        {preferredLanguages && preferredLanguages.map((language, index) => {
           return (
-            <Typography>
+            <Typography key={index}>
               {language}
             </Typography>
           )

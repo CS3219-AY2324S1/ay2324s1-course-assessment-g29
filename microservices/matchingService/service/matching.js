@@ -80,7 +80,7 @@ class MatchingService {
       console.log(this.EasyQueue)
     } else if (difficulty === 'Normal') {
       this.MediumQueue.push(newUser)
-    } else if (difficulty ==='Hard') {
+    } else if (difficulty === 'Hard') {
       this.HardQueue.push(newUser)
     }
   }
