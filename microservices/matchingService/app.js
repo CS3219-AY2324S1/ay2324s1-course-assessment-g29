@@ -35,10 +35,10 @@ io.on('connection', (socket) => {
             io.to(socket.id).emit('ErrorMatching', { errorMessage: 'Connection Timeout! Please Rejoin Queue' })
             console.log(
             `Disconnecting from ${user1id} due to 30s passing and no match was found.`
-            );
-            socket.disconnect();
+            )
+            socket.disconnect()
           }
-        }, 30000);
+        }, 30000)
         callback()
       } else {
         const user2id = userid
@@ -72,7 +72,6 @@ io.on('connection', (socket) => {
     console.log('Leaving Queue')
     matchingService.leaveQueue(socket.id)
   })
-
 })
 
 server.listen(port, () => console.log(`Express app running on port ${port}!`))
