@@ -6,7 +6,8 @@ export const userSlice = createSlice({
     loginStatus: false,
     userid: '',
     displayname: '',
-    email: ''
+    email: '',
+    preferredLanguages: []
   },
   reducers: {
     setLoginStatus: (state, action) => {
@@ -20,12 +21,15 @@ export const userSlice = createSlice({
     },
     setStateEmail: (state, action) => {
       state.email = action.payload
+    },
+    setPreferredLanguages: (state, action) => {
+      state.preferredLanguages = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setStateEmail, setUserid, setDisplayname, setLoginStatus } = userSlice.actions
+export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages } = userSlice.actions
 
 export const selectLoginstatus = (state) => state.user.loginStatus
 
@@ -34,5 +38,7 @@ export const selectUserid = (state) => state.user.userid
 export const selectDisplayname = (state) => state.user.displayname
 
 export const selectEmail = (state) => state.user.email
+
+export const selectPreferredLanguages = (state) => state.user.preferredLanguages
 
 export default userSlice.reducer
