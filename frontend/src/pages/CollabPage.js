@@ -10,11 +10,10 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import SendIcon from '@mui/icons-material/Send'
 import Container from '@mui/material/Container'
-import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
-import { selectRoomid, selectMatchedUserid, setMatchedUserId, selectQuestionData } from '../redux/MatchingSlice'
+import { selectRoomid, selectMatchedUserid, selectQuestionData } from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
@@ -27,7 +26,6 @@ const connectionOptions = {
 }
 
 function CollabPage () {
-  const [isMatched, setIsMatched] = useState(false)
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
   const userid = useSelector(selectUserid)
@@ -53,9 +51,6 @@ function CollabPage () {
     })
 
     socket.current.on('MatchSuccess', ({ matchedUserId }) => {
-      setIsMatched(true)
-      dispatch(setMatchedUserId(matchedUserId))
-      matchedUseridRef.current = matchedUserId
       console.log(matchedUserId)
     })
 
@@ -63,8 +58,6 @@ function CollabPage () {
     return () => {
       if (socket.current) {
         socket.current.disconnect()
-        dispatch(setMatchedUserId(''))
-        matchedUseridRef.current = ''
         socket.current.off()
       }
     }
@@ -93,66 +86,51 @@ function CollabPage () {
 
   return (
     <>
-      {isMatched
-        ? (
-          <>
-            <div style={{ width: '100%', height: '70%', paddingTop: '1rem' }}>
-              <Box
-                display='flex'
-                flexDirection='row'
-                justifyContent='center'
-                alignItems='start'
-              >
-                <div style={{ width: '50%' }}>
-                  <QuestionComponent questionData={questionData} />
+      <div style={{ width: '100%', height: '70%', paddingTop: '1rem' }}>
+        <Box
+          display='flex'
+          flexDirection='row'
+          justifyContent='center'
+          alignItems='start'
+        >
+          <div style={{ width: '50%' }}>
+            <QuestionComponent questionData={questionData} />
+          </div>
+          <div style={{ width: '50%', height: '100%' }}>
+            <Editor />
+          </div>
+        </Box>
+      </div>
+      <Container>
+        <Grid>
+          <Typography variant='h3' component='h2'>
+            Matched with : {matchedUserid}
+          </Typography>
+        </Grid>
+        <Grid>
+          <Card>
+            <ScrollToBottom className='messages'>
+              {messages.map((message, i) => (
+                <div key={i}>
+                  <Typography>{message}</Typography>
                 </div>
-                <div style={{ width: '50%', height: '100%' }}>
-                  <Editor />
-                </div>
-              </Box>
-            </div>
-            <Container>
-              <Grid>
-                <Typography variant='h3' component='h2'>
-                  Matched with : {matchedUserid}
-                </Typography>
-              </Grid>
-              <Grid>
-                <Card>
-                  <ScrollToBottom className='messages'>
-                    {messages.map((message, i) => (
-                      <div key={i}>
-                        <Typography>{message}</Typography>
-                      </div>
-                    ))}
-                  </ScrollToBottom>
-                  <TextField
-                    id='outlined-multiline-flexible'
-                    label='Send A Message'
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    multiline
-                    maxRows={4}
-                  />
-                  <Button variant='contained' onClick={sendMessage} endIcon={<SendIcon />}>
-                    Send
-                  </Button>
-                  <br />
-                </Card>
-              </Grid>
-            </Container>
-          </>
-          )
-        : (
-          <>
-            <Container>
-              <Typography variant='h3' component='h2'>
-                Awaiting Match
-              </Typography>
-              <CircularProgress />
-            </Container>
-          </>
-          )}
+              ))}
+            </ScrollToBottom>
+            <TextField
+              id='outlined-multiline-flexible'
+              label='Send A Message'
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              multiline
+              maxRows={4}
+            />
+            <Button variant='contained' onClick={sendMessage} endIcon={<SendIcon />}>
+              Send
+            </Button>
+            <br />
+          </Card>
+        </Grid>
+      </Container>
     </>
   )
 }

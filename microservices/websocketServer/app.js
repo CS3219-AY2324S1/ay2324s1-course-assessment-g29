@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
       if (filtered.length > 0) {
         const socket1id = filtered[0]
         const filtered2 = roomSockets.filter(socket2id => socket2id === socket.id)
-        if (filtered2 === 0) {
+        if (filtered2.length === 0) {
           roomIdToSocketId[roomid].push(socket.id)
         }
         socketToRoom[socket.id] = roomid
@@ -62,6 +62,7 @@ io.on('connection', (socket) => {
       const roomId = socketToRoom[socket.id]
       for (const index in roomIdToSocketId[roomId]) {
         const socket2id = roomIdToSocketId[roomId][index]
+        console.log(socket2id)
         if (socket2id !== socket.id) {
           console.log('hi')
           io.to(socket2id).emit('Message', { message })
