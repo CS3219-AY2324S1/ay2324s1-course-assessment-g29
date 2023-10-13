@@ -80,7 +80,7 @@ function MatchingComponent () {
       socket.current.disconnect()
       dispatch(setAwaitingMatching(false))
     })
-    
+
     console.log('joined waiting room')
   }
 
@@ -94,7 +94,7 @@ function MatchingComponent () {
     <>
       <Grid mt={2}>
         <Card>
-          {isMatching 
+          {isMatching
             ? (
               <>
                 <Box>
@@ -107,7 +107,7 @@ function MatchingComponent () {
                   <Button variant='contained' onClick={leaveQueue}>Leave Queue</Button>
                 </Box>
               </>
-              ) 
+              )
             : (
               <>
                 <Box sx={{ minWidth: 120 }}>
@@ -130,7 +130,7 @@ function MatchingComponent () {
                   <Button variant='contained' onClick={joinQueue}>Start Match</Button>
                 </Box>
               </>
-          )}
+              )}
         </Card>
       </Grid>
     </>

@@ -52,7 +52,8 @@ io.on('connection', (socket) => {
             io.to(socket.id).emit('ErrorMatching', { errorMessage: 'Please Rejoin Queue' })
           }
         } else {
-          res.status(400).json('Unexpected error. Please rejoin queue.')
+          io.to(user1socket).emit('ErrorMatching', { errorMessage: 'Please Rejoin Queue' })
+          io.to(socket.id).emit('ErrorMatching', { errorMessage: 'Please Rejoin Queue' })
         }
       }
     }
