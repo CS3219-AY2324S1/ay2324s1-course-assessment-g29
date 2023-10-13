@@ -41,7 +41,7 @@ function MatchingComponent () {
     // disconnect from socket when component unmounts
     console.log(isMatching)
     if (isMatching) {
-        joinQueue()
+      joinQueue()
     }
     return () => {
       if (socket.current) {
@@ -51,7 +51,6 @@ function MatchingComponent () {
       }
     }
   }, [])
-
 
   const joinQueue = () => {
     if (difficulty === '') {
@@ -63,10 +62,10 @@ function MatchingComponent () {
     socket.current = io(MATCHINGSERVER, connectionOptions)
     socket.current.connect()
     socket.current.emit('JoinQueue', { userid, difficulty, languages: preferredLanguages }, (error) => {
-        if (error) {
-          dispatch(setErrorMessage(error))
-          dispatch(setShowError(true))
-        }
+      if (error) {
+        dispatch(setErrorMessage(error))
+        dispatch(setShowError(true))
+      }
     })
     dispatch(setAwaitingMatching(true))
     socket.current.on('MatchingSuccess', ({ matchedUserId, roomId, questionData }) => {
@@ -82,7 +81,7 @@ function MatchingComponent () {
       dispatch(setAwaitingMatching(false))
     })
     
-    console.log('joined waiting room')  
+    console.log('joined waiting room')
   }
 
   const leaveQueue = () => {
@@ -95,7 +94,8 @@ function MatchingComponent () {
     <>
       <Grid mt={2}>
         <Card>
-          {isMatching ? (
+          {isMatching 
+            ? (
               <>
                 <Box>
                   <Typography variant='h3' component='h2'>
@@ -107,27 +107,28 @@ function MatchingComponent () {
                   <Button variant='contained' onClick={leaveQueue}>Leave Queue</Button>
                 </Box>
               </>
-            ) : (
+              ) 
+            : (
               <>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                <InputLabel id='difficultyForm'>Difficulty</InputLabel>
-                <Select
-                    labelId='difficultySelect-label'
-                    id='difficultySelect'
-                    value={difficulty}
-                    label='Difficulty'
-                    onChange={handleChange}
-                >
-                    <MenuItem value='Easy'>Easy</MenuItem>
-                    <MenuItem value='Normal'>Normal</MenuItem>
-                    <MenuItem value='Hard'>Hard</MenuItem>
-                </Select>
-                </FormControl>
-              </Box>
-              <Box mt={2}>
-                <Button variant='contained' onClick={joinQueue}>Start Match</Button>
-              </Box>
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id='difficultyForm'>Difficulty</InputLabel>
+                    <Select
+                      labelId='difficultySelect-label'
+                      id='difficultySelect'
+                      value={difficulty}
+                      label='Difficulty'
+                      onChange={handleChange}
+                    >
+                      <MenuItem value='Easy'>Easy</MenuItem>
+                      <MenuItem value='Normal'>Normal</MenuItem>
+                      <MenuItem value='Hard'>Hard</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box mt={2}>
+                  <Button variant='contained' onClick={joinQueue}>Start Match</Button>
+                </Box>
               </>
           )}
         </Card>

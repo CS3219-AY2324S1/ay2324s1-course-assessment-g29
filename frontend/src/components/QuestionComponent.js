@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Chip } from '@mui/material'
 
 function getColourbyDifficulty (difficulty) {

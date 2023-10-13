@@ -11,7 +11,7 @@ class MatchingService {
     for (let i = 0; i < this.EasyQueue.length; i++) {
       user = this.EasyQueue[i]
       if (user.userid === checkUserid) {
-          return true
+        return true
       }
     }
     for (let i = 0; i < this.MediumQueue.length; i++) {
