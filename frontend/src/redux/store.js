@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import matchReducer from './MatchingSlice'
 import userReducer from './UserSlice'
 import errorReducer from './ErrorSlice'
+import editorReducer from './EditorSlice'
 import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
 import storageSession from 'redux-persist/lib/storage/session'
@@ -14,7 +15,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   match: matchReducer,
   user: userReducer,
-  error: errorReducer
+  error: errorReducer,
+  editor: editorReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

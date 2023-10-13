@@ -61,11 +61,29 @@ io.on('connection', (socket) => {
       console.log(message)
       const roomId = socketToRoom[socket.id]
       for (const index in roomIdToSocketId[roomId]) {
+        console.log(index)
         const socket2id = roomIdToSocketId[roomId][index]
         console.log(socket2id)
         if (socket2id !== socket.id) {
           console.log('hi')
           io.to(socket2id).emit('Message', { message })
+        }
+      }
+      callback()
+    } catch (error) {
+      return callback(error)
+    }
+  })
+
+  socket.on('CodeChange', ({ code }, callback) => {
+    try {
+      console.log(socket.id)
+      console.log(code)
+      const roomId = socketToRoom[socket.id]
+      for (const index in roomIdToSocketId[roomId]) {
+        const socket2id = roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          io.to(socket2id).emit('CodeChange', { code })
         }
       }
       callback()
