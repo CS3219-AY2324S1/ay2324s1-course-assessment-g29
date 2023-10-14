@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectChangeProgrammingLanguageAlert, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
 
 export default function ProgrammingLanguageDialog ({ matchedUserId, language, denyChange, agreeChange }) {
-  
   const open = useSelector(selectChangeProgrammingLanguageAlert)
   const dispatch = useDispatch()
 
