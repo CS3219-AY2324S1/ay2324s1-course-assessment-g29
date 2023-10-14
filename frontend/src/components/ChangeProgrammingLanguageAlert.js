@@ -1,14 +1,14 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectChangeProgrammingLanguageAlert, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice';
+import * as React from 'react'
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectChangeProgrammingLanguageAlert, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
 
-export default function ProgrammingLanguageDialog({matchedUserId, language, denyChange, agreeChange}) {
+export default function ProgrammingLanguageDialog ({ matchedUserId, language, denyChange, agreeChange }) {
   
   const open = useSelector(selectChangeProgrammingLanguageAlert)
   const dispatch = useDispatch()
@@ -27,14 +27,14 @@ export default function ProgrammingLanguageDialog({matchedUserId, language, deny
     <div>
       <Dialog
         open={open}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Change Programming Language?"}
+        <DialogTitle id='alert-dialog-title'>
+          Change Programming Language?
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id='alert-dialog-description'>
             {matchedUserId} is trying to change the programming language to {language}.
             Do you agree to the change?
           </DialogContentText>
@@ -47,5 +47,5 @@ export default function ProgrammingLanguageDialog({matchedUserId, language, deny
         </DialogActions>
       </Dialog>
     </div>
-  );
+  )
 }

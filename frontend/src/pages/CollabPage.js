@@ -78,13 +78,13 @@ function CollabPage () {
       dispatch(setCode(code.code))
     })
 
-    socket.current.on('CheckChangeEditorLanguage', ({language}) => {
+    socket.current.on('CheckChangeEditorLanguage', ({ language }) => {
       dispatch(setNewProgrammingLanguage(language))
       dispatch(setChangeProgrammingLanguageAlert(true))
     })
 
     socket.current.on('ConfirmChangeEditorLanguage', ({ agree, language }) => {
-      console.log("matched user has responded:")
+      console.log('matched user has responded:')
       console.log(agree)
       console.log(language)
       if (agree) {
@@ -114,7 +114,7 @@ function CollabPage () {
 
   const denyProgrammingLanguageChange = () => {
     console.log('disagree change')
-    socket.current.emit('ConfirmChangeEditorLanguage', { agree:false, language:newProgrammingLanguage }, (error) => {
+    socket.current.emit('ConfirmChangeEditorLanguage', { agree: false, language: newProgrammingLanguage }, (error) => {
       if (error) {
         dispatch(setErrorMessage(error))
         dispatch(setShowError(true))
@@ -125,7 +125,7 @@ function CollabPage () {
 
   const agreeProgrammingLanguageChange = () => {
     console.log('agree change')
-    socket.current.emit('ConfirmChangeEditorLanguage', { agree:true, language:newProgrammingLanguage }, (error) => {
+    socket.current.emit('ConfirmChangeEditorLanguage', { agree: true, language: newProgrammingLanguage }, (error) => {
       if (error) {
         dispatch(setErrorMessage(error))
         dispatch(setShowError(true))
@@ -138,7 +138,7 @@ function CollabPage () {
   return (
     <>
       <div style={{ width: '100%', height: '70%', paddingTop: '1rem' }}>
-        <ProgrammingLanguageDialog 
+        <ProgrammingLanguageDialog
           matchedUserId={matchedUserid}
           language={newProgrammingLanguage}
           denyChange={denyProgrammingLanguageChange}
@@ -154,7 +154,7 @@ function CollabPage () {
             <QuestionComponent questionData={questionData} />
           </div>
           <div style={{ width: '50%', height: '100%' }}>
-            <Editor socketRef={socket}/>
+            <Editor socketRef={socket} />
           </div>
         </Box>
       </div>

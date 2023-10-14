@@ -20,15 +20,15 @@ function determineLanguage (selectedLanguage) {
   }
 }
 
-function startingCode (language) {
-  if (language === 'Python') {
-    return '## Write down your solutions here\n'
-  } else if (language === 'Java') {
-    return '/* Write down your solutions here */\n'
-  } else if (language === 'C++') {
-    return '/* Write down your solutions here */\n'
-  }
-}
+// function startingCode (language) {
+//   if (language === 'Python') {
+//     return '## Write down your solutions here\n'
+//   } else if (language === 'Java') {
+//     return '/* Write down your solutions here */\n'
+//   } else if (language === 'C++') {
+//     return '/* Write down your solutions here */\n'
+//   }
+// }
 
 export const Editor = ({ socketRef }) => {
   const dispatch = useDispatch()
@@ -64,7 +64,7 @@ export const Editor = ({ socketRef }) => {
         justifyContent: 'center'
       }}
     >
-      <AwaitChangeProgrammingLanguageDialog matchedUserId={matchedUserid}/>
+      <AwaitChangeProgrammingLanguageDialog matchedUserId={matchedUserid} />
       <Card
         style={{
           width: '100%',

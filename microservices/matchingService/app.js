@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
           callback()
         }
         console.log(`${user2id} joining room with ${user1id}`)
-        if (user2id) {    
+        if (user2id) {
           try {
             const matchingLanguages = matchingService.findMatchingLanguages(languages, user.languages)
             const result = await axios.post(collabServiceUrl + 'createroom', { user1id, user2id })

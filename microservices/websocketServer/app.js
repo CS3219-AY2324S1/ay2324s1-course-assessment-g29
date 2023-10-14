@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('ConfirmChangeEditorLanguage', ({ agree, language }, callback ) => {
+  socket.on('ConfirmChangeEditorLanguage', ({ agree, language }, callback) => {
     try {
       console.log(socket.id)
       const roomId = socketToRoom[socket.id]

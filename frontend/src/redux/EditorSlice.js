@@ -35,7 +35,7 @@ export const selectCode = (state) => state.editor.code
 
 export const selectCodeEditorLanguage = (state) => state.editor.codeEditorLanguage
 
-export const selectNewProgrammingLanguage= (state) => state.editor.newProgrammingLanguage
+export const selectNewProgrammingLanguage = (state) => state.editor.newProgrammingLanguage
 
 export const selectAwaitAlertOpen = (state) => state.editor.awaitAlertOpen
 
