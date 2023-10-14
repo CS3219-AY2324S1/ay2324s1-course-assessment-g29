@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import io from 'socket.io-client'
-import { setRoomId, setQuestionData, selectAwaitingMatching, setAwaitingMatching, setMatchedUserId, selectDifficulty, setDifficulty } from '../redux/MatchingSlice'
+import { setRoomId, setQuestionData, selectAwaitingMatching, setAwaitingMatching, setMatchedUserId, selectDifficulty, setDifficulty, setMatchingLanguages } from '../redux/MatchingSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/material'
@@ -14,6 +14,7 @@ import Select from '@mui/material/Select'
 import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import { selectPreferredLanguages, selectUserid } from '../redux/UserSlice'
+import { setCode } from '../redux/EditorSlice'
 import Card from '@mui/material/Card'
 
 const MATCHINGSERVER = 'http://localhost:4000'
@@ -68,10 +69,13 @@ function MatchingComponent () {
       }
     })
     dispatch(setAwaitingMatching(true))
-    socket.current.on('MatchingSuccess', ({ matchedUserId, roomId, questionData }) => {
+    socket.current.on('MatchingSuccess', ({ matchedUserId, roomId, questionData, matchingLanguages }) => {
       dispatch(setMatchedUserId(matchedUserId))
       dispatch(setRoomId(roomId))
       dispatch(setQuestionData(questionData))
+      console.log(matchingLanguages)
+      dispatch(setMatchingLanguages(matchingLanguages))
+      dispatch(setCode('Please choose a language to begin!\n'))
       navigate('/collab')
     })
     socket.current.on('ErrorMatching', ({ errorMessage }) => {

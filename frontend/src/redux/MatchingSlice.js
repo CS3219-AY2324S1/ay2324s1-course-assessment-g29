@@ -7,6 +7,7 @@ export const matchingSlice = createSlice({
     difficulty: '',
     roomid: '',
     matchedUserid: '',
+    matchingLanguages: [],
     questionData: {}
   },
   reducers: {
@@ -22,6 +23,9 @@ export const matchingSlice = createSlice({
     setDifficulty: (state, action) => {
       state.difficulty = action.payload
     },
+    setMatchingLanguages: (state, action) => {
+      state.matchingLanguages = action.payload
+    },
     setQuestionData: (state, action) => {
       state.questionData = action.payload
     }
@@ -29,7 +33,7 @@ export const matchingSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty } = matchingSlice.actions
+export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setCodeEditorLanguage } = matchingSlice.actions
 
 export const selectRoomid = (state) => state.match.roomid
 
@@ -40,5 +44,7 @@ export const selectMatchedUserid = (state) => state.match.matchedUserid
 export const selectQuestionData = (state) => state.match.questionData
 
 export const selectAwaitingMatching = (state) => state.match.awaitingMatching
+
+export const selectMatchingLanguages = (state) => state.match.matchingLanguages
 
 export default matchingSlice.reducer

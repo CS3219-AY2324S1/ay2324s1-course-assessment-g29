@@ -92,6 +92,39 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on('ChangeEditorLanguage', ({ language }, callback) => {
+    try {
+      console.log(socket.id)
+      console.log(language)
+      const roomId = socketToRoom[socket.id]
+      for (const index in roomIdToSocketId[roomId]) {
+        const socket2id = roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          io.to(socket2id).emit('CheckChangeEditorLanguage', { language })
+        }
+      }
+      callback()
+    } catch (error) {
+      return callback(error)
+    }
+  })
+
+  socket.on('ConfirmChangeEditorLanguage', ({ agree, language }, callback ) => {
+    try {
+      console.log(socket.id)
+      const roomId = socketToRoom[socket.id]
+      for (const index in roomIdToSocketId[roomId]) {
+        const socket2id = roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          io.to(socket2id).emit('ConfirmChangeEditorLanguage', { agree, language })
+        }
+      }
+      callback()
+    } catch (error) {
+      return callback(error)
+    }
+  })
+
   socket.on('disconnect', async () => {
     console.log('disconnecting other peer')
     const roomId = socketToRoom[socket.id]
