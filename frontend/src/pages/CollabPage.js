@@ -17,8 +17,7 @@ import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
 import { selectRoomid, selectMatchedUserid, selectQuestionData, selectMatchingLanguages, setRoomId, setQuestionData, setMatchingLanguages, setMatchedUserId, selectMessages, appendMessages, setMessages } from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
-import { selectCode, selectCodeEditorLanguage } from '../redux/EditorSlice'
-import { setAwaitAlertOpen, selectNewProgrammingLanguage, setCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
+import { setAwaitAlertOpen, selectNewProgrammingLanguage, selectCodeEditorLanguagesetCode, selectCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
 import ProgrammingLanguageDialog from '../components/ChangeProgrammingLanguageAlert'
 
 const SOCKETSERVER = 'http://localhost:2000'
@@ -37,7 +36,6 @@ function CollabPage () {
   const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage)
   const userid = useSelector(selectUserid)
   const matchedUserid = useSelector(selectMatchedUserid)
-  const matchedUseridRef = useRef(matchedUserid)
   const roomid = useSelector(selectRoomid)
   const code = useSelector(selectCode)
   const language = useSelector(selectCodeEditorLanguage)
@@ -133,21 +131,21 @@ function CollabPage () {
         dispatch(setShowError(true))
       })
     socket.current.emit('CloseRoom')
-    axios.post('http://localhost:8000/room/savehistory', { rid: roomid, user1id: userid, user2id: matchedUserid, questionData: questionData, code, language, messages })
-    .then((response) => {
-      const message = response.data.message
-      dispatch(setRoomId(''))
-      dispatch(setMatchingLanguages([]))
-      dispatch(setMatchedUserId(''))
-      dispatch(setMessages([]))
-      dispatch(setQuestionData({}))
-      dispatch(setErrorMessage(message))
-      dispatch(setShowError(true))
-      navigate('/')
-    }).catch((error) => {
-      dispatch(setErrorMessage(error.message))
-      dispatch(setShowError(true))
-    })
+    axios.post('http://localhost:8000/room/savehistory', { rid: roomid, user1id: userid, user2id: matchedUserid, questionData, code, language, messages })
+      .then((response) => {
+        const message = response.data.message
+        dispatch(setRoomId(''))
+        dispatch(setMatchingLanguages([]))
+        dispatch(setMatchedUserId(''))
+        dispatch(setMessages([]))
+        dispatch(setQuestionData({}))
+        dispatch(setErrorMessage(message))
+        dispatch(setShowError(true))
+        navigate('/')
+      }).catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
   }
 
   const denyProgrammingLanguageChange = () => {
