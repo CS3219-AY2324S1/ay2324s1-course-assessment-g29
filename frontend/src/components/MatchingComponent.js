@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
-import { setRoomId, setQuestionData, selectAwaitingMatching, setAwaitingMatching, setMatchedUserId, selectDifficulty, setDifficulty, setMatchingLanguages, selectRoomid } from '../redux/MatchingSlice'
+import { setRoomId, setQuestionData, selectAwaitingMatching, setAwaitingMatching, setMatchedUserId, selectDifficulty, setDifficulty, setMatchingLanguages } from '../redux/MatchingSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/material'
@@ -133,7 +133,7 @@ function MatchingComponent () {
                   <Button variant='contained' onClick={joinRoom}>Join Room</Button>
                 </Box>
               </>
-              ) 
+              )
             : (
               <>
                 {isMatching
@@ -174,7 +174,7 @@ function MatchingComponent () {
                     </>
                     )}
               </>
-            )}
+              )}
         </Card>
       </Grid>
     </>
