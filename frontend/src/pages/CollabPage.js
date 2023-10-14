@@ -17,7 +17,7 @@ import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
 import { selectRoomid, selectMatchedUserid, selectQuestionData, selectMatchingLanguages, setRoomId, setQuestionData, setMatchingLanguages, setMatchedUserId, selectMessages, appendMessages, setMessages } from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
-import { setAwaitAlertOpen, selectNewProgrammingLanguage, selectCodeEditorLanguagesetCode, selectCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
+import { setAwaitAlertOpen, selectNewProgrammingLanguage, selectCodeEditorLanguage, setCode, selectCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
 import ProgrammingLanguageDialog from '../components/ChangeProgrammingLanguageAlert'
 
 const SOCKETSERVER = 'http://localhost:2000'
