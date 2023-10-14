@@ -1,6 +1,5 @@
 const express = require('express')
-const mongoose = require('mongoose')
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid')
 const axios = require('axios')
 const cors = require('cors')
 const app = express()
@@ -79,7 +78,7 @@ app.post('/room/changequestion', async (req, res) => {
   try {
     const { rid, questionData } = req.body
     console.log(rid)
-    const result = await roomCollection.doc(rid).update({ questionData })
+    await roomCollection.doc(rid).update({ questionData })
     res.status(200).json({ message: 'Successfully change question' })
   } catch (error) {
     res.status(400).json({ error: error.message })

@@ -117,7 +117,7 @@ function CollabPage () {
 
   const LeaveRoom = (event) => {
     event.preventDefault()
-    axios.post(`http://localhost:8000/room/leaveroom`, { rid: roomid })
+    axios.post('http://localhost:8000/room/leaveroom', { rid: roomid })
       .then((response) => {
         const message = response.data.message
         socket.current.emit('CloseRoom', { roomid, userid })
@@ -131,7 +131,7 @@ function CollabPage () {
       }).catch((error) => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
-    })
+      })
   }
 
   const denyProgrammingLanguageChange = () => {

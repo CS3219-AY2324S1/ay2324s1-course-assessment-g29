@@ -20,8 +20,6 @@ import Card from '@mui/material/Card'
 
 const MATCHINGSERVER = 'http://localhost:4000'
 
-const COLLABSERVER = 'http://localhost:4000'
-
 const connectionOptions = {
   reconnectionAttempts: 'Infinity',
   timeout: 10000,
@@ -32,7 +30,6 @@ function MatchingComponent () {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const userid = useSelector(selectUserid)
-  const roomid = useSelector(selectRoomid)
   const [alreadyInRoom, setAlreadyInRoom] = useState(false)
   const preferredLanguages = useSelector(selectPreferredLanguages)
   const difficulty = useSelector(selectDifficulty)
@@ -44,7 +41,7 @@ function MatchingComponent () {
   }
 
   useEffect(() => {
-    axios.post(`http://localhost:8000/room/checkroom`, { userid })
+    axios.post('http://localhost:8000/room/checkroom', { userid })
       .then((response) => {
         const roomid = response.data.room
         const roomdata = response.data.roomdata
@@ -54,7 +51,7 @@ function MatchingComponent () {
           dispatch(setMatchedUserId(roomdata.matchedUserId))
           dispatch(setQuestionData(roomdata.questionData))
           dispatch(setMatchingLanguages(roomdata.matchingLanguages))
-        } 
+        }
       }).catch((error) => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
@@ -124,7 +121,7 @@ function MatchingComponent () {
     <>
       <Grid mt={2}>
         <Card>
-          {alreadyInRoom 
+          {alreadyInRoom
             ? (
               <>
                 <Box>
@@ -136,8 +133,8 @@ function MatchingComponent () {
                   <Button variant='contained' onClick={joinRoom}>Join Room</Button>
                 </Box>
               </>
-
-            ) : (
+              ) 
+            : (
               <>
                 {isMatching
                   ? (
@@ -152,7 +149,7 @@ function MatchingComponent () {
                         <Button variant='contained' onClick={leaveQueue}>Leave Queue</Button>
                       </Box>
                     </>
-                  )
+                    )
                   : (
                     <>
                       <Box sx={{ minWidth: 120 }}>
@@ -175,7 +172,7 @@ function MatchingComponent () {
                         <Button variant='contained' onClick={joinQueue}>Start Match</Button>
                       </Box>
                     </>
-                  )}
+                    )}
               </>
             )}
         </Card>
