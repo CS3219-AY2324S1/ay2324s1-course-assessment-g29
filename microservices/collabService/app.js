@@ -7,21 +7,7 @@ const port = process.env.PORT || 8000
 
 app.use(cors())
 app.use(express.json())
-// Load environment variables from .env
-// require('dotenv').config()
-// connect to MongoDB database
-// const uri = process.env.MONGODB_URI
-// mongoose.connect(uri, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// })
 
-// const connection = mongoose.connection
-// connection.once('open', () => {
-//   console.log('MongoDB database connection established successfully')
-// })
-
-// Set up firebase
 const admin = require('firebase-admin')
 
 const serviceAccount = require('./configs/peerprep-f1dca-firebase-adminsdk-cwpky-38ec2f2d38.json')
@@ -32,6 +18,7 @@ admin.initializeApp({
 
 const db = admin.firestore()
 const roomCollection = db.collection('rooms')
+const historyCollection = db.collection('history')
 
 app.post('/room/createroom', async (req, res) => {
   try {
@@ -74,6 +61,33 @@ app.post('/room/checkroom', async (req, res) => {
   }
 })
 
+app.post('/room/savehistory', async (req, res) => {
+  try {
+    const { rid, user1id, user2id, questionData, code, language, messages } = req.body
+    console.log(rid)
+    console.log(questionData)
+    console.log(code)
+    await historyCollection.doc(rid).set({ user1id, user2id, questionData, code, language, messages })
+    res.status(200).json({ message: 'Successfully save room history' })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+})
+
+app.post('/room/updatehistory', async (req, res) => {
+  try {
+    const { rid, questionData, code, language, messages } = req.body
+    console.log(rid)
+    console.log(questionData)
+    console.log(code)
+    await historyCollection.doc(rid).update({ questionData, code, language, messages })
+    res.status(200).json({ message: 'Successfully save room history' })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+})
+
+//to implement in frontend
 app.post('/room/changequestion', async (req, res) => {
   try {
     const { rid, questionData } = req.body
