@@ -10,8 +10,13 @@ const Model = require('../models/model')
 
 // Post Method
 router.post('/post', async (req, res) => {
+  const displayName = req.body.name
+  const name = displayName.replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
   const data = new Model({
-    name: req.body.name,
+    name: name,  // kebab case for get and patch
+    displayName: displayName,
     description: req.body.description
   })
 
