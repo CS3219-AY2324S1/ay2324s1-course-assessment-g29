@@ -6,7 +6,7 @@ const router = express.Router()
 module.exports = router
 
 // allow  base64 for image
-const fs = require('fs');
+const fs = require('fs')
 
 // import model
 const Model = require('../models/model')
@@ -15,19 +15,19 @@ const Model = require('../models/model')
 router.post('/post', async (req, res) => {
   // if an image comes with the question, find it in the image folder and parse it into base64 representation.
   const images64 = []
-  if (req.body.hasOwnProperty("images")) {
+  if (Object.prototype.hasOwnProperty.call(req.body, 'images')) {
     for (let i = 0; i < req.body.images.length; i++) {
-      var currentImage = req.body.images[i];
-      const imageBuffer = fs.readFileSync(`images\\${currentImage}`);
-      const base64Image = imageBuffer.toString('base64');
-      images64.push(base64Image);
+      const currentImage = req.body.images[i]
+      const imageBuffer = fs.readFileSync(`images\\${currentImage}`)
+      const base64Image = imageBuffer.toString('base64')
+      images64.push(base64Image)
     }
   }
 
   const data = new Model({
     name: req.body.name,
     description: req.body.description,
-    images: images64,
+    images: images64
   })
 
   try {
