@@ -5,6 +5,11 @@ const router = express.Router()
 
 module.exports = router
 
+// allow BSON for image
+const BSON = require('bson');
+// const fs = require('fs');
+// const imageBuffer = fs.readFileSync('image.PNG');
+
 // import model
 const Model = require('../models/model')
 
@@ -12,7 +17,8 @@ const Model = require('../models/model')
 router.post('/post', async (req, res) => {
   const data = new Model({
     name: req.body.name,
-    description: req.body.description
+    description: req.body.description,
+    imageBSON: req.body.image
   })
 
   try {

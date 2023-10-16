@@ -12,6 +12,10 @@ const dataSchema = new mongoose.Schema({
   tag: {
     required: false,
     type: Array
+  },
+  imageBSON: {
+    required: false,
+    type: Buffer
   }
 })
 
