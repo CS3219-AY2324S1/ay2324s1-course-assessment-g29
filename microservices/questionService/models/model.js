@@ -13,9 +13,9 @@ const dataSchema = new mongoose.Schema({
     required: false,
     type: Array
   },
-  imageBSON: {
+  images: {
     required: false,
-    type: Buffer
+    type: Array
   }
 })
 
