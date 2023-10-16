@@ -34,6 +34,16 @@ router.get('/getAll', async (req, res) => {
   }
 })
 
+// Get all by difficulty Method
+router.get('/getDifficulty/:difficulty', async (req, res) => {
+  try {
+    const data = await Model.find({ difficulty: req.params.difficulty })
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
 // Get by Name Method
 router.get('/getOne/:name', async (req, res) => {
   try {
