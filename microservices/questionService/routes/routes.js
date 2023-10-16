@@ -57,7 +57,7 @@ router.get('/getOneByName/:name', async (req, res) => {
 // Get random one with difficulty
 router.get('/getOneByDifficulty/:difficulty', async (req, res) => {
   try {
-    const count = await Model.find({ difficulty: req.params.difficulty }).estimatedDocumentCount();
+    const count = await Model.find({ difficulty: req.params.difficulty }).estimatedDocumentCount()
     const random = Math.floor(Math.random() * count)
     const data = await Model.findOne({ difficulty: req.params.difficulty }).skip(random).exec()
     res.json(data)

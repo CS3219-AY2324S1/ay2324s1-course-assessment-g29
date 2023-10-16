@@ -16,7 +16,7 @@ const dataSchema = new mongoose.Schema({
   difficulty: {
     required: true,
     type: String,
-    enum: ['Easy', 'Medium', 'Hard'],
+    enum: ['Easy', 'Medium', 'Hard']
   }
 })
 
