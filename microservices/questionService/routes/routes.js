@@ -45,9 +45,21 @@ router.get('/getDifficulty/:difficulty', async (req, res) => {
 })
 
 // Get by Name Method
-router.get('/getOne/:name', async (req, res) => {
+router.get('/getOneByName/:name', async (req, res) => {
   try {
-    const data = await Model.find({ name: req.params.name })
+    const data = await Model.findOne({ name: req.params.name })
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
+// Get random one with difficulty
+router.get('/getOneByDifficulty/:difficulty', async (req, res) => {
+  try {
+    const count = await Model.find({ difficulty: req.params.difficulty }).estimatedDocumentCount();
+    const random = Math.floor(Math.random() * count)
+    const data = await Model.findOne({ difficulty: req.params.difficulty }).skip(random).exec()
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
