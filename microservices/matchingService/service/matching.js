@@ -62,30 +62,34 @@ class MatchingService {
     return matchingLanguages
   }
 
+  hasMatchingLanguages (user1Languages, user2Languages) {
+    if (user1Languages.length === 0 && user2Languages.length === 0) {
+      return true
+    }
+    const matchingLanguages = this.findMatchingLanguages(user1Languages, user2Languages)
+    if (matchingLanguages.length > 0) {
+      return true
+    }
+  }
+
   isEmpty (difficulty, languages) {
     if (difficulty === 'Easy') {
       for (const user of this.EasyQueue) {
-        const prefLanguages = user.languages
-        const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
-        if (matchingLanguages.length > 0) {
+        if (this.hasMatchingLanguages(languages, user.languages)) {
           return false
         }
       }
       return true
     } else if (difficulty === 'Normal') {
       for (const user of this.MediumQueue) {
-        const prefLanguages = user.languages
-        const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
-        if (matchingLanguages.length > 0) {
+        if (this.hasMatchingLanguages(languages, user.languages)) {
           return false
         }
       }
       return true
     } else {
       for (const user of this.HardQueue) {
-        const prefLanguages = user.languages
-        const matchingLanguages = this.findMatchingLanguages(prefLanguages, languages)
-        if (matchingLanguages.length > 0) {
+        if (this.hasMatchingLanguages(languages, user.languages)) {
           return false
         }
       }
@@ -105,19 +109,19 @@ class MatchingService {
     }
   }
 
+  isMatchFound (user1Languages, user2Languages) {
+    if (user1Languages.length === 0 && user2Languages.length === 0) {
+      return true
+    }
+    const matchingLanguages = this.findMatchingLanguages(user1Languages, user2Languages)
+    return matchingLanguages.length > 0
+  }
+
   popQueue (difficulty, languages) {
-    let foundMatching = false
     if (difficulty === 'Easy') {
       for (let i = 0; i < this.EasyQueue.length; i++) {
         const user = this.EasyQueue[i]
-        const prefLanguages = user.languages
-        for (const language of languages) {
-          if (prefLanguages.includes(language)) {
-            foundMatching = true
-            break
-          }
-        }
-        if (foundMatching) {
+        if (this.isMatchFound(languages, user.languages)) {
           const matchedUser = this.EasyQueue.splice(i, 1)[0]
           return matchedUser
         }
@@ -126,15 +130,7 @@ class MatchingService {
     } else if (difficulty === 'Normal') {
       for (let i = 0; i < this.MediumQueue.length; i++) {
         const user = this.MediumQueue[i]
-        const prefLanguages = user.languages
-
-        for (const language of languages) {
-          if (prefLanguages.includes(language)) {
-            foundMatching = true
-            break
-          }
-        }
-        if (foundMatching) {
+        if (this.isMatchFound(languages, user.languages)) {
           const matchedUser = this.MediumQueue.splice(i, 1)[0]
           return matchedUser
         }
@@ -143,15 +139,7 @@ class MatchingService {
     } else if (difficulty === 'Hard') {
       for (let i = 0; i < this.HardQueue.length; i++) {
         const user = this.HardQueue[i]
-        const prefLanguages = user.languages
-
-        for (const language of languages) {
-          if (prefLanguages.includes(language)) {
-            foundMatching = true
-            break
-          }
-        }
-        if (foundMatching) {
+        if (this.isMatchFound(languages, user.languages)) {
           const matchedUser = this.HardQueue.splice(i, 1)[0]
           return matchedUser
         }
