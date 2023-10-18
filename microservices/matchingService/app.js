@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
         if (user2id) {
           try {
             const matchingLanguages = matchingService.findMatchingLanguages(languages, user.languages)
-            const result = await axios.post(collabServiceUrl + 'createroom', { user1id, user2id })
+            const result = await axios.post(collabServiceUrl + 'createroom', { user1id, user2id, matchingLanguages })
             io.to(socket.id).emit('MatchingSuccess', { matchedUserId: user1id, roomId: result.data.roomId, questionData: result.data.questionData, matchingLanguages })
             io.to(user1socket).emit('MatchingSuccess', { matchedUserId: user2id, roomId: result.data.roomId, questionData: result.data.questionData, matchingLanguages })
             callback()

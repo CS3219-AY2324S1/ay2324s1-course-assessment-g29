@@ -1,5 +1,7 @@
 import { React, useState, useEffect, useRef } from 'react'
 import io from 'socket.io-client'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { Editor } from '../components/Editor'
 import { Box } from '@mui/system'
@@ -13,7 +15,7 @@ import Container from '@mui/material/Container'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
-import { selectRoomid, selectMatchedUserid, selectQuestionData, selectMatchingLanguages } from '../redux/MatchingSlice'
+import { selectRoomid, selectMatchedUserid, selectQuestionData, selectMatchingLanguages, setRoomId, setQuestionData, setMatchingLanguages, setMatchedUserId } from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
 import { setAwaitAlertOpen, selectNewProgrammingLanguage, setCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
 import ProgrammingLanguageDialog from '../components/ChangeProgrammingLanguageAlert'
@@ -30,6 +32,7 @@ const connectionOptions = {
 function CollabPage () {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
+  const navigate = useNavigate()
   const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage)
   const userid = useSelector(selectUserid)
   const matchedUserid = useSelector(selectMatchedUserid)
@@ -98,7 +101,7 @@ function CollabPage () {
     })
 
     socket.current.on('DisconnectPeer', (message) => {
-      dispatch(setErrorMessage('Peer has disconnected'))
+      dispatch(setErrorMessage('Peer has closed the room'))
       dispatch(setShowError(true))
     })
   }, [])
@@ -110,6 +113,25 @@ function CollabPage () {
     if (message) {
       socket.current.emit('Message', { message }, () => setMessage(''))
     }
+  }
+
+  const LeaveRoom = (event) => {
+    event.preventDefault()
+    axios.post('http://localhost:8000/room/leaveroom', { rid: roomid })
+      .then((response) => {
+        const message = response.data.message
+        socket.current.emit('CloseRoom', { roomid, userid })
+        dispatch(setRoomId(''))
+        dispatch(setMatchingLanguages([]))
+        dispatch(setMatchedUserId(''))
+        dispatch(setQuestionData({}))
+        dispatch(setErrorMessage(message))
+        dispatch(setShowError(true))
+        navigate('/')
+      }).catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
   }
 
   const denyProgrammingLanguageChange = () => {
@@ -173,6 +195,11 @@ function CollabPage () {
           <Typography variant='h3' component='h2'>
             Matched with : {matchedUserid}
           </Typography>
+        </Grid>
+        <Grid>
+          <Button variant='contained' onClick={LeaveRoom} endIcon={<SendIcon />}>
+            Close Room
+          </Button>
         </Grid>
         <Grid>
           <Card>

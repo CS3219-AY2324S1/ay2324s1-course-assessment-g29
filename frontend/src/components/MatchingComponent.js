@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import io from 'socket.io-client'
+import axios from 'axios'
 import { setRoomId, setQuestionData, selectAwaitingMatching, setAwaitingMatching, setMatchedUserId, selectDifficulty, setDifficulty, setMatchingLanguages } from '../redux/MatchingSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
 import Grid from '@mui/material/Grid'
@@ -29,6 +30,7 @@ function MatchingComponent () {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const userid = useSelector(selectUserid)
+  const [alreadyInRoom, setAlreadyInRoom] = useState(false)
   const preferredLanguages = useSelector(selectPreferredLanguages)
   const difficulty = useSelector(selectDifficulty)
   const isMatching = useSelector(selectAwaitingMatching)
@@ -39,8 +41,25 @@ function MatchingComponent () {
   }
 
   useEffect(() => {
+    axios.post('http://localhost:8000/room/checkroom', { userid })
+      .then((response) => {
+        const roomid = response.data.room
+        const roomdata = response.data.roomdata
+        if (roomid !== '') {
+          setAlreadyInRoom(true)
+          dispatch(setRoomId(roomid))
+          dispatch(setMatchedUserId(roomdata.matchedUserId))
+          dispatch(setQuestionData(roomdata.questionData))
+          dispatch(setMatchingLanguages(roomdata.matchingLanguages))
+        }
+      }).catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
+  }, [])
+
+  useEffect(() => {
     // disconnect from socket when component unmounts
-    console.log(isMatching)
     if (isMatching) {
       joinQueue()
     }
@@ -94,45 +113,66 @@ function MatchingComponent () {
     dispatch(setAwaitingMatching(false))
   }
 
+  const joinRoom = () => {
+    navigate('/collab')
+  }
+
   return (
     <>
       <Grid mt={2}>
         <Card>
-          {isMatching
+          {alreadyInRoom
             ? (
               <>
                 <Box>
                   <Typography variant='h3' component='h2'>
-                    Awaiting Match
+                    Already In Room
                   </Typography>
-                  <CircularProgress />
                 </Box>
                 <Box mt={2}>
-                  <Button variant='contained' onClick={leaveQueue}>Leave Queue</Button>
+                  <Button variant='contained' onClick={joinRoom}>Join Room</Button>
                 </Box>
               </>
               )
             : (
               <>
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id='difficultyForm'>Difficulty</InputLabel>
-                    <Select
-                      labelId='difficultySelect-label'
-                      id='difficultySelect'
-                      value={difficulty}
-                      label='Difficulty'
-                      onChange={handleChange}
-                    >
-                      <MenuItem value='Easy'>Easy</MenuItem>
-                      <MenuItem value='Normal'>Normal</MenuItem>
-                      <MenuItem value='Hard'>Hard</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Box mt={2}>
-                  <Button variant='contained' onClick={joinQueue}>Start Match</Button>
-                </Box>
+                {isMatching
+                  ? (
+                    <>
+                      <Box>
+                        <Typography variant='h3' component='h2'>
+                          Awaiting Match
+                        </Typography>
+                        <CircularProgress />
+                      </Box>
+                      <Box mt={2}>
+                        <Button variant='contained' onClick={leaveQueue}>Leave Queue</Button>
+                      </Box>
+                    </>
+                    )
+                  : (
+                    <>
+                      <Box sx={{ minWidth: 120 }}>
+                        <FormControl fullWidth>
+                          <InputLabel id='difficultyForm'>Difficulty</InputLabel>
+                          <Select
+                            labelId='difficultySelect-label'
+                            id='difficultySelect'
+                            value={difficulty}
+                            label='Difficulty'
+                            onChange={handleChange}
+                          >
+                            <MenuItem value='Easy'>Easy</MenuItem>
+                            <MenuItem value='Normal'>Normal</MenuItem>
+                            <MenuItem value='Hard'>Hard</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                      <Box mt={2}>
+                        <Button variant='contained' onClick={joinQueue}>Start Match</Button>
+                      </Box>
+                    </>
+                    )}
               </>
               )}
         </Card>

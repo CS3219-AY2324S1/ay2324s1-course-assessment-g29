@@ -125,15 +125,24 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('disconnect', async () => {
+  socket.on('CloseRoom', async () => {
     console.log('disconnecting other peer')
     const roomId = socketToRoom[socket.id]
+    let socket2idres = ''
     for (const index in roomIdToSocketId[roomId]) {
       const socket2id = roomIdToSocketId[roomId][index]
       if (socket2id !== socket.id) {
+        socket2idres = socket2id
         io.to(socket2id).emit('DisconnectPeer')
       }
     }
+    disconnectFromSocket(socket.id)
+    if (socket2idres !== '') {
+      disconnectFromSocket(socket2idres)
+    }
+  })
+
+  socket.on('disconnect', async () => {
     disconnectFromSocket(socket.id)
   })
 })
