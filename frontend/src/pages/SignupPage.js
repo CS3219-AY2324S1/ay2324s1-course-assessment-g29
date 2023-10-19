@@ -1,12 +1,15 @@
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
+import { setDisplayname, setUserid, setStateEmail, setLoginStatus, setIdToken } from '../redux/UserSlice.js'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice.js'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function SignupPage () {
-  const [displayName, setDisplayName] = useState('')
+  const auth = getAuth()
+
+  const [name, setDisplayName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,7 +18,7 @@ function SignupPage () {
   const navigate = useNavigate()
 
   const requireAllNonNull = () => {
-    const requiredFields = [displayName, username, email, password, passwordConfirmation]
+    const requiredFields = [name, username, email, password, passwordConfirmation]
     requiredFields.forEach((x, i) => {
       if (x === '') {
         throw new Error('All fields cannot be empty')
@@ -28,28 +31,28 @@ function SignupPage () {
       throw new Error('Passwords do not match')
     }
   }
+
   const handleSignUp = async (e) => {
     e.preventDefault()
 
     try {
       requireAllNonNull()
       checkPasswords(password, passwordConfirmation)
-      axios.post('http://localhost:3001/user/register', { name: displayName, username, email, password })
-        .then((response) => {
-          const userCredentials = response.data
-          const userid = userCredentials.user.uid
-          dispatch(setUserid(userid))
-          const displayName = userCredentials.user.displayName
-          dispatch(setDisplayname(displayName))
-          const useremail = userCredentials.user.email
-          dispatch(setStateEmail(useremail))
-          dispatch(setLoginStatus(true))
-          console.log('Signup successful')
-          navigate('/home')
-        }).catch((error) => {
-          dispatch(setErrorMessage(error.message)) // TODO Handle axios errors
-          dispatch(setShowError(true))
-        })
+      await axios.post('http://localhost:3001/user/register', { name, username, email, password })
+      console.log('sign up success')
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password)
+      const userid = userCredentials.user.uid
+      dispatch(setUserid(userid))
+      const displayName = userCredentials.user.displayName
+      dispatch(setDisplayname(displayName))
+      const useremail = userCredentials.user.email
+      dispatch(setStateEmail(useremail))
+      const idToken = await userCredentials.user.getIdToken()
+      dispatch(setIdToken(idToken))
+      console.log('Signup successful')
+      console.log('idToken', idToken)
+      dispatch(setLoginStatus(true))
+      navigate('/home')
     } catch (error) {
       dispatch(setErrorMessage(error.message))
       dispatch(setShowError(true))
@@ -63,7 +66,7 @@ function SignupPage () {
         <input
           type='text'
           placeholder='Display Name'
-          value={displayName}
+          value={name}
           onChange={(e) => setDisplayName(e.target.value)}
         />
         <input

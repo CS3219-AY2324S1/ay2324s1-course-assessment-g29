@@ -17,7 +17,6 @@ const firebaseConfig = {
   appId: process.env.APP_ID,
   measurementId: process.env.MEASUREMENT_ID
 }
-console.log(firebaseConfig)
 const firebase = require('firebase/app')
 const firebaseApp = firebase.initializeApp(firebaseConfig)
 
@@ -35,26 +34,17 @@ const db = admin.firestore()
 const userCollection = db.collection('users')
 
 // Set up other dependencies
-function validateFields (reqBody, requiredFields) {
-  const missingFields = []
-  for (const field of requiredFields) {
-    if (!(field in reqBody)) {
-      missingFields.push(field)
-    }
-  }
-
-  if (missingFields.length > 0) {
-    throw new Error(`Missing fields: ${missingFields.join(', ')}`)
-  }
-};
-
-const supportedLanguages = ['Python', 'Java', 'C', 'C++', 'C#', 'JavaScript']
+const { ApiFields, validateFields } = require('./utils/apiFields')
+const supportedLanguages = require('./utils/supportedLanguages')
+const TokenManager = require('./utils/tokenManager')
+const tokenManager = new TokenManager(admin)
 
 // User registration route
 app.post('/user/register', async (req, res) => {
   console.log('Register User')
   try {
-    validateFields(req.body, ['name', 'username', 'email', 'password'])
+    console.log(req.body)
+    validateFields(req.body, [ApiFields.name, ApiFields.username, ApiFields.email, ApiFields.password])
     const { name, username, email, password } = req.body
     const userRecord = await admin.auth().createUser({
       uid: username,
@@ -62,16 +52,14 @@ app.post('/user/register', async (req, res) => {
       emailVerified: false,
       password,
       displayName: name
-      // photoURL: '' // init photoURL as empty string
     })
     const docRef = userCollection.doc(username)
     await docRef.set({
       language: [supportedLanguages[0]]
     })
-
     res.status(201).json({ message: 'User registered successfully', user: userRecord })
   } catch (error) {
-    console.log()
+    console.log(error)
     res.status(400).json({ error: error.message })
   }
 })
@@ -79,7 +67,7 @@ app.post('/user/register', async (req, res) => {
 app.post('/user/updateName', async (req, res) => {
   console.log('Update Display Name')
   try {
-    validateFields(req.body, ['uid', 'name'])
+    validateFields(req.body, [ApiFields.uid, ApiFields.name])
     const { uid, name } = req.body
     const userRecord = await admin.auth().updateUser(uid, {
       displayName: name
@@ -93,7 +81,7 @@ app.post('/user/updateName', async (req, res) => {
 app.post('/user/updatePassword', async (req, res) => {
   console.log('Update Password')
   try {
-    validateFields(req.body, ['uid', 'password'])
+    validateFields(req.body, [ApiFields.uid, ApiFields.password])
     const { uid, password } = req.body
     const userRecord = await admin.auth().updateUser(uid, {
       password
@@ -107,7 +95,7 @@ app.post('/user/updatePassword', async (req, res) => {
 app.post('/user/updateLanguage', async (req, res) => {
   console.log('Update Language')
   try {
-    validateFields(req.body, ['uid', 'languages'])
+    validateFields(req.body, [ApiFields.uid, ApiFields.languages])
     const { uid, languages } = req.body
 
     if (!languages.every(val => supportedLanguages.includes(val))) {
@@ -126,7 +114,7 @@ app.post('/user/updateLanguage', async (req, res) => {
 app.post('/user/resetPassword', async (req, res) => {
   console.log('Reset Password')
   try {
-    validateFields(req.body, ['email'])
+    validateFields(req.body, [ApiFields.email])
     const { email } = req.body
     firebaseAuth.sendPasswordResetEmail(auth, email)
       .then(() => {
@@ -164,7 +152,7 @@ app.get('/user/:uid', async (req, res) => {
   }
 })
 
-app.delete('/user/deregister/:uid', async (req, res) => {
+app.delete('/user/deregister/:uid', tokenManager.authenticateJWT, async (req, res) => {
   console.log('Deregister User')
   try {
     await admin.auth().deleteUser(req.params.uid)
