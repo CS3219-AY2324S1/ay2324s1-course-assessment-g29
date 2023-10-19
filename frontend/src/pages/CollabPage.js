@@ -15,9 +15,9 @@ import Container from '@mui/material/Container'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
-import { selectRoomid, selectMatchedUserid, selectQuestionData, selectMatchingLanguages, setRoomId, setQuestionData, setMatchingLanguages, setMatchedUserId } from '../redux/MatchingSlice'
+import { selectRoomid, selectMatchedUserid, selectQuestionData, selectMatchingLanguages, setRoomId, setQuestionData, setMatchingLanguages, setMatchedUserId, selectMessages, appendMessages, setMessages } from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
-import { setAwaitAlertOpen, selectNewProgrammingLanguage, setCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
+import { setAwaitAlertOpen, selectNewProgrammingLanguage, selectCodeEditorLanguage, setCode, selectCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
 import ProgrammingLanguageDialog from '../components/ChangeProgrammingLanguageAlert'
 
 const SOCKETSERVER = 'http://localhost:2000'
@@ -31,13 +31,14 @@ const connectionOptions = {
 
 function CollabPage () {
   const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState([])
+  const messages = useSelector(selectMessages)
   const navigate = useNavigate()
   const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage)
   const userid = useSelector(selectUserid)
   const matchedUserid = useSelector(selectMatchedUserid)
-  const matchedUseridRef = useRef(matchedUserid)
   const roomid = useSelector(selectRoomid)
+  const code = useSelector(selectCode)
+  const language = useSelector(selectCodeEditorLanguage)
   const matchingLanguages = useSelector(selectMatchingLanguages)
   const questionData = useSelector(selectQuestionData)
   const dispatch = useDispatch()
@@ -57,8 +58,15 @@ function CollabPage () {
       console.log('joined waiting room')
     })
 
-    socket.current.on('MatchSuccess', ({ matchedUserId }) => {
+    socket.current.on('MatchSuccess', ({ matchedUserId, messages, code, language }) => {
       console.log(matchedUserId)
+      console.log(messages)
+      console.log(code)
+      console.log(language)
+      console.log('Match Success')
+      dispatch(setMessages(messages))
+      dispatch(setCode(code))
+      dispatch(setCodeEditorLanguage(language))
     })
 
     // disconnect from socket when component unmounts
@@ -72,8 +80,8 @@ function CollabPage () {
 
   useEffect(() => {
     socket.current.on('Message', (message) => {
-      const messageString = `${matchedUseridRef.current} : ${message.message}`
-      setMessages(messages => [...messages, messageString])
+      const messageString = message.message
+      dispatch(appendMessages(messageString))
     })
 
     socket.current.on('CodeChange', (code) => {
@@ -109,21 +117,27 @@ function CollabPage () {
   const sendMessage = (event) => {
     event.preventDefault()
     const messageString = `${userid} : ${message}`
-    setMessages(messages => [...messages, messageString])
     if (message) {
-      socket.current.emit('Message', { message }, () => setMessage(''))
+      dispatch(appendMessages(messageString))
+      socket.current.emit('Message', { message: messageString }, () => setMessage(''))
     }
   }
 
   const LeaveRoom = (event) => {
     event.preventDefault()
     axios.post('http://localhost:8000/room/leaveroom', { rid: roomid })
+      .catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
+    socket.current.emit('CloseRoom')
+    axios.post('http://localhost:8000/room/savehistory', { rid: roomid, user1id: userid, user2id: matchedUserid, questionData, code, language, messages })
       .then((response) => {
         const message = response.data.message
-        socket.current.emit('CloseRoom', { roomid, userid })
         dispatch(setRoomId(''))
         dispatch(setMatchingLanguages([]))
         dispatch(setMatchedUserId(''))
+        dispatch(setMessages([]))
         dispatch(setQuestionData({}))
         dispatch(setErrorMessage(message))
         dispatch(setShowError(true))
