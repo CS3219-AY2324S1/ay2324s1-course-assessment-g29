@@ -5,10 +5,11 @@ import { selectUserid, selectDisplayname, selectEmail } from '../redux/UserSlice
 import { setRoomId } from '../redux/MatchingSlice'
 import axios from 'axios'
 import Alert from '@mui/material/Alert'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography} from '@mui/material'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Container from '@mui/material/Container'
+import Navbar from "../components/Navbar";
 
 function HomePage () {
   const [showErrorAlert, setShowErrorAlert] = useState(false)
@@ -38,40 +39,35 @@ function HomePage () {
   }
   return (
     <>
+      <Navbar />
       <Container>
-        {showSuccessAlert
-          ? (
-            <Alert onClose={() => setShowSuccessAlert(false)}>{successMessage}</Alert>
-            )
-          : (
-            <>
-            </>
-            )}
-        {showErrorAlert
-          ? (
-            <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-            )
-          : (
-            <>
-            </>
-            )}
+        {showSuccessAlert ? (
+          <Alert onClose={() => setShowSuccessAlert(false)}>
+            {successMessage}
+          </Alert>
+        ) : (
+          <></>
+        )}
+        {showErrorAlert ? (
+          <Alert severity="error" onClose={() => setShowErrorAlert(false)}>
+            Error: {errorMessage}
+          </Alert>
+        ) : (
+          <></>
+        )}
         <Card>
-          <Typography>
-            Name: {displayName}
-          </Typography>
-          <Typography>
-            UserId: {userid}
-          </Typography>
-          <Typography>
-            Email: {email}
-          </Typography>
+          <Typography>Name: {displayName}</Typography>
+          <Typography>UserId: {userid}</Typography>
+          <Typography>Email: {email}</Typography>
         </Card>
         <Box mt={2}>
-          <Button variant='contained' onClick={joinQueue}>Start Match</Button>
+          <Button variant="contained" onClick={joinQueue}>
+            Start Match
+          </Button>
         </Box>
       </Container>
     </>
-  )
+  );
 }
 
 export default HomePage

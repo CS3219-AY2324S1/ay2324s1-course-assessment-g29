@@ -12,6 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import TextField from '@mui/material/TextField'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
+import Navbar from "../components/Navbar";
 import { selectRoomid, selectMatchedUserid, setMatchedUserId } from '../redux/MatchingSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
@@ -92,61 +93,63 @@ function CollabPage () {
 
   return (
     <>
-      {showErrorAlert
-        ? (
-          <Alert severity='error' onClose={() => setShowErrorAlert(false)}>Error: {errorMessage}</Alert>
-          )
-        : (
-          <>
-          </>
-          )}
-      {isMatched
-        ? (
-          <>
-            <Container>
-              <Grid>
-                <Typography variant='h3' component='h2'>
-                  Matched with : {matchedUserid}
-                </Typography>
-              </Grid>
-              <Grid>
-                <Card>
-                  <ScrollToBottom className='messages'>
-                    {messages.map((message, i) => (
-                      <div key={i}>
-                        <Typography>{message}</Typography>
-                      </div>
-                    ))}
-                  </ScrollToBottom>
-                  <TextField
-                    id='outlined-multiline-flexible'
-                    label='Send A Message'
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    multiline
-                    maxRows={4}
-                  />
-                  <Button variant='contained' onClick={sendMessage} endIcon={<SendIcon />}>
-                    Send
-                  </Button>
-                  <br />
-                </Card>
-              </Grid>
-            </Container>
-          </>
-          )
-        : (
-          <>
-            <Container>
-              <Typography variant='h3' component='h2'>
-                Awaiting Match
+      {showErrorAlert ? (
+        <Alert severity="error" onClose={() => setShowErrorAlert(false)}>
+          Error: {errorMessage}
+        </Alert>
+      ) : (
+        <></>
+      )}
+      {isMatched ? (
+        <>
+          <Navbar />
+          <Container>
+            <Grid>
+              <Typography variant="h3" component="h2">
+                Matched with : {matchedUserid}
               </Typography>
-              <CircularProgress />
-            </Container>
-          </>
-          )}
+            </Grid>
+            <Grid>
+              <Card>
+                <ScrollToBottom className="messages">
+                  {messages.map((message, i) => (
+                    <div key={i}>
+                      <Typography>{message}</Typography>
+                    </div>
+                  ))}
+                </ScrollToBottom>
+                <TextField
+                  id="outlined-multiline-flexible"
+                  label="Send A Message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  multiline
+                  maxRows={4}
+                />
+                <Button
+                  variant="contained"
+                  onClick={sendMessage}
+                  endIcon={<SendIcon />}
+                >
+                  Send
+                </Button>
+                <br />
+              </Card>
+            </Grid>
+          </Container>
+        </>
+      ) : (
+        <>
+          <Container>
+            <Typography variant="h3" component="h2">
+              Awaiting Match
+            </Typography>
+            <CircularProgress />
+          </Container>
+        </>
+      )}
     </>
-  )
+  );
 }
 
 export default CollabPage
