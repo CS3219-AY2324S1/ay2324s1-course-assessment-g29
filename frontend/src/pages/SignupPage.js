@@ -6,17 +6,21 @@ import {
   TextField
 } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { setShowError, setErrorMessage } from "../redux/ErrorSlice.js";
 import {
   setDisplayname,
   setUserid,
   setStateEmail,
   setLoginStatus,
+  setIdToken,
 } from "../redux/UserSlice.js";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import LoginPageBanner from "../components/FrontPageBanner.js";
 import axios from "axios";
 
-function Signup() {
+function SignupPage() {
+  const auth = getAuth();
   const [displayName, setDisplayName] = useState("");
   const [displayNameError, setDisplayNameError] = useState(false);
 
@@ -36,7 +40,7 @@ function Signup() {
   const navigate = useNavigate();
 
   const requireAllNonNull = () => {
-    const requiredFields = [name, username, email, password, passwordConfirmation]
+    const requiredFields = [displayName, username, email, password, passwordConfirmation]
     requiredFields.forEach((x, i) => {
       if (x === '') {
         throw new Error('All fields cannot be empty')
@@ -60,13 +64,13 @@ function Signup() {
     try {
       requireAllNonNull()
       checkPasswords(password, passwordConfirmation)
-      await axios.post('http://localhost:3001/user/register', { name, username, email, password })
+      await axios.post('http://localhost:3001/user/register', { displayName, username, email, password })
       console.log('sign up success')
       const userCredentials = await signInWithEmailAndPassword(auth, email, password)
       const userid = userCredentials.user.uid
       dispatch(setUserid(userid))
-      const displayName = userCredentials.user.displayName
-      dispatch(setDisplayname(displayName))
+      const userDisplayName = userCredentials.user.displayName
+      dispatch(setDisplayname(userDisplayName))
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
       const idToken = await userCredentials.user.getIdToken()
@@ -122,7 +126,7 @@ function Signup() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               sx={{ marginBottom: "1rem" }}
-              error={emailError}
+              error={displayNameError}
               fullWidth
               required
             />
@@ -210,4 +214,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignupPage;

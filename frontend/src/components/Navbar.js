@@ -164,11 +164,8 @@ function Navbar () {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  <MenuItem key='profile' onClick={handleCloseUserMenu}>
-                    <Typography textAlign='center'>Profile</Typography>
-                  </MenuItem>
                   <MenuItem key='account' onClick={handleCloseUserMenu}>
-                    <Typography textAlign='center'>Account</Typography>
+                    <Typography textAlign='center'>Reset Password</Typography>
                   </MenuItem>
                   <MenuItem key='logout' onClick={handleLogout}>
                     <Typography textAlign='center'>Logout</Typography>

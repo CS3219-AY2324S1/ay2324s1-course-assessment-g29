@@ -16,13 +16,15 @@ import {
   setUserid,
   setStateEmail,
   setLoginStatus,
+  setIdToken,
 } from "../redux/UserSlice.js";
 import { useNavigate } from "react-router-dom";
+import { setErrorMessage, setShowError } from "../redux/ErrorSlice.js";
 import LoginPageBanner from "../components/FrontPageBanner.js";
 
-function Login() {
-  const app = initFirebase();
-  console.log(app);
+function LoginPage() {
+  initFirebase();
+
   const auth = getAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,14 +50,17 @@ function Login() {
       dispatch(setDisplayname(displayName));
       const useremail = userCredentials.user.email;
       dispatch(setStateEmail(useremail));
-      dispatch(setLoginStatus(true));
+      console.log(userCredentials);
+      const idToken = await userCredentials.user.getIdToken();
+      dispatch(setIdToken(idToken));
       console.log("Login successful");
+      dispatch(setLoginStatus(true));
       navigate("/home");
     } catch (error) {
-      console.error("Login error:", error);
+      // dispatch(setErrorMessage(error.message)); // TODO handle firebase errors (give better descriptions)
+      // dispatch(setShowError(true));
+
       setLoginError(true);
-      dispatch(setErrorMessage(error.message)); // TODO handle firebase errors (give better descriptions)
-      dispatch(setShowError(true));
       setIsDialogOpen(true);
     }
   };
@@ -81,6 +86,7 @@ function Login() {
             <b>Please enter your details</b>
           </Typography>
           <form
+            onSubmit={handleLogin}
             style={{
               display: "flex",
               justifyContent: "center",
@@ -107,7 +113,7 @@ function Login() {
               error={LoginError}
               fullWidth
             />
-            <Button variant={"contained"} onClick={handleLogin} fullWidth>
+            <Button variant={"contained"} type="submit" fullWidth>
               <b>Login</b>
             </Button>
           </form>
@@ -127,7 +133,7 @@ function Login() {
           <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
             <DialogContent>
               <Typography variant="body1">
-                Incorrect Password. Please try again.
+                Incorrect Password or email. Please try again.
               </Typography>
             </DialogContent>
             <DialogActions>
