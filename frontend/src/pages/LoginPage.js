@@ -54,6 +54,8 @@ function Login() {
     } catch (error) {
       console.error("Login error:", error);
       setLoginError(true);
+      dispatch(setErrorMessage(error.message)); // TODO handle firebase errors (give better descriptions)
+      dispatch(setShowError(true));
       setIsDialogOpen(true);
     }
   };
@@ -162,4 +164,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage

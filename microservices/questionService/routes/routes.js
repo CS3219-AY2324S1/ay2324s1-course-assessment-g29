@@ -9,9 +9,14 @@ module.exports = router
 const Model = require('../models/model')
 
 // Post Method
-router.post('/question/post', async (req, res) => {
+router.post('/post', async (req, res) => {
+  const displayName = req.body.displayName
+  const name = displayName.replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase()
   const data = new Model({
-    name: req.body.name,
+    name,
+    displayName,
     description: req.body.description
   })
 
@@ -24,7 +29,7 @@ router.post('/question/post', async (req, res) => {
 })
 
 // Get all Method
-router.get('/question/getAll', async (req, res) => {
+router.get('/getAll', async (req, res) => {
   try {
     const data = await Model.find()
     res.json(data)
@@ -34,7 +39,7 @@ router.get('/question/getAll', async (req, res) => {
 })
 
 // Get by Name Method
-router.get('/question/getOne/:name', async (req, res) => {
+router.get('/getOne/:name', async (req, res) => {
   try {
     const data = await Model.find({ name: req.params.name })
     res.json(data)
@@ -43,8 +48,21 @@ router.get('/question/getOne/:name', async (req, res) => {
   }
 })
 
+// Get random
+router.get('/getRandom', async (req, res) => {
+  try {
+    let data
+    await Model.aggregate().sample(1).replaceRoot({ question: '$$ROOT' }).then((res) => {
+      data = res[0]
+    })
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
 // Update by Name Method
-router.patch('/question/update/:name', async (req, res) => {
+router.patch('/update/:name', async (req, res) => {
   try {
     const name = req.params.name
     const updatedData = req.body
@@ -63,7 +81,7 @@ router.patch('/question/update/:name', async (req, res) => {
 })
 
 // Delete by Name Method
-router.delete('/question/delete/:name', async (req, res) => {
+router.delete('/delete/:name', async (req, res) => {
   try {
     const name = req.params.name
     const data = await Model.findOneAndDelete({ name })

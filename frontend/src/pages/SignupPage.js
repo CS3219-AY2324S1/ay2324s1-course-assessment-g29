@@ -35,6 +35,15 @@ function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const requireAllNonNull = () => {
+    const requiredFields = [name, username, email, password, passwordConfirmation]
+    requiredFields.forEach((x, i) => {
+      if (x === '') {
+        throw new Error('All fields cannot be empty')
+      }
+    })
+  }
+
   const checkPasswords = (password1, password2) => {
     if (password1 !== password2) {
       setPasswordConfirmationError("Passwords do not match.");
@@ -44,34 +53,31 @@ function Signup() {
     }
   };
 
+
   const handleSignUp = async (e) => {
     e.preventDefault();
 
     try {
-      checkPasswords(password, passwordConfirmation);
-      return new Promise((resolve, reject) => {
-        axios
-          .post("http://localhost:3001/user/register", {
-            name: displayName,
-            username,
-            email,
-            password,
-          })
-          .then((response) => {
-            const userCredentials = response.data;
-            const userid = userCredentials.user.uid;
-            dispatch(setUserid(userid));
-            const displayName = userCredentials.user.displayName;
-            dispatch(setDisplayname(displayName));
-            const useremail = userCredentials.user.email;
-            dispatch(setStateEmail(useremail));
-            dispatch(setLoginStatus(true));
-            console.log("Signup successful");
-            navigate("/home");
-          });
-      });
+      requireAllNonNull()
+      checkPasswords(password, passwordConfirmation)
+      await axios.post('http://localhost:3001/user/register', { name, username, email, password })
+      console.log('sign up success')
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password)
+      const userid = userCredentials.user.uid
+      dispatch(setUserid(userid))
+      const displayName = userCredentials.user.displayName
+      dispatch(setDisplayname(displayName))
+      const useremail = userCredentials.user.email
+      dispatch(setStateEmail(useremail))
+      const idToken = await userCredentials.user.getIdToken()
+      dispatch(setIdToken(idToken))
+      console.log('Signup successful')
+      console.log('idToken', idToken)
+      dispatch(setLoginStatus(true))
+      navigate('/home')
     } catch (error) {
-      console.error("Signup error:", error);
+      dispatch(setErrorMessage(error.message))
+      dispatch(setShowError(true))
     }
   };
 

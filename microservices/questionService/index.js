@@ -5,8 +5,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 
 const app = express()
-
 app.use(express.json())
+
+const cors = require('cors')
+app.use(cors())
 
 const port = process.env.PORT || 3002
 
@@ -30,4 +32,4 @@ database.once('connected', () => {
 // Import route file
 const routes = require('./routes/routes')
 
-app.use('/api', routes)
+app.use('/question', routes)

@@ -5,6 +5,8 @@ import { QuestionComponent } from '../components/QuestionComponent'
 import { useParams } from 'react-router-dom'
 import Navbar from "../components/Navbar";
 
+// TODO: remove if not necessary?
+
 const CodeEditorPage = () => {
   const { questionId } = useParams()
   console.log('Question ID: ' + questionId)

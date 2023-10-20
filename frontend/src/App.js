@@ -1,4 +1,4 @@
-import { Container, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectLoginstatus } from "./redux/UserSlice";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -16,6 +16,7 @@ function App() {
     <>
       <Box display={"flex"} flexDirection={"column"} height="100vh">
         <BrowserRouter>
+        {showErrorAlert && <ErrorMessage />}
           <Routes>
             {loginStatus ? (
               <>
