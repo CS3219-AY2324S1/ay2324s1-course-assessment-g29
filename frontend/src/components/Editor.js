@@ -6,7 +6,9 @@ import { materialLightInit } from '@uiw/codemirror-theme-material'
 import { python } from '@codemirror/lang-python'
 import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
-import { selectCode, setCode } from '../redux/EditorSlice'
+import { selectCode, setCode, selectCodeEditorLanguage, setAwaitAlertOpen } from '../redux/EditorSlice'
+import { selectMatchedUserid } from '../redux/MatchingSlice'
+import AwaitChangeProgrammingLanguageDialog from '../components/AwaitChangeProgrammingLanguageAlert'
 
 function determineLanguage (selectedLanguage) {
   if (selectedLanguage === 'Python') {
@@ -18,26 +20,30 @@ function determineLanguage (selectedLanguage) {
   }
 }
 
-function startingCode (language) {
-  if (language === 'Python') {
-    return '## Write down your solutions here\n'
-  } else if (language === 'Java') {
-    return '/* Write down your solutions here */\n'
-  } else if (language === 'C++') {
-    return '/* Write down your solutions here */\n'
-  }
-}
+// function startingCode (language) {
+//   if (language === 'Python') {
+//     return '## Write down your solutions here\n'
+//   } else if (language === 'Java') {
+//     return '/* Write down your solutions here */\n'
+//   } else if (language === 'C++') {
+//     return '/* Write down your solutions here */\n'
+//   }
+// }
 
 export const Editor = ({ socketRef }) => {
   const dispatch = useDispatch()
   const reduxCode = useSelector(selectCode)
   const [languages] = useState(['Python', 'Java', 'C++'])
-  const [selectedLanguage, setSelectedLanguage] = useState('')
+  const matchedUserid = useSelector(selectMatchedUserid)
+  const selectedLanguage = useSelector(selectCodeEditorLanguage)
 
   const handleLanguageChange = (e) => {
     const selectedValue = e.target.value
-    setCode(startingCode(selectedValue))
-    setSelectedLanguage(selectedValue) // Update the selected language state
+    dispatch(setAwaitAlertOpen(true))
+    socketRef.current.emit('ChangeEditorLanguage', { language: selectedValue }, (error) => {
+      console.log(error)
+    })
+    // setSelectedLanguage(selectedValue) // Update the selected language state
   }
 
   const handleCodeChange = (value, data) => {
@@ -58,6 +64,7 @@ export const Editor = ({ socketRef }) => {
         justifyContent: 'center'
       }}
     >
+      <AwaitChangeProgrammingLanguageDialog matchedUserId={matchedUserid} />
       <Card
         style={{
           width: '100%',
