@@ -5,9 +5,6 @@ const router = express.Router()
 
 module.exports = router
 
-// allow  base64 for image
-const fs = require('fs')
-
 // import model
 const Model = require('../models/model')
 
@@ -16,7 +13,7 @@ router.post('/post', async (req, res) => {
   const data = new Model({
     name: req.body.name,
     description: req.body.description,
-    images: imagesMap
+    imagesMap: req.body.imagesMap
   })
 
   try {
