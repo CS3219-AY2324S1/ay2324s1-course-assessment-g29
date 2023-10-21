@@ -13,9 +13,9 @@ const dataSchema = new mongoose.Schema({
     required: false,
     type: Array
   },
-  images: {
+  imagesMap: {
     required: false,
-    type: Array
+    type: Map
   }
 })
 
