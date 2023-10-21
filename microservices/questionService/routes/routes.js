@@ -19,6 +19,7 @@ router.post('/post', async (req, res) => {
     displayName,
     description: req.body.description,
     topic: req.body.topic,
+    imagesMap: req.body.imagesMap,
     difficulty: req.body.difficulty
   })
 
