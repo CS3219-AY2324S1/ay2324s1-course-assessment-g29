@@ -20,6 +20,11 @@ const dataSchema = new mongoose.Schema({
   imagesMap: {
     required: false,
     type: Map
+  },
+  difficulty: {
+    required: true,
+    type: String,
+    enum: ['Easy', 'Medium', 'Hard']
   }
 })
 
