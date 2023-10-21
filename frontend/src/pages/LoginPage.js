@@ -2,13 +2,12 @@ import { initFirebase } from '../configs/firebase.js'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setDisplayname, setUserid, setStateEmail, setLoginStatus } from '../redux/UserSlice.js'
+import { setDisplayname, setUserid, setStateEmail, setLoginStatus, setIdToken } from '../redux/UserSlice.js'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice.js'
 import { useNavigate } from 'react-router-dom'
 
 function LoginPage () {
-  const app = initFirebase()
-  console.log(app)
+  initFirebase()
   const auth = getAuth()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -28,9 +27,11 @@ function LoginPage () {
       dispatch(setDisplayname(displayName))
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
-      dispatch(setLoginStatus(true))
       console.log(userCredentials)
+      const idToken = await userCredentials.user.getIdToken()
+      dispatch(setIdToken(idToken))
       console.log('Login successful')
+      dispatch(setLoginStatus(true))
       navigate('/home')
     } catch (error) {
       dispatch(setErrorMessage(error.message)) // TODO handle firebase errors (give better descriptions)

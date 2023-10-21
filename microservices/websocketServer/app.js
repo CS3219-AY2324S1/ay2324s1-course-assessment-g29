@@ -11,6 +11,9 @@ const io = new Server(server)
 const roomIdToSocketId = {}
 const socketToUserId = {}
 const socketToRoom = {}
+const roomIdToCode = {}
+const roomIdToMessages = {}
+const roomIdToLanguage = {}
 
 function disconnectFromSocket (socketid) {
   const roomId = socketToRoom[socketid]
@@ -31,6 +34,9 @@ io.on('connection', (socket) => {
         roomIdToSocketId[roomid] = newUserList
         socketToUserId[socket.id] = userid
         socketToRoom[socket.id] = roomid
+        roomIdToMessages[roomid] = []
+        roomIdToCode[roomid] = 'Please choose a language to begin!\n'
+        roomIdToLanguage[roomid] = ''
         callback()
       }
       const roomSockets = roomIdToSocketId[roomid]
@@ -43,8 +49,12 @@ io.on('connection', (socket) => {
         }
         socketToRoom[socket.id] = roomid
         socketToUserId[socket.id] = userid
-        io.to(socket1id).emit('MatchSuccess', { matchedUserId: userid })
-        io.to(socket.id).emit('MatchSuccess', { matchedUserId: socketToUserId[socket1id] })
+        console.log(roomIdToMessages[roomid])
+        console.log(roomIdToCode[roomid])
+        console.log(roomIdToLanguage[roomid])
+        console.log('Match')
+        io.to(socket1id).emit('MatchSuccess', { matchedUserId: userid, messages: roomIdToMessages[roomid], code: roomIdToCode[roomid], language: roomIdToLanguage[roomid] })
+        io.to(socket.id).emit('MatchSuccess', { matchedUserId: socketToUserId[socket1id], messages: roomIdToMessages[roomid], code: roomIdToCode[roomid], language: roomIdToLanguage[roomid] })
         console.log(`Match Success between ${userid} and ${socketToUserId[socket1id]}`)
         callback()
       } else {
@@ -60,6 +70,7 @@ io.on('connection', (socket) => {
       console.log(socket.id)
       console.log(message)
       const roomId = socketToRoom[socket.id]
+      roomIdToMessages[roomId].push(message)
       for (const index in roomIdToSocketId[roomId]) {
         console.log(index)
         const socket2id = roomIdToSocketId[roomId][index]
@@ -80,6 +91,7 @@ io.on('connection', (socket) => {
       console.log(socket.id)
       console.log(code)
       const roomId = socketToRoom[socket.id]
+      roomIdToCode[roomId] = code
       for (const index in roomIdToSocketId[roomId]) {
         const socket2id = roomIdToSocketId[roomId][index]
         if (socket2id !== socket.id) {
@@ -92,15 +104,61 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('disconnect', async () => {
+  socket.on('ChangeEditorLanguage', ({ language }, callback) => {
+    try {
+      console.log(socket.id)
+      console.log(language)
+      const roomId = socketToRoom[socket.id]
+      for (const index in roomIdToSocketId[roomId]) {
+        const socket2id = roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          io.to(socket2id).emit('CheckChangeEditorLanguage', { language })
+        }
+      }
+      callback()
+    } catch (error) {
+      return callback(error)
+    }
+  })
+
+  socket.on('ConfirmChangeEditorLanguage', ({ agree, language }, callback) => {
+    try {
+      console.log(socket.id)
+      const roomId = socketToRoom[socket.id]
+      roomIdToLanguage[roomId] = language
+      for (const index in roomIdToSocketId[roomId]) {
+        const socket2id = roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          io.to(socket2id).emit('ConfirmChangeEditorLanguage', { agree, language })
+        }
+      }
+      callback()
+    } catch (error) {
+      return callback(error)
+    }
+  })
+
+  socket.on('CloseRoom', async () => {
     console.log('disconnecting other peer')
     const roomId = socketToRoom[socket.id]
+    let socket2idres = ''
     for (const index in roomIdToSocketId[roomId]) {
       const socket2id = roomIdToSocketId[roomId][index]
       if (socket2id !== socket.id) {
+        socket2idres = socket2id
         io.to(socket2id).emit('DisconnectPeer')
       }
     }
+    roomIdToMessages[roomId] = null
+    roomIdToCode[roomId] = null
+    roomIdToLanguage[roomId] = null
+    disconnectFromSocket(socket.id)
+    if (socket2idres !== '') {
+      disconnectFromSocket(socket2idres)
+    }
+  })
+
+  socket.on('disconnect', async () => {
     disconnectFromSocket(socket.id)
   })
 })
