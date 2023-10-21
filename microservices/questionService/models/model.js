@@ -17,9 +17,9 @@ const dataSchema = new mongoose.Schema({
     required: true,
     type: Array
   },
-  imagesMap: {
+  imagesArray: {
     required: false,
-    type: Map
+    type: Array
   },
   difficulty: {
     required: true,
