@@ -13,9 +13,9 @@ const dataSchema = new mongoose.Schema({
     required: true,
     type: String
   },
-  tag: {
-    required: false,
-    type: Array
+  topic: {
+    required: true,
+    type: [String]
   },
   imagesMap: {
     required: false,
