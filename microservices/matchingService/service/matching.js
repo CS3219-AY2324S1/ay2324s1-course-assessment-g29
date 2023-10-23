@@ -10,7 +10,7 @@ class MatchingService {
   checkNewLocation (checkUserid) {
     // Loop through all the queues
     for (const queueName in this.Queues) {
-      const queue = this.Queues[queueName];
+      const queue = this.Queues[queueName]
       for (let i = 0; i < queue.length; i++) {
         const user = queue[i]
         if (user.userid === checkUserid) {
@@ -48,8 +48,8 @@ class MatchingService {
     this.Queues[difficulty].push(newUser)
   }
 
-  isMatchFound(user1Languages, user2Languages) {
-    return this.findMatchingLanguages(user1Languages, user2Languages).length > 0;
+  isMatchFound (user1Languages, user2Languages) {
+    return this.findMatchingLanguages(user1Languages, user2Languages).length > 0
   }
 
   popQueue (difficulty, languages) {
