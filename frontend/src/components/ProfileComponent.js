@@ -57,8 +57,20 @@ function Profile() {
   }, []);
 
   const handleLanguageChange = () => {
-    dispatch(setPreferredLanguages(selectedLanguages));
-    setIsLanguageChangeDialogOpen(false);
+    axios
+      .post(`http://localhost:3001/user/updateLanguage/${userid}`, {
+        languages: selectedLanguages,
+      })
+      .then((response) => {
+        console.log(response);
+        const userLanguages = response.data.languages;
+        dispatch(setPreferredLanguages(selectedLanguages));
+        setIsLanguageChangeDialogOpen(false);
+      })
+      .catch((error) => {
+        dispatch(setErrorMessage(error.message));
+        dispatch(setShowError(true));
+      });
   };
 
   const handleCheckboxChange = (event) => {

@@ -3,9 +3,16 @@ import { Box, Card, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useDrawingArea } from "@mui/x-charts/hooks";
 
-const MetricComponent = () => {
+const MetricComponent = ({ easyCount, normalCount, hardCount }) => {
+  const totalQuestions = easyCount + normalCount + hardCount;
+  const hasQuestionDone = totalQuestions > 0;
+
   return (
-    <Box component="span" sx={{ p: 2, width: 1 / 4, textAlign: "left" }}>
+    <Box
+      component="span"
+      sx={{ p: 2, width: "50%", textAlign: "left" }}
+      flex={1}
+    >
       <Card
         flex={1}
         variant="outlined"
@@ -14,14 +21,15 @@ const MetricComponent = () => {
         <Typography variant={"body2"} marginBottom={"0.5rem"} fontWeight="bold">
           Questions done by difficulty
         </Typography>
+        {hasQuestionDone ? (
         <Box display={"flex"} flex={1} justifyContent={"flex-start"}>
           <PieChart
             series={[
               {
                 data: [
-                  { id: 0, value: 10, label: "Easy" },
-                  { id: 1, value: 15, label: "Medium" },
-                  { id: 2, value: 20, label: "Hard", color: "#FF0000" },
+                  { id: 0, value: easyCount, label: "Easy" },
+                  { id: 1, value: normalCount, label: "Medium" },
+                  { id: 2, value: hardCount, label: "Hard", color: "#FF0000" },
                 ],
                 innerRadius: 55,
               },
@@ -29,9 +37,9 @@ const MetricComponent = () => {
             width={300}
             height={140}
           >
-            <PieCenterLabel>Attempts</PieCenterLabel>
+            <PieCenterLabel>{`Total: ${totalQuestions}`}</PieCenterLabel>
           </PieChart>
-        </Box>
+        </Box>) : ( <Typography variant={"body2"} marginBottom={"0.5rem"} fontWeight="bold">No question done yet, get started today! </Typography>)}
       </Card>
     </Box>
   );

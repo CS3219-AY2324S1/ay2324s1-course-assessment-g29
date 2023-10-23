@@ -139,7 +139,8 @@ function MatchingComponent() {
   return (
     <Box
       component="span"
-      sx={{ p: 2, width: 1 / 4 }}
+      sx={{ p: 2, width: "50%"}}
+      flex={1}
     >
       <Card
         flex={1}

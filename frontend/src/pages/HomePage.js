@@ -11,21 +11,21 @@ function HomePage() {
       display="flex"
       flexDirection="column"
       flex={1}
+      justifyContent={"center"}
     >
       <Navbar />
       <Box
         display="flex"
         flexDirection="row"
-        justifyContent="center"
+        justifyContent={"center"}
         flex={1}
       >
         <Profile />
-        <Box display={"flex"} flexDirection={"column"} flex={1}>
-          <Box display={"flex"} flexDirection={"row"} flex={1}>
+        <Box display={"flex"} flexDirection={"column"} width="50%">
+          <Box display={"flex"} flexDirection={"row"}>
             <MetricComponent />
             <MatchingComponent />
           </Box>
-
           <PreviousQuestionsDone />
         </Box>
       </Box>
