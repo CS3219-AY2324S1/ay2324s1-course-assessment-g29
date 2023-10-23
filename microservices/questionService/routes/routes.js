@@ -17,7 +17,10 @@ router.post('/post', async (req, res) => {
   const data = new Model({
     name,
     displayName,
-    description: req.body.description
+    description: req.body.description,
+    topic: req.body.topic,
+    imagesMap: req.body.imagesMap,
+    difficulty: req.body.difficulty
   })
 
   try {
@@ -38,10 +41,42 @@ router.get('/getAll', async (req, res) => {
   }
 })
 
-// Get by Name Method
-router.get('/getOne/:name', async (req, res) => {
+// Get all by difficulty Method
+router.get('/getDifficulty/:difficulty', async (req, res) => {
   try {
-    const data = await Model.find({ name: req.params.name })
+    const data = await Model.find({ difficulty: req.params.difficulty })
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
+// Get by Name Method
+router.get('/getOneByName/:name', async (req, res) => {
+  try {
+    const data = await Model.findOne({ name: req.params.name })
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
+// Get random one with difficulty
+router.get('/getOneByDifficulty/:difficulty', async (req, res) => {
+  try {
+    const count = await Model.find({ difficulty: req.params.difficulty }).estimatedDocumentCount()
+    const random = Math.floor(Math.random() * count)
+    const data = await Model.findOne({ difficulty: req.params.difficulty }).skip(random).exec()
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
+// Get all by Topic Method
+router.get('/getTopic/:topic', async (req, res) => {
+  try {
+    const data = await Model.find({ topic: req.params.topic })
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -55,6 +90,18 @@ router.get('/getRandom', async (req, res) => {
     await Model.aggregate().sample(1).replaceRoot({ question: '$$ROOT' }).then((res) => {
       data = res[0]
     })
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
+// Get random one with topic
+router.get('/getOneByTopic/:topic', async (req, res) => {
+  try {
+    const count = await Model.Model.find({ topic: req.params.topic }).estimatedDocumentCount()
+    const random = Math.floor(Math.random() * count)
+    const data = await Model.findOne({ topic: req.params.topic }).skip(random).exec()
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })

@@ -13,9 +13,18 @@ const dataSchema = new mongoose.Schema({
     required: true,
     type: String
   },
-  tag: {
+  topic: {
+    required: true,
+    type: [String]
+  },
+  imagesMap: {
     required: false,
-    type: Array
+    type: Map
+  },
+  difficulty: {
+    required: true,
+    type: String,
+    enum: ['Easy', 'Medium', 'Hard']
   }
 })
 
