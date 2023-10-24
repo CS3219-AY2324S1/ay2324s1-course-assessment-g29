@@ -41,3 +41,8 @@ jobs:
           MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
         run: npm test
       #   run: npm run test-ci # need to set up test-ci in package.json
+
+      - name: Debug Secrets
+        run: |
+          echo "My first secret: ${{ secrets.API_KEY }}"
+          echo "My second secret: ${{ secrets.PROJECT_ID }}"
