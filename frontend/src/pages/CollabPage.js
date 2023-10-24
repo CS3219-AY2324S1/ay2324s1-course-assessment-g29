@@ -12,12 +12,12 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
 import SendIcon from "@mui/icons-material/Send";
-import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 import { Typography } from "@mui/material";
 import { selectUserid } from "../redux/UserSlice";
 import Navbar from "../components/Navbar";
+import chatComponent from "../components/ChatComponent";
 import {
   selectRoomid,
   selectMatchedUserid,
@@ -32,6 +32,7 @@ import {
   setMessages,
 } from "../redux/MatchingSlice";
 import { setErrorMessage, setShowError } from "../redux/ErrorSlice";
+import Fab from "@mui/material/Fab";
 import {
   setAwaitAlertOpen,
   selectNewProgrammingLanguage,
@@ -43,6 +44,7 @@ import {
   setChangeProgrammingLanguageAlert,
 } from "../redux/EditorSlice";
 import ProgrammingLanguageDialog from "../components/ChangeProgrammingLanguageAlert";
+import ChatComponent from "../components/ChatComponent";
 
 const SOCKETSERVER = "http://localhost:2000";
 
@@ -54,7 +56,7 @@ const connectionOptions = {
 };
 
 function CollabPage() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const messages = useSelector(selectMessages);
   const navigate = useNavigate();
   const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage);
@@ -224,17 +226,7 @@ function CollabPage() {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent={"center"}
-    >
-      <ProgrammingLanguageDialog
-        matchedUserId={matchedUserid}
-        language={newProgrammingLanguage}
-        denyChange={denyProgrammingLanguageChange}
-        agreeChange={agreeProgrammingLanguageChange}
-      />
+    <Box display="flex" flexDirection="column" alignContent={"flex-start"}>
       <Navbar />
       <Box
         style={{ width: "100%", height: "70%", paddingTop: "1rem" }}
@@ -264,39 +256,22 @@ function CollabPage() {
                   ))}
               </Typography>
             </Box>
-
-            <Box>
-              <Card>
-                <ScrollToBottom className="messages">
-                  {messages.map((message, i) => (
-                    <div key={i}>
-                      <Typography>{message}</Typography>
-                    </div>
-                  ))}
-                </ScrollToBottom>
-                <TextField
-                  id="outlined-multiline-flexible"
-                  label="Send A Message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  multiline
-                  maxRows={4}
-                />
-                <Button
-                  variant="contained"
-                  onClick={sendMessage}
-                  endIcon={<SendIcon />}
-                >
-                  Send
-                </Button>
-              </Card>
-            </Box>
           </Box>
-          <Box display="flex" flexDirection={"column"} flex={1}>
+          <Box
+            display="flex"
+            flexDirection={"column"}
+            flex={1}
+            alignContent="flex-end"
+          >
             <Box margin={1} flex={1}>
               <Editor socketRef={socket} />
             </Box>
-            <Box margin={1} display="flex" flexDirection={"row"}>
+            <Box
+              margin={1}
+              display="flex"
+              flexDirection="row"
+              alignContent="flex-end"
+            >
               <Button
                 variant="contained"
                 onClick={LeaveRoom}
@@ -315,7 +290,15 @@ function CollabPage() {
             </Box>
           </Box>
         </Box>
+        
       </Box>
+      <ProgrammingLanguageDialog
+        matchedUserId={matchedUserid}
+        language={newProgrammingLanguage}
+        denyChange={denyProgrammingLanguageChange}
+        agreeChange={agreeProgrammingLanguageChange}
+      />
+      <ChatComponent socket={socket}/>
     </Box>
   );
 }

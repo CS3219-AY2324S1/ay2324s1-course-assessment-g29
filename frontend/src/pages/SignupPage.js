@@ -69,7 +69,7 @@ function SignupPage() {
       const userCredentials = await signInWithEmailAndPassword(auth, email, password)
       const userid = userCredentials.user.uid
       dispatch(setUserid(userid))
-      const userDisplayName = userCredentials.user.name
+      const userDisplayName = userCredentials.user.displayName
       dispatch(setDisplayname(userDisplayName))
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
