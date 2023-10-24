@@ -38,6 +38,9 @@ jobs:
           echo ${{ secrets.PROJECT_ID }}
           echo "Trick to echo GitHub Actions Secret:  "
           echo ${{secrets.PROJECT_ID}} | sed 's/./& /g'
+          echo "$HELLO"
+        env:
+          HELLO: secrets.PROJECT_ID
 
       - name: Run Tests
         env:
