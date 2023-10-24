@@ -163,7 +163,7 @@ function MatchingComponent () {
                             onChange={handleChange}
                           >
                             <MenuItem value='Easy'>Easy</MenuItem>
-                            <MenuItem value='Normal'>Normal</MenuItem>
+                            <MenuItem value='Medium'>Medium</MenuItem>
                             <MenuItem value='Hard'>Hard</MenuItem>
                           </Select>
                         </FormControl>
