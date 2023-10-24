@@ -36,8 +36,6 @@ jobs:
           echo "My second secret: ${{ secrets.PROJECT_ID }}"
           echo "The GitHub Action Secret will be masked:  "
           echo ${{ secrets.PROJECT_ID }}
-          echo "Trick to echo GitHub Actions Secret:  "
-          echo ${{secrets.PROJECT_ID}} | sed 's/./& /g'
           echo "$HELLO"
           echo ${{secrets.TEST}} | sed 's/./& /g'
         env:
@@ -52,5 +50,11 @@ jobs:
           MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
           APP_ID: ${{ secrets.APP_ID }}
           MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
+          FIREBASE_ADMIN_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_ADMIN_PRIVATE_KEY_ID }}
+          FIREBASE_ADMIN_PRIVATE_KEY: ${{ secrets.FIREBASE_ADMIN_PRIVATE_KEY }}
+          FIREBASE_ADMIN_CLIENT_EMAIL: ${{ secrets.FIREBASE_ADMIN_CLIENT_EMAIL }}
+          FIREBASE_ADMIN_CLIENT_ID: ${{ secrets.FIREBASE_ADMIN_CLIENT_ID }}
+          FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL }}
+          FIREBASE_ADMIN_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_CLIENT_X509_CERT_URL }}
         run: npm test
       #   run: npm run test-ci # need to set up test-ci in package.json
