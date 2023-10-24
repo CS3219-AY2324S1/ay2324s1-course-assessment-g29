@@ -19,7 +19,7 @@ router.post('/post', async (req, res) => {
     displayName,
     description: req.body.description,
     topic: req.body.topic,
-    imagesMap: req.body.imagesMap,
+    imagesArray: req.body.imagesArray,
     difficulty: req.body.difficulty
   })
 
@@ -64,7 +64,7 @@ router.get('/getOneByName/:name', async (req, res) => {
 // Get random one with difficulty
 router.get('/getOneByDifficulty/:difficulty', async (req, res) => {
   try {
-    const count = await Model.find({ difficulty: req.params.difficulty }).estimatedDocumentCount()
+    const count = await Model.find({ difficulty: req.params.difficulty }).countDocuments()
     const random = Math.floor(Math.random() * count)
     const data = await Model.findOne({ difficulty: req.params.difficulty }).skip(random).exec()
     res.json(data)
@@ -99,7 +99,7 @@ router.get('/getRandom', async (req, res) => {
 // Get random one with topic
 router.get('/getOneByTopic/:topic', async (req, res) => {
   try {
-    const count = await Model.Model.find({ topic: req.params.topic }).estimatedDocumentCount()
+    const count = await Model.Model.find({ topic: req.params.topic }).countDocuments()
     const random = Math.floor(Math.random() * count)
     const data = await Model.findOne({ topic: req.params.topic }).skip(random).exec()
     res.json(data)
