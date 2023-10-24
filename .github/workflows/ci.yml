@@ -30,17 +30,6 @@ jobs:
       - name: Build
         run: npm run build --if-present
 
-      - name: Debug Secrets
-        run: |
-          echo "My first secret: ${{ secrets.API_KEY }}"
-          echo "My second secret: ${{ secrets.PROJECT_ID }}"
-          echo "The GitHub Action Secret will be masked:  "
-          echo ${{ secrets.PROJECT_ID }}
-          echo "$HELLO"
-          echo ${{secrets.TEST}} | sed 's/./& /g'
-        env:
-          HELLO: ${{ secrets.TEST }}
-
       - name: Run Tests
         env:
           API_KEY: ${{ secrets.API_KEY }}
