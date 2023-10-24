@@ -14,4 +14,4 @@ RUN yarn install --production
 EXPOSE 3001
 
 # Command to run the application
-CMD ["node", "userService.js"]
+CMD ["node", "server.js"]
