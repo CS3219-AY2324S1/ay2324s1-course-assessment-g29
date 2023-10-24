@@ -15,11 +15,11 @@ const dataSchema = new mongoose.Schema({
   },
   topic: {
     required: true,
-    type: [String]
+    type: Array
   },
-  imagesMap: {
+  imagesArray: {
     required: false,
-    type: Map
+    type: Array
   },
   difficulty: {
     required: true,
