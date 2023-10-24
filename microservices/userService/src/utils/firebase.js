@@ -10,6 +10,10 @@ const firebaseConfig = {
   appId: process.env.APP_ID,
   measurementId: process.env.MEASUREMENT_ID
 }
+
+console.log(process.env.API_KEY)
+console.log(firebaseConfig)
+
 const firebase = require('firebase/app')
 const firebaseApp = firebase.initializeApp(firebaseConfig)
 
