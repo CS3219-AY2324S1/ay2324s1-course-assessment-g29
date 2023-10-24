@@ -1,8 +1,8 @@
 # Configs
 configs/
 
-#.env
-microservices/collabService/.env
+# VSCode
+.vscode
 
 # OS specific
 .DS_Store
