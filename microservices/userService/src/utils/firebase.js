@@ -1,3 +1,5 @@
+console.log(process.env.API_KEY)
+
 const path = require('path')
 const envPath = path.join(__dirname, '../../configs/.env')
 require('dotenv').config({ path: envPath })

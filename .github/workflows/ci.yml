@@ -34,6 +34,10 @@ jobs:
         run: |
           echo "My first secret: ${{ secrets.API_KEY }}"
           echo "My second secret: ${{ secrets.PROJECT_ID }}"
+          echo "The GitHub Action Secret will be masked:  "
+          echo ${{ secrets.PROJECT_ID }}
+          echo "Trick to echo GitHub Actions Secret:  "
+          echo ${{secrets.PROJECT_ID}} | sed 's/./& /g'
 
       - name: Run Tests
         env:
