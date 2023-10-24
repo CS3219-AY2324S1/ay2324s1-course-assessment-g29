@@ -10,7 +10,7 @@ const MetricComponent = ({ easyCount, normalCount, hardCount }) => {
   return (
     <Box
       component="span"
-      sx={{ p: 2, width: "50%", textAlign: "left" }}
+      sx={{ p: 2, width: "50%", textAlign: "left", height: "50%"}}
       flex={1}
     >
       <Card

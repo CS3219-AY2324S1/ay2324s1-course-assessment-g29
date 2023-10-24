@@ -35,7 +35,7 @@ function Profile() {
   const displayName = useSelector(selectDisplayname);
   const preferredLanguages = useSelector(selectPreferredLanguages);
 
-  const ALL_LANGUAGES = ["python", "java", "c"];
+  const ALL_LANGUAGES = ["Python", "Java", "C"];
 
   const [isLanguageChangeDialogOpen, setIsLanguageChangeDialogOpen] =
     useState(false);
@@ -57,9 +57,11 @@ function Profile() {
   }, []);
 
   const handleLanguageChange = () => {
+    const JsonData = JSON.stringify(selectedLanguages);
     axios
-      .post(`http://localhost:3001/user/updateLanguage/${userid}`, {
-        languages: selectedLanguages,
+      .post(`http://localhost:3001/user/updateLanguage/`, {
+        uid: userid,
+        language: JsonData
       })
       .then((response) => {
         console.log(response);

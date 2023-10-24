@@ -21,7 +21,7 @@ import axios from "axios";
 
 function SignupPage() {
   const auth = getAuth();
-  const [displayName, setDisplayName] = useState("");
+  const [name, setName] = useState("");
   const [displayNameError, setDisplayNameError] = useState(false);
 
   const [username, setUsername] = useState("");
@@ -40,7 +40,7 @@ function SignupPage() {
   const navigate = useNavigate();
 
   const requireAllNonNull = () => {
-    const requiredFields = [displayName, username, email, password, passwordConfirmation]
+    const requiredFields = [name, username, email, password, passwordConfirmation]
     requiredFields.forEach((x, i) => {
       if (x === '') {
         throw new Error('All fields cannot be empty')
@@ -64,12 +64,12 @@ function SignupPage() {
     try {
       requireAllNonNull()
       checkPasswords(password, passwordConfirmation)
-      await axios.post('http://localhost:3001/user/register', { displayName, username, email, password })
+      await axios.post('http://localhost:3001/user/register', { name, username, email, password })
       console.log('sign up success')
       const userCredentials = await signInWithEmailAndPassword(auth, email, password)
       const userid = userCredentials.user.uid
       dispatch(setUserid(userid))
-      const userDisplayName = userCredentials.user.displayName
+      const userDisplayName = userCredentials.user.name
       dispatch(setDisplayname(userDisplayName))
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
@@ -123,8 +123,8 @@ function SignupPage() {
               type="text"
               placeholder="Display Name"
               variant="standard"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               sx={{ marginBottom: "1rem" }}
               error={displayNameError}
               fullWidth
