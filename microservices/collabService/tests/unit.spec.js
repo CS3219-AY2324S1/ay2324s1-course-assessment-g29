@@ -13,7 +13,7 @@ describe('Express App Unit Tests', () => {
       .send({
         user1id: 'user123',
         user2id: 'user456',
-        matchingLanguages: ['JavaScript', 'Python'],
+        matchingLanguages: ['JavaScript', 'Python']
       })
       .end((err, res) => {
         expect(res).to.have.status(200)
@@ -22,7 +22,7 @@ describe('Express App Unit Tests', () => {
         done()
       })
   })
-  
+
   it('should check for an existing room', (done) => {
     chai
       .request(app)
@@ -35,7 +35,7 @@ describe('Express App Unit Tests', () => {
         done()
       })
   })
-  
+
   it('should save room history', (done) => {
     chai
       .request(app)
@@ -47,55 +47,55 @@ describe('Express App Unit Tests', () => {
         questionData: 'your_question_data',
         code: 'your_code',
         language: 'your_language',
-        messages: ['message1', 'message2'],
+        messages: ['message1', 'message2']
       })
       .end((err, res) => {
         expect(res).to.have.status(200)
         done()
       })
   })
-  
-    it('should update room history', (done) => {
-      chai
-        .request(app)
-        .post('/room/updatehistory')
-        .send({
-          rid: 'room_id', // Provide a valid room ID
-          questionData: 'updated_question_data',
-          code: 'updated_code',
-          language: 'updated_language',
-          messages: ['updated_message1', 'updated_message2'],
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(200)
-          done()
-        })
-    })
-  
+
+  it('should update room history', (done) => {
+    chai
+      .request(app)
+      .post('/room/updatehistory')
+      .send({
+        rid: 'room_id', // Provide a valid room ID
+        questionData: 'updated_question_data',
+        code: 'updated_code',
+        language: 'updated_language',
+        messages: ['updated_message1', 'updated_message2']
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(200)
+        done()
+      })
+  })
+
   it('should change question in a room', (done) => {
     chai
       .request(app)
       .post('/room/changequestion')
       .send({
         rid: 'room_id',
-        questionData: 'new_question_data',
+        questionData: 'new_question_data'
       })
       .end((err, res) => {
         expect(res).to.have.status(200)
         done()
       })
   })
-  
+
   it('should delete a room', (done) => {
     chai
       .request(app)
       .post('/room/leaveroom')
       .send({
-        rid: 'room_id',
+        rid: 'room_id'
       })
       .end((err, res) => {
         expect(res).to.have.status(200)
         done()
       })
-    })
+  })
 })

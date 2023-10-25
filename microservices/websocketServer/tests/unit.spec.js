@@ -10,15 +10,15 @@ describe('Websocket Service Unit Tests', () => {
   // Set up the Socket.io server and client connections
   before(async () => {
     clientSocket = ioc('http://localhost:2000', {
-      reconnection: false,
+      reconnection: false
     })
     clientSocket2 = ioc('http://localhost:2000', {
-      reconnection: false,
+      reconnection: false
     })
     await new Promise((resolve) => {
       clientSocket.on('connect', resolve)
     })
-    
+
     await new Promise((resolve) => {
       clientSocket2.on('connect', resolve)
     })
@@ -32,8 +32,8 @@ describe('Websocket Service Unit Tests', () => {
 
   it('should get matchsucess', (done) => {
     // Keep track of how many times 'MatchingSuccess' event is received
-    const user1 = {userid: 'user123', roomid: 'room1'}
-    const user2 = {userid: 'user456', roomid: 'room1'}
+    const user1 = { userid: 'user123', roomid: 'room1' }
+    const user2 = { userid: 'user456', roomid: 'room1' }
     let matchingSuccessCount = 0
     clientSocket.emit('JoinRoom', user1, (response) => {
     })
@@ -45,18 +45,18 @@ describe('Websocket Service Unit Tests', () => {
       assert.equal(response.matchedUserId, user2.userid)
       matchingSuccessCount++
       if (matchingSuccessCount === 2) {
-          // Both clients have received the event
-          done()
+        // Both clients have received the event
+        done()
       }
     })
     // Listen for the 'MatchingSuccess' event on both client sockets
     clientSocket2.on('MatchSuccess', (response) => {
-        assert.equal(response.matchedUserId, user1.userid)
-        matchingSuccessCount++
-        if (matchingSuccessCount === 2) {
-            // Both clients have received the event
-            done()
-        }
+      assert.equal(response.matchedUserId, user1.userid)
+      matchingSuccessCount++
+      if (matchingSuccessCount === 2) {
+        // Both clients have received the event
+        done()
+      }
     })
   })
 
@@ -69,7 +69,7 @@ describe('Websocket Service Unit Tests', () => {
       console.log(response)
       assert.equal(response.message, messageData.message)
       done()
-    }) 
+    })
   })
 
   it('should handle the CodeChange event', (done) => {
@@ -80,18 +80,18 @@ describe('Websocket Service Unit Tests', () => {
     clientSocket2.on('CodeChange', (response) => {
       assert.equal(response.code, codeData.code)
       done()
-    }) 
+    })
   })
 
   it('should handle the ChangeEditorLanguage event', (done) => {
     const languageData = { language: 'Python' }
 
-    clientSocket.emit('ChangeEditorLanguage', languageData, () => {     
+    clientSocket.emit('ChangeEditorLanguage', languageData, () => {
     })
     clientSocket2.on('CheckChangeEditorLanguage', (response) => {
       assert.equal(response.language, languageData.language)
       done()
-    }) 
+    })
   })
 
   it('should handle the ConfirmChangeEditorLanguage event', (done) => {
@@ -103,7 +103,7 @@ describe('Websocket Service Unit Tests', () => {
       assert.equal(response.agree, languageData.agree)
       assert.equal(response.language, languageData.language)
       done()
-    }) 
+    })
   })
 
   it('should handle the CloseRoom event', (done) => {
@@ -112,7 +112,6 @@ describe('Websocket Service Unit Tests', () => {
     // Listen for the 'MatchingSuccess' event on both client sockets
     clientSocket2.on('DisconnectPeer', (response) => {
       done()
-    }) 
+    })
   })
-
 })
