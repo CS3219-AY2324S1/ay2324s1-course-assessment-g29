@@ -76,3 +76,5 @@ io.on('connection', (socket) => {
 })
 
 server.listen(port, () => console.log(`Express app running on port ${port}!`))
+
+module.exports = io;

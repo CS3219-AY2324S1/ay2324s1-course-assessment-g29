@@ -116,3 +116,5 @@ app.post('/room/leaveroom', async (req, res) => {
 // app.use('/room', roomsRouter)
 
 app.listen(port, () => console.log(`Express app running on port ${port}!`))
+
+module.exports = app
