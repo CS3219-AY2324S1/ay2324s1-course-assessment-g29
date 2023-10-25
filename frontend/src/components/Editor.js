@@ -1,27 +1,27 @@
-import { React, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Select, MenuItem, InputLabel, FormControl, Card } from "@mui/material";
-import CodeMirror from "@uiw/react-codemirror";
-import { materialLightInit } from "@uiw/codemirror-theme-material";
-import { python } from "@codemirror/lang-python";
-import { java } from "@codemirror/lang-java";
-import { cpp } from "@codemirror/lang-cpp";
+import { React, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Select, MenuItem, InputLabel, FormControl, Card } from '@mui/material'
+import CodeMirror from '@uiw/react-codemirror'
+import { materialLightInit } from '@uiw/codemirror-theme-material'
+import { python } from '@codemirror/lang-python'
+import { java } from '@codemirror/lang-java'
+import { cpp } from '@codemirror/lang-cpp'
 import {
   selectCode,
   setCode,
   selectCodeEditorLanguage,
-  setAwaitAlertOpen,
-} from "../redux/EditorSlice";
-import { selectMatchedUserid } from "../redux/MatchingSlice";
-import AwaitChangeProgrammingLanguageDialog from "../components/AwaitChangeProgrammingLanguageAlert";
+  setAwaitAlertOpen
+} from '../redux/EditorSlice'
+import { selectMatchedUserid } from '../redux/MatchingSlice'
+import AwaitChangeProgrammingLanguageDialog from '../components/AwaitChangeProgrammingLanguageAlert'
 
-function determineLanguage(selectedLanguage) {
-  if (selectedLanguage === "Python") {
-    return [python({ jsx: true })];
-  } else if (selectedLanguage === "Java") {
-    return [java({ jsx: true })];
-  } else if (selectedLanguage === "C++") {
-    return [cpp({ jsx: true })];
+function determineLanguage (selectedLanguage) {
+  if (selectedLanguage === 'Python') {
+    return [python({ jsx: true })]
+  } else if (selectedLanguage === 'Java') {
+    return [java({ jsx: true })]
+  } else if (selectedLanguage === 'C++') {
+    return [cpp({ jsx: true })]
   }
 }
 
@@ -36,54 +36,54 @@ function determineLanguage(selectedLanguage) {
 // }
 
 export const Editor = ({ socketRef }) => {
-  const dispatch = useDispatch();
-  const reduxCode = useSelector(selectCode);
-  const [languages] = useState(["Python", "Java", "C++"]);
-  const matchedUserid = useSelector(selectMatchedUserid);
-  const selectedLanguage = useSelector(selectCodeEditorLanguage);
+  const dispatch = useDispatch()
+  const reduxCode = useSelector(selectCode)
+  const [languages] = useState(['Python', 'Java', 'C++'])
+  const matchedUserid = useSelector(selectMatchedUserid)
+  const selectedLanguage = useSelector(selectCodeEditorLanguage)
 
   const handleLanguageChange = (e) => {
-    const selectedValue = e.target.value;
-    dispatch(setAwaitAlertOpen(true));
+    const selectedValue = e.target.value
+    dispatch(setAwaitAlertOpen(true))
     socketRef.current.emit(
-      "ChangeEditorLanguage",
+      'ChangeEditorLanguage',
       { language: selectedValue },
       (error) => {
-        console.log(error);
+        console.log(error)
       }
-    );
+    )
     // setSelectedLanguage(selectedValue) // Update the selected language state
-  };
+  }
 
   const handleCodeChange = (value, data) => {
-    console.log("Code changed to:", value);
-    dispatch(setCode(value));
-    socketRef.current.emit("CodeChange", { code: value }, (error) => {
-      console.log(error);
-    });
-  };
+    console.log('Code changed to:', value)
+    dispatch(setCode(value))
+    socketRef.current.emit('CodeChange', { code: value }, (error) => {
+      console.log(error)
+    })
+  }
 
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}
     >
       <AwaitChangeProgrammingLanguageDialog matchedUserId={matchedUserid} />
       <Card
         style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
-        <FormControl style={{ width: "50%" }}>
-          <InputLabel id="Programming language">
+        <FormControl style={{ width: '50%' }}>
+          <InputLabel id='Programming language'>
             Choose programming language
           </InputLabel>
           <Select onChange={handleLanguageChange} value={selectedLanguage}>
@@ -96,20 +96,20 @@ export const Editor = ({ socketRef }) => {
         </FormControl>
         <CodeMirror
           value={reduxCode}
-          style={{ width: "100%", paddingTop: "1rem" }}
+          style={{ width: '100%', paddingTop: '1rem' }}
           onChange={handleCodeChange}
-          className="custom-codemirror"
+          className='custom-codemirror'
           theme={materialLightInit({
             settings: {
-              caret: "#c6c6c6",
-              fontFamily: "monospace",
-              foreground: "#75baff",
-              lineHighlight: "#8a91991a",
-            },
+              caret: '#c6c6c6',
+              fontFamily: 'monospace',
+              foreground: '#75baff',
+              lineHighlight: '#8a91991a'
+            }
           })}
           extensions={determineLanguage(selectedLanguage)}
         />
       </Card>
     </div>
-  );
-};
+  )
+}

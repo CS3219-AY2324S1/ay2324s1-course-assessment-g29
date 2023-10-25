@@ -1,96 +1,93 @@
-import React, { useState, useRef, useEffect } from "react";
-import { selectMessages, appendMessages } from "../redux/MatchingSlice";
-import { useDispatch, useSelector } from "react-redux";
-import ScrollToBottom from "react-scroll-to-bottom";
-import { Box } from "@mui/system";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import SendIcon from "@mui/icons-material/Send";
-import Fab from "@mui/material/Fab";
-import { selectUserid } from "../redux/UserSlice";
-import { selectMatchedUserid } from "../redux/MatchingSlice";
-import { Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import "react-chat-elements/dist/main.css";
-import { MessageList } from "react-chat-elements";
-import ChatIcon from "@mui/icons-material/Chat";
-import CloseIcon from "@mui/icons-material/Close";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
+import React, { useState } from 'react'
+import { selectMessages, appendMessages, selectMatchedUserid } from '../redux/MatchingSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { Box } from '@mui/system'
+import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
+import SendIcon from '@mui/icons-material/Send'
+import Fab from '@mui/material/Fab'
+import { selectUserid } from '../redux/UserSlice'
+import TextField from '@mui/material/TextField'
+import 'react-chat-elements/dist/main.css'
+import { MessageList } from 'react-chat-elements'
+import ChatIcon from '@mui/icons-material/Chat'
+import CloseIcon from '@mui/icons-material/Close'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
 
 const ChatComponent = ({ socket }) => {
-  const dispatch = useDispatch();
-  const messageListReferance = React.createRef();
+  const dispatch = useDispatch()
+  const messageListReferance = React.createRef()
 
-  const [message, setMessage] = useState("");
-  const [chatopen, setChatopen] = useState(false);
+  const [message, setMessage] = useState('')
+  const [chatopen, setChatopen] = useState(false)
 
-  const messages = useSelector(selectMessages);
-  const userid = useSelector(selectUserid);
-  const matchedUserid = useSelector(selectMatchedUserid);
+  const messages = useSelector(selectMessages)
+  const userid = useSelector(selectUserid)
+  const matchedUserid = useSelector(selectMatchedUserid)
 
   const toggleChat = () => {
-    setChatopen(!chatopen);
-  };
+    setChatopen(!chatopen)
+  }
 
   const sendMessage = (event) => {
-    event.preventDefault();
-    const messageString = `${userid} : ${message}`;
+    event.preventDefault()
+    const messageString = `${userid} : ${message}`
     if (message) {
-      dispatch(appendMessages(messageString));
-      socket.current.emit("Message", { message: messageString }, () =>
-        setMessage("")
-      );
+      dispatch(appendMessages(messageString))
+      socket.current.emit('Message', { message: messageString }, () =>
+        setMessage('')
+      )
     }
-  };
+  }
 
   const messageListData = (messages) =>
     messages.map((message, i) => {
       if (message) {
-        const useridLen = userid.length;
-        const parts = message.split(":");
-        const firstCharacters = parts[0].trim();
-        let text = "";
-        let sender = "";
-        let position = "";
+        const useridLen = userid.length
+        const parts = message.split(':')
+        const firstCharacters = parts[0].trim()
+        let text = ''
+        let sender = ''
+        let position = ''
 
         if (firstCharacters === userid) {
-          position = "right";
-          text = message.substring(useridLen + 3, message.length);
+          position = 'right'
+          text = message.substring(useridLen + 3, message.length)
 
-          sender = userid;
+          sender = userid
         } else {
-          text = message.substring(matchedUserid.length + 3, message.length);
-          position = "left";
-          sender = matchedUserid;
+          text = message.substring(matchedUserid.length + 3, message.length)
+          position = 'left'
+          sender = matchedUserid
         }
 
         return {
-          position: position,
-          type: "text",
+          position,
+          type: 'text',
           title: sender,
-          text: text, // Ensure you use message.text here
-          key: i,
-        };
+          text, // Ensure you use message.text here
+          key: i
+        }
       } else {
-        return null;
+        return null
       }
-    });
+    })
   return (
     <Box>
       {chatopen ? (
         <Card
           style={{
-            position: "fixed",
-            bottom: "20px", // Adjust this value as needed
-            right: "20px", // Adjust this value as needed
-            height: "600px",
-            width: "400px", // Set a maximum height for the Card
+            position: 'fixed',
+            bottom: '20px', // Adjust this value as needed
+            right: '20px', // Adjust this value as needed
+            height: '600px',
+            width: '400px' // Set a maximum height for the Card
           }}
-          alignContent={"space-between"}
+          alignContent='space-between'
         >
-          <Box display="flex" justifyContent={"flex-end"}>
-            <Tooltip title="close message box">
+          <Box display='flex' justifyContent='flex-end'>
+            <Tooltip title='close message box'>
               <IconButton onClick={toggleChat}>
                 <CloseIcon />
               </IconButton>
@@ -98,40 +95,40 @@ const ChatComponent = ({ socket }) => {
           </Box>
 
           <Box
-            alignItems="stretch" // This ensures elements stretch horizontally
-            style={{ height: "100%" }}
+            alignItems='stretch' // This ensures elements stretch horizontally
+            style={{ height: '100%' }}
           >
             <div
               style={{
-                overflowY: "scroll",
-                height: "calc(100% - 95px)",
-                flex: 1, // Adjust as needed to leave space for input and button
+                overflowY: 'scroll',
+                height: 'calc(100% - 95px)',
+                flex: 1 // Adjust as needed to leave space for input and button
               }}
             >
               <MessageList
                 referance={messageListReferance}
-                className="message-list"
-                lockable={true}
-                toBottomHeight={"100%"}
+                className='message-list'
+                lockable
+                toBottomHeight='100%'
                 dataSource={messageListData(messages, userid)}
               />
             </div>
-            <Box display="flex" flexDirection="row" alignContent="center">
+            <Box display='flex' flexDirection='row' alignContent='center'>
               <TextField
-                id="standard-basic"
-                variant="standard"
-                label="Send A Message"
+                id='standard-basic'
+                variant='standard'
+                label='Send A Message'
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 multiline
                 maxRows={3}
-                style={{ flex: 1, marginRight: "5px", marginLeft: "5px" }}
+                style={{ flex: 1, marginRight: '5px', marginLeft: '5px' }}
               />
               <Button
-                variant="contained"
+                variant='contained'
                 onClick={sendMessage}
                 endIcon={<SendIcon />}
-                style={{ marginRight: "5px", marginLeft: "5px" }}
+                style={{ marginRight: '5px', marginLeft: '5px' }}
               >
                 Send
               </Button>
@@ -140,19 +137,19 @@ const ChatComponent = ({ socket }) => {
         </Card>
       ) : (
         <Fab
-          color="primary"
+          color='primary'
           onClick={toggleChat}
           style={{
-            position: "fixed",
-            bottom: "20px",
-            right: "20px",
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px'
           }}
         >
           <ChatIcon />
         </Fab>
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default ChatComponent;
+export default ChatComponent
