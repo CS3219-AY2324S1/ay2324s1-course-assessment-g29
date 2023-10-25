@@ -16,7 +16,7 @@ const testUser = {
 const defaultLanguage = ['Python']
 const newLanguages = ['Java', 'C++']
 
-describe('Test /user', () => {
+describe('Integration Test with firebase for /user', () => {
   before('before', () => {
     console.log('Running test suites for /user')
   })
