@@ -1,3 +1,5 @@
+// TODO: check if commented out code is needed
+
 import {
   Box,
   Button,
@@ -19,7 +21,7 @@ import {
   setIdToken
 } from '../redux/UserSlice.js'
 import { useNavigate } from 'react-router-dom'
-import { setErrorMessage, setShowError } from '../redux/ErrorSlice.js'
+// import { setErrorMessage, setShowError } from '../redux/ErrorSlice.js'
 import LoginPageBanner from '../components/FrontPageBanner.js'
 
 function LoginPage () {

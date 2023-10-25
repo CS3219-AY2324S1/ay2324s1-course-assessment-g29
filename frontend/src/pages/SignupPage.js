@@ -1,3 +1,5 @@
+// TODO: check if commented out code is needed
+
 import React, { useState } from 'react'
 import { Box, Button, Typography, TextField } from '@mui/material'
 import { useDispatch } from 'react-redux'
@@ -17,16 +19,16 @@ import axios from 'axios'
 function SignupPage () {
   const auth = getAuth()
   const [name, setName] = useState('')
-  const [displayNameError, setDisplayNameError] = useState(false)
+  // const [displayNameError, setDisplayNameError] = useState(false)
 
   const [username, setUsername] = useState('')
-  const [usernameError, setUsernameError] = useState(false)
+  // const [usernameError, setUsernameError] = useState(false)
 
   const [email, setEmail] = useState('')
-  const [emailError, setEmailError] = useState(false)
+  // const [emailError, setEmailError] = useState(false)
 
   const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState(false)
+  // const [passwordError, setPasswordError] = useState(false)
 
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [passwordConfirmationError, setPasswordConfirmationError] =
@@ -136,7 +138,7 @@ function SignupPage () {
               value={name}
               onChange={(e) => setName(e.target.value)}
               sx={{ marginBottom: '1rem' }}
-              error={displayNameError}
+              // error={displayNameError}
               fullWidth
               required
             />
@@ -147,7 +149,7 @@ function SignupPage () {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               sx={{ marginBottom: '1rem' }}
-              error={usernameError}
+              // error={usernameError}
               fullWidth
               required
             />
@@ -158,7 +160,7 @@ function SignupPage () {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               sx={{ marginBottom: '1rem' }}
-              error={emailError}
+              // error={emailError}
               fullWidth
               required
             />
@@ -169,7 +171,7 @@ function SignupPage () {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               sx={{ marginBottom: '1rem' }}
-              error={passwordError}
+              // error={passwordError}
               fullWidth
               required
             />

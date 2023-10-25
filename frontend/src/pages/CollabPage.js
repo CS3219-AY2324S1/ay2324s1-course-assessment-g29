@@ -1,4 +1,6 @@
-import { React, useState, useEffect, useRef } from 'react'
+// TODO: check if commented out code is needed
+
+import { React, useEffect, useRef } from 'react'
 import io from 'socket.io-client'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -6,18 +8,18 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Editor } from '../components/Editor'
 import { Box } from '@mui/system'
 import { QuestionComponent } from '../components/QuestionComponent'
-import ScrollToBottom from 'react-scroll-to-bottom'
+// import ScrollToBottom from 'react-scroll-to-bottom'
 import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
-import Grid from '@mui/material/Grid'
+// import Card from '@mui/material/Card'
+// import Grid from '@mui/material/Grid'
 import Chip from '@mui/material/Chip'
 import SendIcon from '@mui/icons-material/Send'
-import TextField from '@mui/material/TextField'
+// import TextField from '@mui/material/TextField'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
 import Navbar from '../components/Navbar'
-import chatComponent from '../components/ChatComponent'
+// import chatComponent from '../components/ChatComponent'
 import {
   selectRoomid,
   selectMatchedUserid,
@@ -32,7 +34,7 @@ import {
   setMessages
 } from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
-import Fab from '@mui/material/Fab'
+// import Fab from '@mui/material/Fab'
 import {
   setAwaitAlertOpen,
   selectNewProgrammingLanguage,
@@ -56,7 +58,7 @@ const connectionOptions = {
 }
 
 function CollabPage () {
-  const [message, setMessage] = useState('')
+  // const [message, setMessage] = useState('')
   const messages = useSelector(selectMessages)
   const navigate = useNavigate()
   const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage)
@@ -147,16 +149,16 @@ function CollabPage () {
     })
   }, [])
 
-  const sendMessage = (event) => {
-    event.preventDefault()
-    const messageString = `${userid} : ${message}`
-    if (message) {
-      dispatch(appendMessages(messageString))
-      socket.current.emit('Message', { message: messageString }, () =>
-        setMessage('')
-      )
-    }
-  }
+  // const sendMessage = (event) => {
+  //   event.preventDefault()
+  //   const messageString = `${userid} : ${message}`
+  //   if (message) {
+  //     dispatch(appendMessages(messageString))
+  //     socket.current.emit('Message', { message: messageString }, () =>
+  //       setMessage('')
+  //     )
+  //   }
+  // }
 
   const LeaveRoom = (event) => {
     event.preventDefault()

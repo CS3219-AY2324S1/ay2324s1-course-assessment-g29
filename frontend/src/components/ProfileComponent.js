@@ -66,7 +66,7 @@ function Profile () {
       .then((response) => {
         console.log(response)
         const userLanguages = response.data.languages
-        dispatch(setPreferredLanguages(selectedLanguages))
+        dispatch(setPreferredLanguages(userLanguages))
         setIsLanguageChangeDialogOpen(false)
       })
       .catch((error) => {
