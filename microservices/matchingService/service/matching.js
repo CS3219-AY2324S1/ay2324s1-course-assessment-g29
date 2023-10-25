@@ -32,6 +32,9 @@ class MatchingService {
   }
 
   findMatchingLanguages (user1Languages, user2Languages) {
+    if (user1Languages.length === 0 && user2Languages.length === 0) {
+      return true
+    }
     return user2Languages.filter((language) => user1Languages.includes(language))
   }
 
@@ -40,7 +43,12 @@ class MatchingService {
   }
 
   isEmpty (difficulty, languages) {
-    return this.Queues[difficulty].every((user) => !this.hasMatchingLanguages(languages, user.languages))
+    for (const user of this.Queues[difficulty]) {
+      if (this.hasMatchingLanguages(languages, user.languages)) {
+        return false
+      }
+    }
+    return true
   }
 
   joinQueue (difficulty, languages, userid, socketid) {

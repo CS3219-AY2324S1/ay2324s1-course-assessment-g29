@@ -6,7 +6,12 @@ import { materialLightInit } from '@uiw/codemirror-theme-material'
 import { python } from '@codemirror/lang-python'
 import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
-import { selectCode, setCode, selectCodeEditorLanguage, setAwaitAlertOpen } from '../redux/EditorSlice'
+import {
+  selectCode,
+  setCode,
+  selectCodeEditorLanguage,
+  setAwaitAlertOpen
+} from '../redux/EditorSlice'
 import { selectMatchedUserid } from '../redux/MatchingSlice'
 import AwaitChangeProgrammingLanguageDialog from '../components/AwaitChangeProgrammingLanguageAlert'
 
@@ -40,9 +45,13 @@ export const Editor = ({ socketRef }) => {
   const handleLanguageChange = (e) => {
     const selectedValue = e.target.value
     dispatch(setAwaitAlertOpen(true))
-    socketRef.current.emit('ChangeEditorLanguage', { language: selectedValue }, (error) => {
-      console.log(error)
-    })
+    socketRef.current.emit(
+      'ChangeEditorLanguage',
+      { language: selectedValue },
+      (error) => {
+        console.log(error)
+      }
+    )
     // setSelectedLanguage(selectedValue) // Update the selected language state
   }
 

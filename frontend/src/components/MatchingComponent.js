@@ -3,15 +3,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import io from 'socket.io-client'
 import axios from 'axios'
-import { setRoomId, setQuestionData, selectAwaitingMatching, setAwaitingMatching, setMatchedUserId, selectDifficulty, setDifficulty, setMatchingLanguages } from '../redux/MatchingSlice'
+import {
+  setRoomId,
+  setQuestionData,
+  selectAwaitingMatching,
+  setAwaitingMatching,
+  setMatchedUserId,
+  selectDifficulty,
+  setDifficulty,
+  setMatchingLanguages
+} from '../redux/MatchingSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
-import Grid from '@mui/material/Grid'
-import { Box } from '@mui/material'
+import { Box, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 import Button from '@mui/material/Button'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
 import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import { selectPreferredLanguages, selectUserid } from '../redux/UserSlice'
@@ -41,7 +46,8 @@ function MatchingComponent () {
   }
 
   useEffect(() => {
-    axios.post('http://localhost:8000/room/checkroom', { userid })
+    axios
+      .post('http://localhost:8000/room/checkroom', { userid })
       .then((response) => {
         const roomid = response.data.room
         const roomdata = response.data.roomdata
@@ -52,7 +58,8 @@ function MatchingComponent () {
           dispatch(setQuestionData(roomdata.questionData))
           dispatch(setMatchingLanguages(roomdata.matchingLanguages))
         }
-      }).catch((error) => {
+      })
+      .catch((error) => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
@@ -81,22 +88,29 @@ function MatchingComponent () {
     console.log('Try Matching')
     socket.current = io(MATCHINGSERVER, connectionOptions)
     socket.current.connect()
-    socket.current.emit('JoinQueue', { userid, difficulty, languages: preferredLanguages }, (error) => {
-      if (error) {
-        dispatch(setErrorMessage(error))
-        dispatch(setShowError(true))
+    socket.current.emit(
+      'JoinQueue',
+      { userid, difficulty, languages: preferredLanguages },
+      (error) => {
+        if (error) {
+          dispatch(setErrorMessage(error))
+          dispatch(setShowError(true))
+        }
       }
-    })
+    )
     dispatch(setAwaitingMatching(true))
-    socket.current.on('MatchingSuccess', ({ matchedUserId, roomId, questionData, matchingLanguages }) => {
-      dispatch(setMatchedUserId(matchedUserId))
-      dispatch(setRoomId(roomId))
-      dispatch(setQuestionData(questionData))
-      console.log(matchingLanguages)
-      dispatch(setMatchingLanguages(matchingLanguages))
-      dispatch(setCode('Please choose a language to begin!\n'))
-      navigate('/collab')
-    })
+    socket.current.on(
+      'MatchingSuccess',
+      ({ matchedUserId, roomId, questionData, matchingLanguages }) => {
+        dispatch(setMatchedUserId(matchedUserId))
+        dispatch(setRoomId(roomId))
+        dispatch(setQuestionData(questionData))
+        console.log(matchingLanguages)
+        dispatch(setMatchingLanguages(matchingLanguages))
+        dispatch(setCode('Please choose a language to begin!\n'))
+        navigate('/collab')
+      }
+    )
     socket.current.on('ErrorMatching', ({ errorMessage }) => {
       dispatch(setErrorMessage(errorMessage))
       dispatch(setShowError(true))
@@ -118,66 +132,84 @@ function MatchingComponent () {
   }
 
   return (
-    <>
-      <Grid mt={2}>
-        <Card>
-          {alreadyInRoom
-            ? (
-              <>
-                <Box>
-                  <Typography variant='h3' component='h2'>
-                    Already In Room
-                  </Typography>
-                </Box>
-                <Box mt={2}>
-                  <Button variant='contained' onClick={joinRoom}>Join Room</Button>
-                </Box>
-              </>
-              )
-            : (
-              <>
-                {isMatching
-                  ? (
-                    <>
-                      <Box>
-                        <Typography variant='h3' component='h2'>
-                          Awaiting Match
-                        </Typography>
-                        <CircularProgress />
-                      </Box>
-                      <Box mt={2}>
-                        <Button variant='contained' onClick={leaveQueue}>Leave Queue</Button>
-                      </Box>
-                    </>
-                    )
-                  : (
-                    <>
-                      <Box sx={{ minWidth: 120 }}>
-                        <FormControl fullWidth>
-                          <InputLabel id='difficultyForm'>Difficulty</InputLabel>
-                          <Select
-                            labelId='difficultySelect-label'
-                            id='difficultySelect'
-                            value={difficulty}
-                            label='Difficulty'
-                            onChange={handleChange}
-                          >
-                            <MenuItem value='Easy'>Easy</MenuItem>
-                            <MenuItem value='Medium'>Medium</MenuItem>
-                            <MenuItem value='Hard'>Hard</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Box>
-                      <Box mt={2}>
-                        <Button variant='contained' onClick={joinQueue}>Start Match</Button>
-                      </Box>
-                    </>
-                    )}
-              </>
-              )}
-        </Card>
-      </Grid>
-    </>
+    <Box component='span' sx={{ p: 2, width: '50%' }} flex={1}>
+      <Card flex={1} variant='outlined' sx={{ p: 2 }} height='200'>
+        {alreadyInRoom
+          ? (
+            <Box flex={1}>
+              <Box>
+                <Typography variant='h3' component='h2'>
+                  Already In Room
+                </Typography>
+              </Box>
+              <Box flex={1}>
+                <Button variant='contained' onClick={joinRoom} fullwidth>
+                  Join Room
+                </Button>
+              </Box>
+            </Box>
+            )
+          : (
+            <Box
+              component='span'
+              flex={1}
+              justifyContent='center'
+              alignItems='center'
+            >
+              {isMatching
+                ? (
+                  <>
+                    <Box>
+                      <Typography variant='h5' component='h2'>
+                        Awaiting Match
+                      </Typography>
+                      <CircularProgress />
+                    </Box>
+                    <Box mt={2}>
+                      <Button variant='contained' onClick={leaveQueue}>
+                        Leave Queue
+                      </Button>
+                    </Box>
+                  </>
+                  )
+                : (
+                  <Box flex={1} justifyContent='center' alignItems='center'>
+                    <FormControl fullWidth>
+                      <RadioGroup
+                        name='difficulty'
+                        value={difficulty}
+                        onChange={handleChange}
+                      >
+                        <Box display='flex' flexDirection='column'>
+                          <FormControlLabel
+                            value='Easy'
+                            control={<Radio color='success' />}
+                            label='Easy'
+                          />
+                        </Box>
+                        <FormControlLabel
+                          value='Normal'
+                          control={<Radio color='primary' />}
+                          label='Normal'
+                        />
+                        <FormControlLabel
+                          value='Hard'
+                          control={<Radio color='warning' />}
+                          label='Hard'
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                    <Box flex={1}>
+                      <Button variant='contained' onClick={joinQueue} fullwidth>
+                        Start Match
+                      </Button>
+                    </Box>
+                  </Box>
+                  )}
+            </Box>
+            )}
+      </Card>
+    </Box>
   )
 }
 

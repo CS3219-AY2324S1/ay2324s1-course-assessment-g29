@@ -1,10 +1,10 @@
-import { Container } from '@mui/material'
+import { Box } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { selectLoginstatus } from './redux/UserSlice'
-import { selectShowError } from './redux/ErrorSlice'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Navbar from './components/Navbar'
 import ErrorMessage from './components/ErrorMessage'
+import { selectShowError } from './redux/ErrorSlice'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
@@ -17,10 +17,9 @@ function App () {
 
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        {showErrorAlert && <ErrorMessage />}
-        <Container>
+      <Box display='flex' flexDirection='column' height='100vh'>
+        <BrowserRouter>
+          {showErrorAlert && <ErrorMessage />}
           <Routes>
             {loginStatus
               ? (
@@ -28,21 +27,25 @@ function App () {
                   <Route path='/' element={<Navigate to='/home' replace />} />
                   <Route path='/home' exact element={<HomePage />} />
                   <Route path='/collab' exact element={<CollabPage />} />
-                  <Route path='/question/:questionId' element={<CodeEditorPage />} />
+                  <Route
+                    path='/question/:questionId'
+                    element={<CodeEditorPage />}
+                  />
                   <Route path='*' element={<Navigate to='/home' />} />
                 </>
                 )
               : (
                 <>
-                  <Route path='/' exact element={<LoginPage />} />
-                  <Route path='/signup' exact element={<SignupPage />} />
+                  <Route path='/' Component={LoginPage} />
+                  <Route path='/signup' Component={SignupPage} />
+                  <Route path='/resetPassword' Component={ResetPasswordPage} />
                   <Route path='' element={<Navigate to='/' />} />
                   <Route path='*' element={<Navigate to='/' />} />
                 </>
                 )}
           </Routes>
-        </Container>
-      </BrowserRouter>
+        </BrowserRouter>
+      </Box>
     </>
   )
 }

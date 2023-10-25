@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { selectLoginstatus, selectDisplayname, setUserid, setStateEmail, setDisplayname, setLoginStatus } from '../redux/UserSlice'
+import {
+  selectLoginstatus,
+  selectDisplayname,
+  setUserid,
+  setStateEmail,
+  setDisplayname,
+  setLoginStatus,
+  selectEmail
+} from '../redux/UserSlice'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -15,6 +24,9 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
+import { Dialog, DialogActions } from '@mui/material'
+import DialogContent from '@mui/material/DialogContent'
+import { setShowError, setErrorMessage } from '../redux/ErrorSlice.js'
 
 const pages = []
 
@@ -23,8 +35,12 @@ function Navbar () {
   const [anchorElUser, setAnchorElUser] = useState(null)
   const loginStatus = useSelector(selectLoginstatus)
   const displayName = useSelector(selectDisplayname)
+  const email = useSelector(selectEmail)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const [isPasswordResetDialogOpen, setIsPasswordResetDialogOpen] =
+    useState(false)
 
   const handleLogout = (event) => {
     dispatch(setUserid(''))
@@ -33,6 +49,19 @@ function Navbar () {
     dispatch(setLoginStatus(false))
     setAnchorElUser(null)
     navigate('/')
+  }
+
+  const handleResetPassword = (event) => {
+    console.log(email)
+    axios
+      .post('http://localhost:3001/user/resetPassword', { email })
+      .then((response) => {
+        setIsPasswordResetDialogOpen(true)
+      })
+      .catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
   }
 
   const handleOpenNavMenu = (event) => {
@@ -145,7 +174,10 @@ function Navbar () {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title='Open settings'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={displayName} src='/static/images/avatar/2.jpg' />
+                    <Avatar
+                      alt={displayName}
+                      src='/static/images/avatar/2.jpg'
+                    />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -164,16 +196,31 @@ function Navbar () {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  <MenuItem key='profile' onClick={handleCloseUserMenu}>
-                    <Typography textAlign='center'>Profile</Typography>
-                  </MenuItem>
-                  <MenuItem key='account' onClick={handleCloseUserMenu}>
-                    <Typography textAlign='center'>Account</Typography>
+                  <MenuItem key='account' onClick={handleResetPassword}>
+                    <Typography textAlign='center'>Reset Password</Typography>
                   </MenuItem>
                   <MenuItem key='logout' onClick={handleLogout}>
                     <Typography textAlign='center'>Logout</Typography>
                   </MenuItem>
                 </Menu>
+                <Dialog
+                  open={isPasswordResetDialogOpen}
+                  onClose={() => setIsPasswordResetDialogOpen(false)}
+                >
+                  <DialogContent>
+                    <Typography variant='body1'>
+                      We have sent an email to {email} for you to reset your
+                      password. Do contact us for further enquiry should you
+                      still have issues with resetting your password.
+                    </Typography>
+                  </DialogContent>
+
+                  <DialogActions>
+                    <Button onClick={() => setIsPasswordResetDialogOpen(false)}>
+                      OK
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </Box>
             </>
           )}

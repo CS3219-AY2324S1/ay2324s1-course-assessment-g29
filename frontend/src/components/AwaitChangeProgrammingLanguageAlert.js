@@ -6,7 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { useSelector } from 'react-redux'
 import { selectAwaitAlertOpen } from '../redux/EditorSlice'
 
-export default function AwaitChangeProgrammingLanguageDialog ({ matchedUserId }) {
+export default function AwaitChangeProgrammingLanguageDialog ({
+  matchedUserId
+}) {
   const awaitAlertOpen = useSelector(selectAwaitAlertOpen)
 
   return (
@@ -21,7 +23,8 @@ export default function AwaitChangeProgrammingLanguageDialog ({ matchedUserId })
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            Awaiting for {matchedUserId} to agree to change the programming language.
+            Awaiting for {matchedUserId} to agree to change the programming
+            language.
           </DialogContentText>
         </DialogContent>
       </Dialog>

@@ -1,24 +1,50 @@
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+// TODO: check if commented out code is needed
+
 import React, { useState } from 'react'
+import { Box, Button, Typography, TextField } from '@mui/material'
 import { useDispatch } from 'react-redux'
-import { setDisplayname, setUserid, setStateEmail, setLoginStatus, setIdToken } from '../redux/UserSlice.js'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice.js'
+import {
+  setDisplayname,
+  setUserid,
+  setStateEmail,
+  setLoginStatus,
+  setIdToken
+} from '../redux/UserSlice.js'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
+import LoginPageBanner from '../components/FrontPageBanner.js'
 import axios from 'axios'
 
 function SignupPage () {
   const auth = getAuth()
+  const [name, setName] = useState('')
+  // const [displayNameError, setDisplayNameError] = useState(false)
 
-  const [name, setDisplayName] = useState('')
   const [username, setUsername] = useState('')
+  // const [usernameError, setUsernameError] = useState(false)
+
   const [email, setEmail] = useState('')
+  // const [emailError, setEmailError] = useState(false)
+
   const [password, setPassword] = useState('')
+  // const [passwordError, setPasswordError] = useState(false)
+
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [passwordConfirmationError, setPasswordConfirmationError] =
+    useState('')
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const requireAllNonNull = () => {
-    const requiredFields = [name, username, email, password, passwordConfirmation]
+    const requiredFields = [
+      name,
+      username,
+      email,
+      password,
+      passwordConfirmation
+    ]
     requiredFields.forEach((x, i) => {
       if (x === '') {
         throw new Error('All fields cannot be empty')
@@ -28,7 +54,10 @@ function SignupPage () {
 
   const checkPasswords = (password1, password2) => {
     if (password1 !== password2) {
+      setPasswordConfirmationError('Passwords do not match.')
       throw new Error('Passwords do not match')
+    } else {
+      setPasswordConfirmationError('')
     }
   }
 
@@ -38,13 +67,22 @@ function SignupPage () {
     try {
       requireAllNonNull()
       checkPasswords(password, passwordConfirmation)
-      await axios.post('http://localhost:3001/user/register', { name, username, email, password })
+      await axios.post('http://localhost:3001/user/register', {
+        name,
+        username,
+        email,
+        password
+      })
       console.log('sign up success')
-      const userCredentials = await signInWithEmailAndPassword(auth, email, password)
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
       const userid = userCredentials.user.uid
       dispatch(setUserid(userid))
-      const displayName = userCredentials.user.displayName
-      dispatch(setDisplayname(displayName))
+      const userDisplayName = userCredentials.user.displayName
+      dispatch(setDisplayname(userDisplayName))
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
       const idToken = await userCredentials.user.getIdToken()
@@ -59,43 +97,132 @@ function SignupPage () {
     }
   }
 
+  const routeChangeSignin = () => {
+    const path = '/login'
+    navigate(path)
+  }
+
+  const routeChangeResetPassword = () => {
+    const path = '/resetPassword'
+    navigate(path)
+  }
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      <h2>Sign up for a PeerPrep account!</h2>
-      <form onSubmit={handleSignUp} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-        <input
-          type='text'
-          placeholder='Display Name'
-          value={name}
-          onChange={(e) => setDisplayName(e.target.value)}
-        />
-        <input
-          type='text'
-          placeholder='Username'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type='email'
-          placeholder='Email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type='password'
-          placeholder='Password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type='password'
-          placeholder='Confirm Password'
-          value={passwordConfirmation}
-          onChange={(e) => setPasswordConfirmation(e.target.value)}
-        />
-        <button type='submit'>Sign up</button>
-      </form>
-    </div>
+    <Box display='flex' flexDirection='row' height='100vh'>
+      <Box
+        display='flex'
+        flex={1}
+        flexDirection='column'
+        justifyContent='center'
+      >
+        <Box display='flex' flexDirection='column' padding='25%'>
+          <Typography variant='h4' marginBottom='1rem' fontWeight='bold'>
+            First step to landing your dream job
+          </Typography>
+          <Typography variant='body2' marginBottom='2rem'>
+            <b>Please enter your details</b>
+          </Typography>
+          <form
+            onSubmit={handleSignUp}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column'
+            }}
+          >
+            <TextField
+              type='text'
+              placeholder='Display Name'
+              variant='standard'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              sx={{ marginBottom: '1rem' }}
+              // error={displayNameError}
+              fullWidth
+              required
+            />
+            <TextField
+              type='text'
+              placeholder='Username'
+              variant='standard'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              sx={{ marginBottom: '1rem' }}
+              // error={usernameError}
+              fullWidth
+              required
+            />
+            <TextField
+              type='email'
+              placeholder='Email'
+              variant='standard'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{ marginBottom: '1rem' }}
+              // error={emailError}
+              fullWidth
+              required
+            />
+            <TextField
+              type='password'
+              placeholder='Password'
+              variant='standard'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              sx={{ marginBottom: '1rem' }}
+              // error={passwordError}
+              fullWidth
+              required
+            />
+            <TextField
+              type='password'
+              placeholder='Confirm Password'
+              variant='standard'
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              sx={{ marginBottom: '1rem' }}
+              error={passwordConfirmationError !== ''}
+              helperText={passwordConfirmationError}
+              fullWidth
+              required
+            />
+            <Button variant='contained' type='submit' fullWidth>
+              <b>Sign up</b>
+            </Button>
+          </form>
+          <Typography variant='body2'>
+            <a
+              style={{
+                fontWeight: 'bolder',
+                textDecoration: 'none',
+                color: '#1976d2'
+              }}
+              href=''
+              onClick={routeChangeResetPassword}
+            >
+              Reset password
+            </a>
+          </Typography>
+          <Typography variant='body2' marginTop='1rem'>
+            Already have an account?
+            <a
+              style={{
+                marginLeft: '0.5em',
+                fontWeight: 'bolder',
+                textDecoration: 'none',
+                color: '#1976d2'
+              }}
+              href=''
+              onClick={routeChangeSignin}
+            >
+              Sign in
+            </a>
+          </Typography>
+        </Box>
+      </Box>
+      <LoginPageBanner />
+    </Box>
   )
 }
 

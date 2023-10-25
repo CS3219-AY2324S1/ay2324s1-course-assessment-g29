@@ -6,9 +6,17 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectChangeProgrammingLanguageAlert, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
+import {
+  selectChangeProgrammingLanguageAlert,
+  setChangeProgrammingLanguageAlert
+} from '../redux/EditorSlice'
 
-export default function ProgrammingLanguageDialog ({ matchedUserId, language, denyChange, agreeChange }) {
+export default function ProgrammingLanguageDialog ({
+  matchedUserId,
+  language,
+  denyChange,
+  agreeChange
+}) {
   const open = useSelector(selectChangeProgrammingLanguageAlert)
   const dispatch = useDispatch()
 
@@ -34,8 +42,8 @@ export default function ProgrammingLanguageDialog ({ matchedUserId, language, de
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            {matchedUserId} is trying to change the programming language to {language}.
-            Do you agree to the change?
+            {matchedUserId} is trying to change the programming language to{' '}
+            {language}. Do you agree to the change?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

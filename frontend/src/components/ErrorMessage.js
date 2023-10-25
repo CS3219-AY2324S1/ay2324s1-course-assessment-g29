@@ -1,6 +1,11 @@
 import { Alert } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectShowError, selectErrorMessage, setShowError, setErrorMessage } from '../redux/ErrorSlice.js'
+import {
+  selectShowError,
+  selectErrorMessage,
+  setShowError,
+  setErrorMessage
+} from '../redux/ErrorSlice.js'
 
 function ErrorMessage () {
   const dispatch = useDispatch()
@@ -14,8 +19,11 @@ function ErrorMessage () {
 
   return (
     <>
-      {showErrorAlert &&
-        <Alert severity='error' onClose={closeErrorAlert}>Error: {errorMessage}</Alert>}
+      {showErrorAlert && (
+        <Alert severity='error' onClose={closeErrorAlert}>
+          Error: {errorMessage}
+        </Alert>
+      )}
     </>
   )
 }

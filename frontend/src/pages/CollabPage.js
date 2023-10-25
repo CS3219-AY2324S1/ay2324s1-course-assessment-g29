@@ -1,4 +1,6 @@
-import { React, useState, useEffect, useRef } from 'react'
+// TODO: check if commented out code is needed
+
+import { React, useEffect, useRef } from 'react'
 import io from 'socket.io-client'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -6,19 +8,45 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Editor } from '../components/Editor'
 import { Box } from '@mui/system'
 import { QuestionComponent } from '../components/QuestionComponent'
-import ScrollToBottom from 'react-scroll-to-bottom'
+// import ScrollToBottom from 'react-scroll-to-bottom'
 import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
-import Grid from '@mui/material/Grid'
+// import Card from '@mui/material/Card'
+// import Grid from '@mui/material/Grid'
+import Chip from '@mui/material/Chip'
 import SendIcon from '@mui/icons-material/Send'
-import Container from '@mui/material/Container'
-import TextField from '@mui/material/TextField'
+// import TextField from '@mui/material/TextField'
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { Typography } from '@mui/material'
 import { selectUserid } from '../redux/UserSlice'
-import { selectRoomid, selectMatchedUserid, selectQuestionData, selectMatchingLanguages, setRoomId, setQuestionData, setMatchingLanguages, setMatchedUserId, selectMessages, appendMessages, setMessages } from '../redux/MatchingSlice'
+import Navbar from '../components/Navbar'
+// import chatComponent from '../components/ChatComponent'
+import {
+  selectRoomid,
+  selectMatchedUserid,
+  selectQuestionData,
+  selectMatchingLanguages,
+  setRoomId,
+  setQuestionData,
+  setMatchingLanguages,
+  setMatchedUserId,
+  selectMessages,
+  appendMessages,
+  setMessages
+} from '../redux/MatchingSlice'
 import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
-import { setAwaitAlertOpen, selectNewProgrammingLanguage, selectCodeEditorLanguage, setCode, selectCode, setCodeEditorLanguage, setNewProgrammingLanguage, setChangeProgrammingLanguageAlert } from '../redux/EditorSlice'
+// import Fab from '@mui/material/Fab'
+import {
+  setAwaitAlertOpen,
+  selectNewProgrammingLanguage,
+  selectCodeEditorLanguage,
+  setCode,
+  selectCode,
+  setCodeEditorLanguage,
+  setNewProgrammingLanguage,
+  setChangeProgrammingLanguageAlert
+} from '../redux/EditorSlice'
 import ProgrammingLanguageDialog from '../components/ChangeProgrammingLanguageAlert'
+import ChatComponent from '../components/ChatComponent'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -30,7 +58,7 @@ const connectionOptions = {
 }
 
 function CollabPage () {
-  const [message, setMessage] = useState('')
+  // const [message, setMessage] = useState('')
   const messages = useSelector(selectMessages)
   const navigate = useNavigate()
   const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage)
@@ -58,16 +86,19 @@ function CollabPage () {
       console.log('joined waiting room')
     })
 
-    socket.current.on('MatchSuccess', ({ matchedUserId, messages, code, language }) => {
-      console.log(matchedUserId)
-      console.log(messages)
-      console.log(code)
-      console.log(language)
-      console.log('Match Success')
-      dispatch(setMessages(messages))
-      dispatch(setCode(code))
-      dispatch(setCodeEditorLanguage(language))
-    })
+    socket.current.on(
+      'MatchSuccess',
+      ({ matchedUserId, messages, code, language }) => {
+        console.log(matchedUserId)
+        console.log(messages)
+        console.log(code)
+        console.log(language)
+        console.log('Match Success')
+        dispatch(setMessages(messages))
+        dispatch(setCode(code))
+        dispatch(setCodeEditorLanguage(language))
+      }
+    )
 
     // disconnect from socket when component unmounts
     return () => {
@@ -103,7 +134,11 @@ function CollabPage () {
         dispatch(setAwaitAlertOpen(false))
       } else {
         dispatch(setAwaitAlertOpen(false))
-        dispatch(setErrorMessage(`${matchedUserid} has declined to change the programming language`))
+        dispatch(
+          setErrorMessage(
+            `${matchedUserid} has declined to change the programming language`
+          )
+        )
         dispatch(setShowError(true))
       }
     })
@@ -114,24 +149,36 @@ function CollabPage () {
     })
   }, [])
 
-  const sendMessage = (event) => {
-    event.preventDefault()
-    const messageString = `${userid} : ${message}`
-    if (message) {
-      dispatch(appendMessages(messageString))
-      socket.current.emit('Message', { message: messageString }, () => setMessage(''))
-    }
-  }
+  // const sendMessage = (event) => {
+  //   event.preventDefault()
+  //   const messageString = `${userid} : ${message}`
+  //   if (message) {
+  //     dispatch(appendMessages(messageString))
+  //     socket.current.emit('Message', { message: messageString }, () =>
+  //       setMessage('')
+  //     )
+  //   }
+  // }
 
   const LeaveRoom = (event) => {
     event.preventDefault()
-    axios.post('http://localhost:8000/room/leaveroom', { rid: roomid })
+    axios
+      .post('http://localhost:8000/room/leaveroom', { rid: roomid })
       .catch((error) => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
     socket.current.emit('CloseRoom')
-    axios.post('http://localhost:8000/room/savehistory', { rid: roomid, user1id: userid, user2id: matchedUserid, questionData, code, language, messages })
+    axios
+      .post('http://localhost:8000/room/savehistory', {
+        rid: roomid,
+        user1id: userid,
+        user2id: matchedUserid,
+        questionData,
+        code,
+        language,
+        messages
+      })
       .then((response) => {
         const message = response.data.message
         dispatch(setRoomId(''))
@@ -142,7 +189,8 @@ function CollabPage () {
         dispatch(setErrorMessage(message))
         dispatch(setShowError(true))
         navigate('/')
-      }).catch((error) => {
+      })
+      .catch((error) => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
@@ -150,96 +198,109 @@ function CollabPage () {
 
   const denyProgrammingLanguageChange = () => {
     console.log('disagree change')
-    socket.current.emit('ConfirmChangeEditorLanguage', { agree: false, language: newProgrammingLanguage }, (error) => {
-      if (error) {
-        dispatch(setErrorMessage(error))
-        dispatch(setShowError(true))
+    socket.current.emit(
+      'ConfirmChangeEditorLanguage',
+      { agree: false, language: newProgrammingLanguage },
+      (error) => {
+        if (error) {
+          dispatch(setErrorMessage(error))
+          dispatch(setShowError(true))
+        }
       }
-    })
+    )
     dispatch(setNewProgrammingLanguage(''))
   }
 
   const agreeProgrammingLanguageChange = () => {
     console.log('agree change')
-    socket.current.emit('ConfirmChangeEditorLanguage', { agree: true, language: newProgrammingLanguage }, (error) => {
-      if (error) {
-        dispatch(setErrorMessage(error))
-        dispatch(setShowError(true))
+    socket.current.emit(
+      'ConfirmChangeEditorLanguage',
+      { agree: true, language: newProgrammingLanguage },
+      (error) => {
+        if (error) {
+          dispatch(setErrorMessage(error))
+          dispatch(setShowError(true))
+        }
       }
-    })
+    )
     dispatch(setNewProgrammingLanguage(''))
     dispatch(setCodeEditorLanguage(newProgrammingLanguage))
   }
 
   return (
-    <>
-      <div style={{ width: '100%', height: '70%', paddingTop: '1rem' }}>
-        <ProgrammingLanguageDialog
-          matchedUserId={matchedUserid}
-          language={newProgrammingLanguage}
-          denyChange={denyProgrammingLanguageChange}
-          agreeChange={agreeProgrammingLanguageChange}
-        />
+    <Box display='flex' flexDirection='column' alignContent='flex-start'>
+      <Navbar />
+      <Box
+        style={{ width: '100%', height: '70%', paddingTop: '1rem' }}
+        display='flex'
+        justifyContent='center'
+        padding='2rem'
+      >
         <Box
           display='flex'
           flexDirection='row'
           justifyContent='center'
-          alignItems='start'
+          sx={{ p: 2, width: '80%' }}
         >
-          <div style={{ width: '50%' }}>
-            <QuestionComponent questionData={questionData} />
-          </div>
-          <div style={{ width: '50%', height: '100%' }}>
-            <Editor socketRef={socket} />
-          </div>
+          <Box style={{ width: '50%' }} justifyContent='space-between'>
+            <Box>
+              <QuestionComponent questionData={questionData} />
+              <Box marginBottom={1}>
+                <Typography variant='body2' component='h2'>
+                  You're currently matched with {matchedUserid}
+                </Typography>
+              </Box>
+              <Typography variant='body2' component='h2'>
+                Common Programming Languages:{' '}
+                {matchingLanguages.length > 0 &&
+                  matchingLanguages.map((language, i) => (
+                    <Chip key={i} label={language} />
+                  ))}
+              </Typography>
+            </Box>
+          </Box>
+          <Box
+            display='flex'
+            flexDirection='column'
+            flex={1}
+            alignContent='flex-end'
+          >
+            <Box margin={1} flex={1}>
+              <Editor socketRef={socket} />
+            </Box>
+            <Box
+              margin={1}
+              display='flex'
+              flexDirection='row'
+              alignContent='flex-end'
+            >
+              <Button
+                variant='contained'
+                onClick={LeaveRoom}
+                endIcon={<SendIcon />}
+              >
+                Close room
+              </Button>
+              <Box marginRight={1} />
+              <Button
+                variant='contained'
+                onClick={LeaveRoom}
+                endIcon={<QuestionMarkIcon />}
+              >
+                Change question
+              </Button>
+            </Box>
+          </Box>
         </Box>
-      </div>
-      <Container>
-        <Grid>
-          <Typography variant='h3' component='h2'>
-            Matching Programming Languages:
-          </Typography>
-          {matchingLanguages.length > 0 && matchingLanguages.map((language, i) => (
-            <div key={i}>
-              <Typography>{language}</Typography>
-            </div>
-          ))}
-        </Grid>
-        <Grid>
-          <Typography variant='h3' component='h2'>
-            Matched with : {matchedUserid}
-          </Typography>
-        </Grid>
-        <Grid>
-          <Button variant='contained' onClick={LeaveRoom} endIcon={<SendIcon />}>
-            Close Room
-          </Button>
-        </Grid>
-        <Grid>
-          <Card>
-            <ScrollToBottom className='messages'>
-              {messages.map((message, i) => (
-                <div key={i}>
-                  <Typography>{message}</Typography>
-                </div>
-              ))}
-            </ScrollToBottom>
-            <TextField
-              id='outlined-multiline-flexible'
-              label='Send A Message'
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              multiline
-              maxRows={4}
-            />
-            <Button variant='contained' onClick={sendMessage} endIcon={<SendIcon />}>
-              Send
-            </Button>
-            <br />
-          </Card>
-        </Grid>
-      </Container>
-    </>
+      </Box>
+      <ProgrammingLanguageDialog
+        matchedUserId={matchedUserid}
+        language={newProgrammingLanguage}
+        denyChange={denyProgrammingLanguageChange}
+        agreeChange={agreeProgrammingLanguageChange}
+      />
+      <ChatComponent socket={socket} />
+    </Box>
   )
 }
 

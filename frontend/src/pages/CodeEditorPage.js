@@ -3,6 +3,7 @@ import { Editor } from '../components/Editor'
 import { Box } from '@mui/system'
 import { QuestionComponent } from '../components/QuestionComponent'
 import { useParams } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 
 // TODO: remove if not necessary?
 
@@ -12,6 +13,7 @@ const CodeEditorPage = () => {
 
   return (
     <div style={{ width: '100%', height: '100%', paddingTop: '1rem' }}>
+      <Navbar />
       <Box
         display='flex'
         flexDirection='row'
