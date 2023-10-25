@@ -57,12 +57,11 @@ function Profile() {
   }, []);
 
   const handleLanguageChange = () => {
-    const JsonData = JSON.stringify(selectedLanguages);
-    console.log(JsonData);  
+    console.log(selectedLanguages)
     axios
       .post(`http://localhost:3001/user/updateLanguage/`, {
         uid: userid, 
-        languages: JsonData, 
+        languages: selectedLanguages 
       })
       .then((response) => {
         console.log(response);

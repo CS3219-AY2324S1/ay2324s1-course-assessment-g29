@@ -48,14 +48,19 @@ const ChatComponent = ({ socket }) => {
     messages.map((message, i) => {
       if (message) {
         const useridLen = userid.length;
-        const firstCharacters = message.substring(0, useridLen);
-        let text = message.substring(useridLen + 3, message.length);
-        let position = "";
+        const parts = message.split(":");
+        const firstCharacters = parts[0].trim();
+        let text = ""; 
         let sender = "";
+        let position = "";
+
         if (firstCharacters === userid) {
           position = "right";
+          text = message.substring(useridLen + 3, message.length);
+        
           sender = userid;
         } else {
+          text = message.substring(matchedUserid.length + 3, message.length);
           position = "left";
           sender = matchedUserid;
         }
