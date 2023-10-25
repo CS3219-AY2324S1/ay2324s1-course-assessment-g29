@@ -10,7 +10,7 @@ const MetricComponent = ({ easyCount, normalCount, hardCount }) => {
   return (
     <Box
       component="span"
-      sx={{ p: 2, width: "50%", textAlign: "left", height: "50%"}}
+      sx={{ p: 2, width: "50%", textAlign: "left", height: "50%" }}
       flex={1}
     >
       <Card
@@ -22,24 +22,38 @@ const MetricComponent = ({ easyCount, normalCount, hardCount }) => {
           Questions done by difficulty
         </Typography>
         {hasQuestionDone ? (
-        <Box display={"flex"} flex={1} justifyContent={"flex-start"}>
-          <PieChart
-            series={[
-              {
-                data: [
-                  { id: 0, value: easyCount, label: "Easy" },
-                  { id: 1, value: normalCount, label: "Medium" },
-                  { id: 2, value: hardCount, label: "Hard", color: "#FF0000" },
-                ],
-                innerRadius: 55,
-              },
-            ]}
-            width={300}
-            height={140}
+          <Box display={"flex"} flex={1} justifyContent={"flex-start"}>
+            <PieChart
+              series={[
+                {
+                  data: [
+                    { id: 0, value: easyCount, label: "Easy" },
+                    { id: 1, value: normalCount, label: "Medium" },
+                    {
+                      id: 2,
+                      value: hardCount,
+                      label: "Hard",
+                      color: "#FF0000",
+                    },
+                  ],
+                  innerRadius: 55,
+                },
+              ]}
+              width={300}
+              height={140}
+            >
+              <PieCenterLabel>{`Total: ${totalQuestions}`}</PieCenterLabel>
+            </PieChart>
+          </Box>
+        ) : (
+          <Typography
+            variant={"body2"}
+            marginBottom={"0.5rem"}
+            fontWeight="bold"
           >
-            <PieCenterLabel>{`Total: ${totalQuestions}`}</PieCenterLabel>
-          </PieChart>
-        </Box>) : ( <Typography variant={"body2"} marginBottom={"0.5rem"} fontWeight="bold">No question done yet, get started today! </Typography>)}
+            No question done yet, get started today!{" "}
+          </Typography>
+        )}
       </Card>
     </Box>
   );

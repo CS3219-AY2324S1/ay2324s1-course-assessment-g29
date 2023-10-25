@@ -1,24 +1,16 @@
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import LoginPageBanner from "../components/FrontPageBanner";
 import { setShowError, setErrorMessage } from "../redux/ErrorSlice.js";
-import axios from "axios";  
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  Dialog,
-  DialogActions,
-} from "@mui/material";
+import { Dialog, DialogActions } from "@mui/material";
 import DialogContent from "@mui/material/DialogContent";
 
 function ResetPasswordPage() {
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState(""); 
+  const [emailError, setEmailError] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -27,14 +19,14 @@ function ResetPasswordPage() {
   const handleResetPassword = (e) => {
     axios
       .post("http://localhost:3001/user/resetPassword", { email: email })
-      .then((response)=> {
+      .then((response) => {
         setIsDialogOpen(true);
         navigate("/");
       })
       .catch((error) => {
-        dispatch(setErrorMessage(error.message))
-        dispatch(setShowError(true))
-        setEmailError(error.message)
+        dispatch(setErrorMessage(error.message));
+        dispatch(setShowError(true));
+        setEmailError(error.message);
       });
   };
 
@@ -81,7 +73,7 @@ function ResetPasswordPage() {
           <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
             <DialogContent>
               <Typography variant="body1">
-                An email has been sent to your email to reset your password. 
+                An email has been sent to your email to reset your password.
               </Typography>
             </DialogContent>
             <DialogActions>

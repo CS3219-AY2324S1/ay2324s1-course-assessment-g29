@@ -1,15 +1,15 @@
-import { React } from 'react'
-import { Editor } from '../components/Editor'
-import { Box } from '@mui/system'
-import { QuestionComponent } from '../components/QuestionComponent'
-import { useParams } from 'react-router-dom'
+import { React } from "react";
+import { Editor } from "../components/Editor";
+import { Box } from "@mui/system";
+import { QuestionComponent } from "../components/QuestionComponent";
+import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 // TODO: remove if not necessary?
 
 const CodeEditorPage = () => {
-  const { questionId } = useParams()
-  console.log('Question ID: ' + questionId)
+  const { questionId } = useParams();
+  console.log("Question ID: " + questionId);
 
   return (
     <div style={{ width: "100%", height: "100%", paddingTop: "1rem" }}>
@@ -29,6 +29,6 @@ const CodeEditorPage = () => {
       </Box>
     </div>
   );
-}
+};
 
-export default CodeEditorPage
+export default CodeEditorPage;

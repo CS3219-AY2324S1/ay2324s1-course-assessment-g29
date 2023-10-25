@@ -137,17 +137,8 @@ function MatchingComponent() {
   };
 
   return (
-    <Box
-      component="span"
-      sx={{ p: 2, width: "50%"}}
-      flex={1}
-    >
-      <Card
-        flex={1}
-        variant="outlined"
-        sx={{ p: 2 }}
-        height="200"
-      >
+    <Box component="span" sx={{ p: 2, width: "50%" }} flex={1}>
+      <Card flex={1} variant="outlined" sx={{ p: 2 }} height="200">
         {alreadyInRoom ? (
           <Box flex={1}>
             <Box>

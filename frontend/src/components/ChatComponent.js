@@ -50,14 +50,14 @@ const ChatComponent = ({ socket }) => {
         const useridLen = userid.length;
         const parts = message.split(":");
         const firstCharacters = parts[0].trim();
-        let text = ""; 
+        let text = "";
         let sender = "";
         let position = "";
 
         if (firstCharacters === userid) {
           position = "right";
           text = message.substring(useridLen + 3, message.length);
-        
+
           sender = userid;
         } else {
           text = message.substring(matchedUserid.length + 3, message.length);
@@ -92,9 +92,7 @@ const ChatComponent = ({ socket }) => {
           <Box display="flex" justifyContent={"flex-end"}>
             <Tooltip title="close message box">
               <IconButton onClick={toggleChat}>
-                <CloseIcon
-                  
-                />
+                <CloseIcon />
               </IconButton>
             </Tooltip>
           </Box>

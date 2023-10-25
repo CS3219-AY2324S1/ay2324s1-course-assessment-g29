@@ -57,11 +57,11 @@ function Profile() {
   }, []);
 
   const handleLanguageChange = () => {
-    console.log(selectedLanguages)
+    console.log(selectedLanguages);
     axios
       .post(`http://localhost:3001/user/updateLanguage/`, {
-        uid: userid, 
-        languages: selectedLanguages 
+        uid: userid,
+        languages: selectedLanguages,
       })
       .then((response) => {
         console.log(response);
@@ -132,7 +132,9 @@ function Profile() {
               <Stack direction="row" spacing={1}>
                 {preferredLanguages &&
                   preferredLanguages.map((language, index) => {
-                    return <Chip label={language} key={language} paddingLeft={0.5}/>;
+                    return (
+                      <Chip label={language} key={language} paddingLeft={0.5} />
+                    );
                   })}
               </Stack>
             </Typography>

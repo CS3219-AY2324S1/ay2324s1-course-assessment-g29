@@ -290,7 +290,6 @@ function CollabPage() {
             </Box>
           </Box>
         </Box>
-        
       </Box>
       <ProgrammingLanguageDialog
         matchedUserId={matchedUserid}
@@ -298,7 +297,7 @@ function CollabPage() {
         denyChange={denyProgrammingLanguageChange}
         agreeChange={agreeProgrammingLanguageChange}
       />
-      <ChatComponent socket={socket}/>
+      <ChatComponent socket={socket} />
     </Box>
   );
 }

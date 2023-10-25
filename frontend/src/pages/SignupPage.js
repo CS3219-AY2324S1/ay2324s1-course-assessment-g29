@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  TextField
-} from "@mui/material";
+import { Box, Button, Typography, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setShowError, setErrorMessage } from "../redux/ErrorSlice.js";
 import {
@@ -34,19 +29,26 @@ function SignupPage() {
   const [passwordError, setPasswordError] = useState(false);
 
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [passwordConfirmationError, setPasswordConfirmationError] = useState("");
+  const [passwordConfirmationError, setPasswordConfirmationError] =
+    useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const requireAllNonNull = () => {
-    const requiredFields = [name, username, email, password, passwordConfirmation]
+    const requiredFields = [
+      name,
+      username,
+      email,
+      password,
+      passwordConfirmation,
+    ];
     requiredFields.forEach((x, i) => {
-      if (x === '') {
-        throw new Error('All fields cannot be empty')
+      if (x === "") {
+        throw new Error("All fields cannot be empty");
       }
-    })
-  }
+    });
+  };
 
   const checkPasswords = (password1, password2) => {
     if (password1 !== password2) {
@@ -57,31 +59,39 @@ function SignupPage() {
     }
   };
 
-
   const handleSignUp = async (e) => {
     e.preventDefault();
 
     try {
-      requireAllNonNull()
-      checkPasswords(password, passwordConfirmation)
-      await axios.post('http://localhost:3001/user/register', { name, username, email, password })
-      console.log('sign up success')
-      const userCredentials = await signInWithEmailAndPassword(auth, email, password)
-      const userid = userCredentials.user.uid
-      dispatch(setUserid(userid))
-      const userDisplayName = userCredentials.user.displayName
-      dispatch(setDisplayname(userDisplayName))
-      const useremail = userCredentials.user.email
-      dispatch(setStateEmail(useremail))
-      const idToken = await userCredentials.user.getIdToken()
-      dispatch(setIdToken(idToken))
-      console.log('Signup successful')
-      console.log('idToken', idToken)
-      dispatch(setLoginStatus(true))
-      navigate('/home')
+      requireAllNonNull();
+      checkPasswords(password, passwordConfirmation);
+      await axios.post("http://localhost:3001/user/register", {
+        name,
+        username,
+        email,
+        password,
+      });
+      console.log("sign up success");
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const userid = userCredentials.user.uid;
+      dispatch(setUserid(userid));
+      const userDisplayName = userCredentials.user.displayName;
+      dispatch(setDisplayname(userDisplayName));
+      const useremail = userCredentials.user.email;
+      dispatch(setStateEmail(useremail));
+      const idToken = await userCredentials.user.getIdToken();
+      dispatch(setIdToken(idToken));
+      console.log("Signup successful");
+      console.log("idToken", idToken);
+      dispatch(setLoginStatus(true));
+      navigate("/home");
     } catch (error) {
-      dispatch(setErrorMessage(error.message))
-      dispatch(setShowError(true))
+      dispatch(setErrorMessage(error.message));
+      dispatch(setShowError(true));
     }
   };
 

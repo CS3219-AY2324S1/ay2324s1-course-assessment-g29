@@ -4,7 +4,7 @@ import {
   Dialog,
   TextField,
   Typography,
-  DialogActions
+  DialogActions,
 } from "@mui/material";
 import DialogContent from "@mui/material/DialogContent";
 import { initFirebase } from "../configs/firebase.js";
@@ -170,4 +170,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage
+export default LoginPage;
