@@ -30,6 +30,8 @@ database.once('connected', () => {
 })
 
 // Import route file
-const routes = require('./routes/routes')
+const routes = require('./src/routes/routes')
 
 app.use('/question', routes)
+
+module.exports = app
