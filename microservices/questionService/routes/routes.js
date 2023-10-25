@@ -11,9 +11,7 @@ const Model = require('../models/model')
 // Post Method
 router.post('/post', async (req, res) => {
   const displayName = req.body.displayName
-  const name = displayName.replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/[\s_]+/g, '-')
-    .toLowerCase()
+  const name = req.body.name
   const data = new Model({
     name,
     displayName,
@@ -99,7 +97,7 @@ router.get('/getRandom', async (req, res) => {
 // Get random one with topic
 router.get('/getOneByTopic/:topic', async (req, res) => {
   try {
-    const count = await Model.Model.find({ topic: req.params.topic }).countDocuments()
+    const count = await Model.find({ topic: req.params.topic }).countDocuments()
     const random = Math.floor(Math.random() * count)
     const data = await Model.findOne({ topic: req.params.topic }).skip(random).exec()
     res.json(data)
