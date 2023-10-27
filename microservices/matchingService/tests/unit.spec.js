@@ -1,6 +1,5 @@
 /* global describe, before, after, it */
 const ioc = require('socket.io-client')
-const io = require('../app')
 const { assert } = require('chai')
 
 // Include your MatchingService implementation
@@ -8,7 +7,6 @@ const MatchingService = require('../service/matching')
 
 describe('Matching Service Unit Tests', () => {
   let clientSocket, matchingService
-  io;
   before((done) => {
     matchingService = new MatchingService()
     clientSocket = ioc('http://localhost:4000', {

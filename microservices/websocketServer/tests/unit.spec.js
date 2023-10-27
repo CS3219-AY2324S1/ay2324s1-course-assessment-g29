@@ -6,7 +6,6 @@ const { assert } = require('chai')
 // Socket.io setup
 describe('Websocket Service Unit Tests', () => {
   let clientSocket, clientSocket2
-  io;
   // Set up the Socket.io server and client connections
   before(async () => {
     clientSocket = ioc('http://localhost:2000', {
