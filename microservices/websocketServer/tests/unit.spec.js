@@ -1,6 +1,5 @@
 /* global describe, before, after, it */
 const ioc = require('socket.io-client')
-const io = require('../app')
 const { assert } = require('chai')
 
 // Socket.io setup
