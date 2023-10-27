@@ -8,7 +8,7 @@ const MatchingService = require('../service/matching')
 
 describe('Matching Service Unit Tests', () => {
   let clientSocket, matchingService
-
+  io;
   before((done) => {
     matchingService = new MatchingService()
     clientSocket = ioc('http://localhost:4000', {

@@ -1,4 +1,4 @@
-/* global describe, before, after, it */
+/* global describe, it */
 
 const chai = require('chai')
 const chaiHttp = require('chai-http')
@@ -17,7 +17,7 @@ describe('Express App Unit Tests', () => {
         user2id: 'user456',
         matchingLanguages: ['JavaScript', 'Python']
       })
-      .end((err, res) => {
+      .end((res) => {
         expect(res).to.have.status(200)
         expect(res.body).to.have.property('roomId')
         expect(res.body).to.have.property('questionData')
@@ -30,7 +30,7 @@ describe('Express App Unit Tests', () => {
       .request(app)
       .post('/room/checkroom')
       .send({ userid: 'user123' })
-      .end((err, res) => {
+      .end((res) => {
         expect(res).to.have.status(200)
         expect(res.body).to.have.property('room')
         expect(res.body).to.have.property('roomdata')
@@ -51,7 +51,7 @@ describe('Express App Unit Tests', () => {
         language: 'your_language',
         messages: ['message1', 'message2']
       })
-      .end((err, res) => {
+      .end((res) => {
         expect(res).to.have.status(200)
         done()
       })
@@ -68,7 +68,7 @@ describe('Express App Unit Tests', () => {
         language: 'updated_language',
         messages: ['updated_message1', 'updated_message2']
       })
-      .end((err, res) => {
+      .end((res) => {
         expect(res).to.have.status(200)
         done()
       })
@@ -82,7 +82,7 @@ describe('Express App Unit Tests', () => {
         rid: 'room_id',
         questionData: 'new_question_data'
       })
-      .end((err, res) => {
+      .end((res) => {
         expect(res).to.have.status(200)
         done()
       })
@@ -95,7 +95,7 @@ describe('Express App Unit Tests', () => {
       .send({
         rid: 'room_id'
       })
-      .end((err, res) => {
+      .end((res) => {
         expect(res).to.have.status(200)
         done()
       })
