@@ -4,10 +4,7 @@ const Model = require('../models/model')
 // Post Method
 exports.postQuestion = async function (questionObj) {
   try {
-    const { displayName, description, topic, imagesArray, difficulty } = questionObj
-    const name = displayName.replace(/([a-z])([A-Z])/g, '$1-$2')
-      .replace(/[\s_]+/g, '-')
-      .toLowerCase()
+    const { displayName, name, description, topic, imagesArray, difficulty } = questionObj
     const data = new Model({
       name,
       displayName,
@@ -85,7 +82,7 @@ exports.getRandom = async function () {
 // Get random one with topic
 exports.getOneByTopic = async function (topic) {
   try {
-    const count = await Model.Model.find({ topic }).countDocuments()
+    const count = await Model.find({ topic }).countDocuments()
     const random = Math.floor(Math.random() * count)
     return await Model.findOne({ topic }).skip(random).exec()
   } catch (error) {
