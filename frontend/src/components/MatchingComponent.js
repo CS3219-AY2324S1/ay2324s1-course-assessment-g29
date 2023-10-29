@@ -188,9 +188,9 @@ function MatchingComponent () {
                           />
                         </Box>
                         <FormControlLabel
-                          value='Normal'
+                          value='Medium'
                           control={<Radio color='primary' />}
-                          label='Normal'
+                          label='Medium'
                         />
                         <FormControlLabel
                           value='Hard'
