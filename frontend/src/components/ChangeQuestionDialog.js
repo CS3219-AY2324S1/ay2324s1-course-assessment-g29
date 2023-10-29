@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import { useSelector } from 'react-redux'
 import { selectChangeQuesitonAlertOpen, setChangeQuestionAlertOpen, setAwaitChangeQuestionOpen } from '../redux/EditorSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
 import QuestionTable from './QuestionTable'
 
-export default function ChangeQuestionDialog ({socket}) {
+export default function ChangeQuestionDialog ({ socket }) {
   const dispatch = useDispatch()
   const changeQuestionAlertOpen = useSelector(selectChangeQuesitonAlertOpen)
   const [questions, setQuestions] = useState([])
@@ -19,7 +18,7 @@ export default function ChangeQuestionDialog ({socket}) {
   }
 
   const signalChangeQuestion = (question) => {
-    socket.current.emit('ChangeQuestionData', {question})
+    socket.current.emit('ChangeQuestionData', { question })
     dispatch(setChangeQuestionAlertOpen(false))
     dispatch(setAwaitChangeQuestionOpen(true))
   }
@@ -28,7 +27,7 @@ export default function ChangeQuestionDialog ({socket}) {
     axios
       .get('http://localhost:3002/question/getAll')
       .then((response) => {
-        setQuestions(response.data);
+        setQuestions(response.data)
       })
       .catch((error) => {
         dispatch(setErrorMessage(error.message))
@@ -44,13 +43,13 @@ export default function ChangeQuestionDialog ({socket}) {
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
         fullWidth
-        maxWidth="xl"
+        maxWidth='xl'
       >
         <DialogTitle id='alert-dialog-title'>
           Choose your question:
         </DialogTitle>
         <DialogContent>
-          <QuestionTable questions={questions} setQuestions={setQuestions} signalChangeQuestion={signalChangeQuestion}/>
+          <QuestionTable questions={questions} setQuestions={setQuestions} signalChangeQuestion={signalChangeQuestion} />
         </DialogContent>
       </Dialog>
     </div>

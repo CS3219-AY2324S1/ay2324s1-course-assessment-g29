@@ -45,7 +45,7 @@ export const editorSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { 
+export const {
   setCode,
   setCodeEditorLanguage,
   setAwaitAlertOpen,
@@ -54,8 +54,9 @@ export const {
   setChangeProgrammingLanguageAlert,
   setNewProgrammingLanguage,
   setCheckChangeQuestionData,
-  setChangeQuestionData } 
-  = editorSlice.actions
+  setChangeQuestionData
+} =
+  editorSlice.actions
 
 export const selectCode = (state) => state.editor.code
 

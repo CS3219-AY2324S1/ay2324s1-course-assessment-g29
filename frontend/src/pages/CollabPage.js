@@ -127,13 +127,13 @@ function CollabPage () {
       dispatch(setCode(code.code))
     })
 
-    socket.current.on('CheckQuestionChange', ({question}) => {
+    socket.current.on('CheckQuestionChange', ({ question }) => {
       console.log(question)
       dispatch(setChangeQuestionData(question))
       dispatch(setCheckChangeQuestionData(true))
     })
 
-    socket.current.on('ConfirmChangeQuestion', ({agree, question}) => {
+    socket.current.on('ConfirmChangeQuestion', ({ agree, question }) => {
       console.log('matched user has responded:')
       console.log(agree)
       console.log(question)
@@ -336,9 +336,9 @@ function CollabPage () {
         denyChange={denyProgrammingLanguageChange}
         agreeChange={agreeProgrammingLanguageChange}
       />
-      <AwaitChangeQuestionDialog matchedUserId={matchedUserid}/>
-      <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid}/>
-      <ChangeQuestionDialog socket={socket}/>
+      <AwaitChangeQuestionDialog matchedUserId={matchedUserid} />
+      <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
+      <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
     </Box>
   )

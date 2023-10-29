@@ -1,5 +1,3 @@
-
-
 class RoomController {
   constructor (roomModel, io) {
     this.roomModel = roomModel
@@ -57,7 +55,7 @@ class RoomController {
         })
 
         console.log(`Match Success between ${userid} and ${this.roomModel.socketToUserId[socket1id]}`)
-      } 
+      }
     } catch (error) {
       console.log(error)
     }
@@ -114,7 +112,6 @@ class RoomController {
           this.io.to(socket2id).emit('CheckChangeEditorLanguage', { language })
         }
       }
-
     } catch (error) {
       console.log(error)
     }
@@ -132,7 +129,6 @@ class RoomController {
           this.io.to(socket2id).emit('ConfirmChangeEditorLanguage', { agree, language })
         }
       }
-
     } catch (error) {
       console.log(error)
     }
@@ -154,7 +150,6 @@ class RoomController {
     }
   }
 
-
   handleConfirmChangeQuestionData (socket, { agree, question }, callback) {
     try {
       console.log(socket.id)
@@ -167,7 +162,7 @@ class RoomController {
         }
       }
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
   }
 
@@ -187,7 +182,6 @@ class RoomController {
     this.roomModel.roomIdToCode[roomId] = null
     this.roomModel.roomIdToLanguage[roomId] = null
     this.roomModel.disconnectFromSocket(socket.id)
-    
 
     if (socket2idres !== '') {
       this.roomModel.disconnectFromSocket(socket2idres)

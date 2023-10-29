@@ -14,20 +14,20 @@ import {
 } from '../redux/EditorSlice'
 import { setQuestionData } from '../redux/MatchingSlice'
 
-export default function CheckChangeQuestionDataDialog ({socket, matchedUserId}) {
+export default function CheckChangeQuestionDataDialog ({ socket, matchedUserId }) {
   const open = useSelector(selectCheckChangeQuestionData)
   const newQuestion = useSelector(selectChangeQuesitonData)
   const dispatch = useDispatch()
 
   const handleDisagree = () => {
-    socket.current.emit('ConfirmChangeQuestion', {agree: false, question: newQuestion})
+    socket.current.emit('ConfirmChangeQuestion', { agree: false, question: newQuestion })
     dispatch(setCheckChangeQuestionData(false))
     dispatch(setChangeQuestionData({}))
   }
 
   const handleAgree = () => {
     const finalQuestion = { question: newQuestion }
-    socket.current.emit('ConfirmChangeQuestion', {agree: true, question: finalQuestion})
+    socket.current.emit('ConfirmChangeQuestion', { agree: true, question: finalQuestion })
     dispatch(setQuestionData(finalQuestion))
     dispatch(setCheckChangeQuestionData(false))
     dispatch(setChangeQuestionData({}))

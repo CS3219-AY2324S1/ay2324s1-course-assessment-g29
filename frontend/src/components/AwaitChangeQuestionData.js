@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { useSelector } from 'react-redux'
 import { selectAwaitChangeQuestionOpen } from '../redux/EditorSlice'
 
-export default function AwaitChangeQuestionDialog ({matchedUserId}) {
+export default function AwaitChangeQuestionDialog ({ matchedUserId }) {
   const awaitAlertOpen = useSelector(selectAwaitChangeQuestionOpen)
 
   return (
