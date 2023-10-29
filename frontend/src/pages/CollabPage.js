@@ -43,10 +43,17 @@ import {
   selectCode,
   setCodeEditorLanguage,
   setNewProgrammingLanguage,
-  setChangeProgrammingLanguageAlert
+  setChangeProgrammingLanguageAlert,
+  setChangeQuestionAlertOpen,
+  setCheckChangeQuestionData,
+  setChangeQuestionData,
+  setAwaitChangeQuestionOpen
 } from '../redux/EditorSlice'
 import ProgrammingLanguageDialog from '../components/ChangeProgrammingLanguageAlert'
+import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
+import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
+import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -118,6 +125,31 @@ function CollabPage () {
     socket.current.on('CodeChange', (code) => {
       console.log(code.code)
       dispatch(setCode(code.code))
+    })
+
+    socket.current.on('CheckQuestionChange', ({question}) => {
+      console.log(question)
+      dispatch(setChangeQuestionData(question))
+      dispatch(setCheckChangeQuestionData(true))
+    })
+
+    socket.current.on('ConfirmChangeQuestion', ({agree, question}) => {
+      console.log('matched user has responded:')
+      console.log(agree)
+      console.log(question)
+      if (agree) {
+        dispatch(setCode('Please choose a language to begin!\n'))
+        dispatch(setQuestionData(question))
+        dispatch(setChangeQuestionData({}))
+      } else {
+        dispatch(
+          setErrorMessage(
+            `${matchedUserid} has declined to change the question`
+          )
+        )
+        dispatch(setShowError(true))
+      }
+      dispatch(setAwaitChangeQuestionOpen(false))
     })
 
     socket.current.on('CheckChangeEditorLanguage', ({ language }) => {
@@ -227,6 +259,11 @@ function CollabPage () {
     dispatch(setCodeEditorLanguage(newProgrammingLanguage))
   }
 
+  const changeQuestion = (event) => {
+    event.preventDefault()
+    dispatch(setChangeQuestionAlertOpen(true))
+  }
+
   return (
     <Box display='flex' flexDirection='column' alignContent='flex-start'>
       <Navbar />
@@ -284,7 +321,7 @@ function CollabPage () {
               <Box marginRight={1} />
               <Button
                 variant='contained'
-                onClick={LeaveRoom}
+                onClick={changeQuestion}
                 endIcon={<QuestionMarkIcon />}
               >
                 Change question
@@ -299,6 +336,9 @@ function CollabPage () {
         denyChange={denyProgrammingLanguageChange}
         agreeChange={agreeProgrammingLanguageChange}
       />
+      <AwaitChangeQuestionDialog matchedUserId={matchedUserid}/>
+      <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid}/>
+      <ChangeQuestionDialog socket={socket}/>
       <ChatComponent socket={socket} />
     </Box>
   )

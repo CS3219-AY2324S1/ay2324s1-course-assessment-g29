@@ -36,6 +36,14 @@ io.on('connection', (socket) => {
     roomController.handleConfirmChangeEditorLanguage(socket, data, callback)
   })
 
+  socket.on('ChangeQuestionData', (data, callback) => {
+    roomController.handleChangeQuestionData(socket, data, callback)
+  })
+
+  socket.on('ConfirmChangeQuestion', (data, callback) => {
+    roomController.handleConfirmChangeQuestionData(socket, data, callback)
+  })
+
   socket.on('CloseRoom', () => {
     roomController.handleCloseRoom(socket)
   })
