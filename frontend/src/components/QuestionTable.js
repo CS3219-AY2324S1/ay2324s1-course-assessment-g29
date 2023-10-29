@@ -3,14 +3,14 @@ import { SearchOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
 
 const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
-//   const [filteredQuestions, setFilteredQuestions] = useState([])
+  //   const [filteredQuestions, setFilteredQuestions] = useState([])
 
-//   const handleFilterSearch = (column, value) => {
-//     const filtered = questions.filter((question) =>
-//       question[column].toLowerCase().includes(value.toLowerCase())
-//     )
-//     setFilteredQuestions(filtered)
-//   }
+  //   const handleFilterSearch = (column, value) => {
+  //     const filtered = questions.filter((question) =>
+  //       question[column].toLowerCase().includes(value.toLowerCase())
+  //     )
+  //     setFilteredQuestions(filtered)
+  //   }
 
   // header for table + able to filter data using filterDropdown
   const columns = [
