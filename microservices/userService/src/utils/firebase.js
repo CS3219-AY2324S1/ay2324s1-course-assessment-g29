@@ -12,7 +12,7 @@ const firebaseConfig = {
 }
 
 const firebase = require('firebase/app')
-const firebaseApp = firebase.initializeApp(firebaseConfig)
+const firebaseApp = firebase.initializeApp(firebaseConfig, 'user')
 
 const firebaseAuth = require('firebase/auth')
 const auth = firebaseAuth.getAuth(firebaseApp)
