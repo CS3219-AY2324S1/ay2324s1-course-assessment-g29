@@ -33,8 +33,13 @@ const serviceAccount = {
   client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL
 }
 
+if (admin.apps.length) {
+  admin.deleteApp().then(function () {
+    console.log('Default app deleted successfully')
+  })
+}
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
-}, 'userService')
+})
 
 module.exports = { firebaseAuth, auth }
