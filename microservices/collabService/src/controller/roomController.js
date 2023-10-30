@@ -25,7 +25,7 @@ if (!admin.apps.length) {
     credential: admin.credential.cert(serviceAccount, 'collab')
   })
 } else {
-  const app = admin.apps.get(0)
+  const app = admin.apps[0]
   console.log(app)
 }
 
