@@ -27,9 +27,6 @@ jobs:
       - name: Run Standard Style Check
         run: npx standard
 
-      - name: Build
-        run: npm run build --if-present
-
       - name: Run Tests
         env:
           API_KEY: ${{ secrets.API_KEY }}
