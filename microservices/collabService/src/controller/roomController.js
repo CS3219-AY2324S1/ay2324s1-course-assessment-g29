@@ -24,6 +24,9 @@ if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount, 'collab')
   })
+} else {
+  const app = admin.apps.get(0)
+  console.log(app)
 }
 
 const db = admin.firestore()

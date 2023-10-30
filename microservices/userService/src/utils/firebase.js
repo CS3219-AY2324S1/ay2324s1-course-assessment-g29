@@ -37,6 +37,9 @@ if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
   })
+} else {
+  const app = admin.apps.get(0)
+  console.log(app)
 }
 
 module.exports = { firebaseAuth, auth }
