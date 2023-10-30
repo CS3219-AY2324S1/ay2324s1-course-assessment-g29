@@ -35,7 +35,7 @@ const serviceAccount = {
 
 if (admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount, 'collab')
+    credential: admin.credential.cert(serviceAccount)
   }, 'userService')
 } else {
   admin.initializeApp({

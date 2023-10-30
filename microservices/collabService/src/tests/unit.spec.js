@@ -1,4 +1,4 @@
-/* global describe, it, after */
+/* global describe, it, before, after */
 
 const chai = require('chai')
 const chaiHttp = require('chai-http')
@@ -24,13 +24,15 @@ const fakeQuestionData = {
 }
 const matchingLanguages = ['Python']
 
-const axiosStub = sinon.stub(axios, 'get')
+const sandbox = sinon.createSandbox()
+
+const axiosStub = sandbox.stub(axios, 'get')
 axiosStub.withArgs('http://questionservice:3002/question/getRandom').resolves({
   data: fakeQuestionData
 })
 
-const firestoreStub = sinon.stub(admin, 'firestore')
-const collectionStub = sinon.stub()
+const firestoreStub = sandbox.stub(admin, 'firestore')
+const collectionStub = sandbox.stub()
 
 firestoreStub.get(function () {
   return function () {
@@ -39,7 +41,7 @@ firestoreStub.get(function () {
 })
 
 collectionStub.withArgs('rooms').returns({
-  get: sinon.stub().resolves(
+  get: sandbox.stub().resolves(
     [{
       data: () => ({
         user1id: 'user1',
@@ -49,29 +51,29 @@ collectionStub.withArgs('rooms').returns({
       })
     }]
   ),
-  doc: sinon.stub().callsFake((rid) => {
+  doc: sandbox.stub().callsFake((rid) => {
     return {
-      set: sinon.stub().resolves({ message: 'Done!' }),
-      update: sinon.stub().resolves({ message: 'Done!' }),
-      delete: sinon.stub().resolves({ message: 'Done!' })
+      set: sandbox.stub().resolves({ message: 'Done!' }),
+      update: sandbox.stub().resolves({ message: 'Done!' }),
+      delete: sandbox.stub().resolves({ message: 'Done!' })
     }
   })
 })
 
 collectionStub.withArgs('history').returns({
-  doc: sinon.stub().callsFake((rid) => {
+  doc: sandbox.stub().callsFake((rid) => {
     return {
-      set: sinon.stub().resolves({ message: 'Done!' }),
-      update: sinon.stub().resolves({ message: 'Done!' })
+      set: sandbox.stub().resolves({ message: 'Done!' }),
+      update: sandbox.stub().resolves({ message: 'Done!' })
     }
   })
 })
 
 collectionStub.withArgs('useridToRoom').returns({
-  doc: sinon.stub().callsFake((uid) => {
+  doc: sandbox.stub().callsFake((uid) => {
     return {
-      set: sinon.stub().resolves({ message: 'Done!' }),
-      get: sinon.stub().resolves({ data: () => ({ roomId: [] }) })
+      set: sandbox.stub().resolves({ message: 'Done!' }),
+      get: sandbox.stub().resolves({ data: () => ({ roomId: [] }) })
     }
   })
 })
@@ -80,11 +82,14 @@ collectionStub.withArgs('useridToRoom').returns({
 const { createRoom, checkRoom, saveHistory, updateHistory, changeQuestion, leaveRoom } = require('../controller/roomController')
 
 describe('Unit Test for /collab', () => {
+  before('before', () => {
+    console.log('Running test suites for /collab')
+  })
+
   after('after', () => {
     console.log('Ran all test suites for /collab successfully')
     // Restore the stub after the test
-    axiosStub.restore()
-    firestoreStub.restore()
+    sandbox.restore()
   })
 
   describe('Create room on /createroom', () => {

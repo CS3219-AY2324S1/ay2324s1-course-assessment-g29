@@ -22,24 +22,26 @@ const defaultLanguage = ['Python']
 const newLanguages = ['Java', 'C++']
 
 // Stubs
-const collectionStub = sinon.stub(firestore, 'collection')
+const sandbox = sinon.createSandbox()
+
+const collectionStub = sandbox.stub(firestore, 'collection')
 collectionStub.withArgs('users').returns({
-  doc: sinon.stub().callsFake((uid) => {
+  doc: sandbox.stub().callsFake((uid) => {
     return {
-      set: sinon.stub().resolves({ message: 'Language updated successfully!' }),
-      get: sinon.stub().resolves({
+      set: sandbox.stub().resolves({ message: 'Language updated successfully!' }),
+      get: sandbox.stub().resolves({
         data: () => ({ language: defaultLanguage })
       })
     }
   })
 })
 
-const createUserStub = sinon.stub(adminAuth, 'createUser')
+const createUserStub = sandbox.stub(adminAuth, 'createUser')
 createUserStub.callsFake(async (user) => {
   return { uid: testUser.uid, ...user }
 })
 
-const getUserStub = sinon.stub(adminAuth, 'getUser')
+const getUserStub = sandbox.stub(adminAuth, 'getUser')
 getUserStub.callsFake(async (uid) => {
   if (uid === testUser.uid) {
     return { uid, email: testUser.email, displayName: testUser.displayName }
@@ -48,7 +50,7 @@ getUserStub.callsFake(async (uid) => {
   }
 })
 
-const updateUserStub = sinon.stub(adminAuth, 'updateUser')
+const updateUserStub = sandbox.stub(adminAuth, 'updateUser')
 updateUserStub.callsFake(async (uid, updatedUser) => {
   if (uid === testUser.uid) {
     return { uid, ...updatedUser }
@@ -57,7 +59,7 @@ updateUserStub.callsFake(async (uid, updatedUser) => {
   }
 })
 
-const deleteUserStub = sinon.stub(adminAuth, 'deleteUser')
+const deleteUserStub = sandbox.stub(adminAuth, 'deleteUser')
 deleteUserStub.callsFake(async (uid) => {
   if (uid === testUser.uid) {
     return null
@@ -73,10 +75,7 @@ describe('Unit Test for /user', () => {
 
   after('after', () => {
     console.log('Ran all test suites for /user successfully')
-    createUserStub.restore()
-    getUserStub.restore()
-    updateUserStub.restore()
-    deleteUserStub.restore()
+    sandbox.restore()
   })
 
   describe('Register user on /registerUser', () => {
