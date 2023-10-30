@@ -1,4 +1,5 @@
 /* global describe, before, after, it */
+// standard-ignore
 const io = require('../../app.js')
 const ioc = require('socket.io-client')
 const { assert } = require('chai')
