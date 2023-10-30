@@ -123,6 +123,20 @@ const updateHistory = async (req, res) => {
   }
 }
 
+const getHistory = async (req, res) => {
+  try {
+    const { rid } = req.params
+    console.log('Get history for', rid)
+    const doc = await historyCollection.doc(rid).get()
+    if (!doc.exists) {
+      throw new Error(`Room does not exist: ${rid}`)
+    }
+    res.status(200).json({ roomInfo: doc.data() })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 const changeQuestion = async (req, res) => {
   try {
     const { rid, questionData } = req.body
@@ -150,6 +164,7 @@ module.exports = {
   checkRoom,
   saveHistory,
   updateHistory,
+  getHistory,
   changeQuestion,
   leaveRoom
 }

@@ -64,7 +64,20 @@ collectionStub.withArgs('history').returns({
   doc: sandbox.stub().callsFake((rid) => {
     return {
       set: sandbox.stub().resolves({ message: 'Done!' }),
-      update: sandbox.stub().resolves({ message: 'Done!' })
+      update: sandbox.stub().resolves({ message: 'Done!' }),
+      get: sandbox.stub().resolves({
+        data: () => ({
+          code: 'Please choose a language to begin!\n',
+          questionData: {
+            question: fakeQuestionData
+          },
+          user2id: 'user2',
+          messages: [],
+          language: '',
+          user1id: 'user1'
+        }),
+        exists: true
+      })
     }
   })
 })
@@ -79,7 +92,7 @@ collectionStub.withArgs('useridToRoom').returns({
 })
 
 // Import functions to test
-const { createRoom, checkRoom, saveHistory, updateHistory, changeQuestion, leaveRoom } = require('../controller/roomController')
+const { createRoom, checkRoom, saveHistory, updateHistory, changeQuestion, leaveRoom, getHistory } = require('../controller/roomController')
 
 describe('Unit Test for /collab', () => {
   before('before', () => {
@@ -181,6 +194,33 @@ describe('Unit Test for /collab', () => {
         }
       }
       await updateHistory(req, res)
+    })
+  })
+
+  describe('Get history on /getHistory', () => {
+    it('should update room history', async () => {
+      const req = {
+        params: {
+          rid: 'room_id' // Provide a valid room ID
+        }
+      }
+      const res = {
+        status: (code) => {
+          expect(code).to.equal(200)
+          return {
+            json: (data) => {
+              expect(data).to.have.property('roomInfo')
+              expect(data.roomInfo).to.have.property('questionData')
+              expect(data.roomInfo).to.have.property('code')
+              expect(data.roomInfo).to.have.property('language')
+              expect(data.roomInfo).to.have.property('messages')
+              expect(data.roomInfo).to.have.property('user1id')
+              expect(data.roomInfo).to.have.property('user2id')
+            }
+          }
+        }
+      }
+      await getHistory(req, res)
     })
   })
 
