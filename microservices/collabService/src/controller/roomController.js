@@ -1,7 +1,7 @@
 // controllers/roomController.js
 const admin = require('firebase-admin')
 const { v4: uuidv4 } = require('uuid')
-const serviceAccount = require('../configs/peerprep-f1dca-firebase-adminsdk-cwpky-38ec2f2d38.json')
+const serviceAccount = require('../../configs/peerprep-f1dca-firebase-adminsdk-cwpky-38ec2f2d38.json')
 const axios = require('axios')
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)

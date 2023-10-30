@@ -3,7 +3,7 @@ const ioc = require('socket.io-client')
 const { assert } = require('chai')
 
 // Include your MatchingService implementation
-const MatchingService = require('../service/matching')
+const MatchingService = require('../model/matching')
 
 describe('Matching Service Unit Tests', () => {
   let clientSocket, matchingService

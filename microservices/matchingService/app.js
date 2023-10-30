@@ -5,8 +5,8 @@ const port = process.env.PORT || 4000
 const { createServer } = require('node:http')
 const { Server } = require('socket.io')
 
-const MatchingService = require('./model/matching')
-const MatchingController = require('./controller/matchingController')
+const MatchingService = require('./src/model/matching')
+const MatchingController = require('./src/controller/matchingController')
 
 app.use(cors())
 app.use(express.json())
