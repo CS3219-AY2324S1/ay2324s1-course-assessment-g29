@@ -1,7 +1,5 @@
 /* global describe, before, after, it */
-/* eslint-disable standard */
 const io = require('../../app.js')
-/* eslint-enable standard */
 const ioc = require('socket.io-client')
 const { assert } = require('chai')
 
@@ -27,6 +25,7 @@ describe('Websocket Service Unit Tests', () => {
 
   after(() => {
     // Close the clientSocket connection
+    io.close()
     clientSocket.disconnect()
     clientSocket2.disconnect()
   })
