@@ -26,6 +26,7 @@ class MatchingService {
       for (let i = this.Queues[difficulty].length - 1; i >= 0; i--) {
         if (this.Queues[difficulty][i].socketid === checkSocketid) {
           this.Queues[difficulty].splice(i, 1)
+          return
         }
       }
     }
