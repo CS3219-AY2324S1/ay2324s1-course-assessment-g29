@@ -34,12 +34,13 @@ const serviceAccount = {
 }
 
 if (admin.apps.length) {
-  admin.deleteApp().then(function () {
-    console.log('Default app deleted successfully')
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount, 'collab')
+  }, 'userService')
+} else {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
   })
 }
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-})
 
 module.exports = { firebaseAuth, auth }

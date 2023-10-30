@@ -22,13 +22,14 @@ const serviceAccount = {
 const axios = require('axios')
 
 if (admin.apps.length) {
-  admin.deleteApp().then(function () {
-    console.log('Default app deleted successfully')
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount, 'collab')
+  }, 'collabService')
+} else {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount, 'collab')
   })
 }
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount, 'collab')
-})
 
 const db = admin.firestore()
 const roomCollection = db.collection('rooms')
