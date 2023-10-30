@@ -12,7 +12,7 @@ const firebaseConfig = {
 }
 
 const firebase = require('firebase/app')
-const firebaseApp = firebase.initializeApp(firebaseConfig)
+const firebaseApp = firebase.initializeApp(firebaseConfig, 'user')
 
 const firebaseAuth = require('firebase/auth')
 const auth = firebaseAuth.getAuth(firebaseApp)
@@ -33,8 +33,13 @@ const serviceAccount = {
   client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL
 }
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-})
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  })
+} else {
+  const app = admin.apps[0]
+  console.log(app)
+}
 
 module.exports = { firebaseAuth, auth }
