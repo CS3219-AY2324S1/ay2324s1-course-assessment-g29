@@ -23,7 +23,8 @@ describe('Matching Service Unit Tests', () => {
 
   // Test the 'JoinQueue' event
   it('Test JoinQueue timeout', function (done) {
-    this.timeout(50000)
+    console.log('Timing out for 31s to test timeout')
+    this.timeout(31000)
     const userData = {
       userid: 'user123',
       difficulty: 'Easy',
