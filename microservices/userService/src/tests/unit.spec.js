@@ -7,6 +7,7 @@ const sinon = require('sinon')
 const userController = require('../controller/user.controller')
 const admins = require('firebase-admin')
 const adminAuth = admins.auth()
+const firestore = admins.firestore()
 
 // Test user
 const testUser = {
@@ -21,13 +22,7 @@ const defaultLanguage = ['Python']
 const newLanguages = ['Java', 'C++']
 
 // Stubs
-const firestoreStub = sinon.stub(admins, 'firestore')
-firestoreStub.get(function () {
-  return function () {
-    return { collection: collectionStub }
-  }
-})
-const collectionStub = sinon.stub()
+const collectionStub = sinon.stub(firestore, 'collection')
 collectionStub.withArgs('users').returns({
   doc: sinon.stub().callsFake((uid) => {
     return {
