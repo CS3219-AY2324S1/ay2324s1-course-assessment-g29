@@ -90,6 +90,7 @@ describe('Unit Test for /collab', () => {
     console.log('Ran all test suites for /collab successfully')
     // Restore the stub after the test
     sandbox.restore()
+    firestoreStub.restore()
   })
 
   describe('Create room on /createroom', () => {
