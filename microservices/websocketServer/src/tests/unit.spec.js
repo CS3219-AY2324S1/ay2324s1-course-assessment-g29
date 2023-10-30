@@ -1,6 +1,7 @@
 /* global describe, before, after, it */
-// standard-ignore
+/* eslint-disable standard */
 const io = require('../../app.js')
+/* eslint-enable standard */
 const ioc = require('socket.io-client')
 const { assert } = require('chai')
 
