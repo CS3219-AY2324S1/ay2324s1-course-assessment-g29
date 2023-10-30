@@ -23,11 +23,11 @@ const axios = require('axios')
 
 if (admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount, 'collab')
+    credential: admin.credential.cert(serviceAccount)
   }, 'collabService')
 } else {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount, 'collab')
+    credential: admin.credential.cert(serviceAccount)
   })
 }
 
