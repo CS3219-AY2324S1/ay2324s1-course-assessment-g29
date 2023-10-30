@@ -33,13 +33,9 @@ const serviceAccount = {
   client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL
 }
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  })
-} else {
-  const app = admin.apps[0]
-  console.log(app)
-}
+console.log(admin.apps)
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+})
 
 module.exports = { firebaseAuth, auth }

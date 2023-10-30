@@ -20,14 +20,11 @@ const serviceAccount = {
 }
 
 const axios = require('axios')
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount, 'collab')
-  })
-} else {
-  const app = admin.apps[0]
-  console.log(app)
-}
+
+console.log(admin.apps)
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount, 'collab')
+})
 
 const db = admin.firestore()
 const roomCollection = db.collection('rooms')
