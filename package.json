@@ -13,7 +13,12 @@
     "web-vitals": "^3.4.0"
   },
   "scripts": {
-    "test": "npm info mocha version && npm info sinon version && mocha ./microservices/**/src/tests/*.js --timeout 50000",
+    "test": "mocha ./microservices/**/src/tests/*.js --timeout 50000",
+    "test-collab": "mocha ./microservices/collabService/src/tests/*.js",
+    "test-matching": "mocha ./microservices/matchingService/src/tests/*.js --timeout 50000",
+    "test-question": "mocha ./microservices/questionServicec/src/tests/*.js --timeout 10000",
+    "test-user": "mocha ./microservices/userService/src/tests/*.js --timeout 10000",
+    "test-websocket": "mocha ./microservices/websocketServer/src/tests/*.js --timeout 50000",
     "start": "react-scripts start"
   },
   "dependencies": {
