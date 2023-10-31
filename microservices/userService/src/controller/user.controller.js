@@ -123,6 +123,7 @@ exports.deregisterUser = async function (uid) {
   try {
     await admin.auth().deleteUser(uid)
     await userCollection.doc(uid).delete()
+    await userHistoryCollection.doc(uid).delete()
     return 'OK'
   } catch (error) {
     return Promise.reject(error)
