@@ -59,4 +59,7 @@ jobs:
 
       - name: Run Tests on Websocket Server Service
         run: npm run test-websocket
+
+      - name: Run Tests on Question Service
+        run: npm run test-question
       #   run: npm run test-ci # need to set up test-ci in package.json
