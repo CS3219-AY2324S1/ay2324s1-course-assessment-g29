@@ -3,7 +3,7 @@ name: CI Pipeline
 on: [push, pull_request]
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,10 +27,7 @@ jobs:
       - name: Run Standard Style Check
         run: npx standard
 
-      - name: Build
-        run: npm run build --if-present
-
-      - name: Run Tests
+      - name: Run Tests on User Service
         env:
           API_KEY: ${{ secrets.API_KEY }}
           AUTH_DOMAIN: ${{ secrets.AUTH_DOMAIN }}
@@ -45,5 +42,21 @@ jobs:
           FIREBASE_ADMIN_CLIENT_ID: ${{ secrets.FIREBASE_ADMIN_CLIENT_ID }}
           FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL }}
           FIREBASE_ADMIN_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_CLIENT_X509_CERT_URL }}
-        run: npm test
+        run: npm run test-user
+
+      - name: Run Tests on Collab Service
+        env:
+          FIREBASE_ADMIN_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_ADMIN_PRIVATE_KEY_ID }}
+          FIREBASE_ADMIN_PRIVATE_KEY: ${{ secrets.FIREBASE_ADMIN_PRIVATE_KEY }}
+          FIREBASE_ADMIN_CLIENT_EMAIL: ${{ secrets.FIREBASE_ADMIN_CLIENT_EMAIL }}
+          FIREBASE_ADMIN_CLIENT_ID: ${{ secrets.FIREBASE_ADMIN_CLIENT_ID }}
+          FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL }}
+          FIREBASE_ADMIN_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_CLIENT_X509_CERT_URL }}
+        run: npm run test-collab
+
+      - name: Run Tests on Matching Service
+        run: npm run test-matching
+
+      - name: Run Tests on Websocket Server Service
+        run: npm run test-websocket
       #   run: npm run test-ci # need to set up test-ci in package.json
