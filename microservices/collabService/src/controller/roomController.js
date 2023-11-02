@@ -84,7 +84,8 @@ const saveHistory = async (req, res) => {
     console.log(questionData)
     console.log(code)
 
-    await historyCollection.doc(rid).set({ user1id, user2id, questionData, code, language, messages })
+    const timestamp = Date.now()
+    await historyCollection.doc(rid).set({ user1id, user2id, questionData, code, language, messages, timestamp })
 
     // Fetch the existing roomId data for user1id
     const user1Doc = await userToRoomCollection.doc(user1id).get()
@@ -106,6 +107,7 @@ const saveHistory = async (req, res) => {
 
     res.status(200).json({ message: 'Successfully save room history' })
   } catch (error) {
+    console.log(error.message)
     res.status(400).json({ error: error.message })
   }
 }
