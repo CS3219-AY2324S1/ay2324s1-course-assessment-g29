@@ -1,14 +1,40 @@
+import { useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import { Table, Tag, Space, Input } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
+import {
+  selectUserid,
+  selectPreviousRooms,
+  setPreviousRooms,
+} from '../redux/UserSlice'
+import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 
 const PreviousQuestionsDone = () => {
+  const dispatch = useDispatch()
+  const userid = useSelector(selectUserid)
+  const previousRooms = useSelector(selectPreviousRooms)
+
   const pagination = {
     pageSize: 5,
     showSizeChanger: false
   }
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/user/history/${userid}`)
+      .then((response) => {
+        console.log(userid)
+        dispatch(setPreviousRooms(response.data.history))
+      })
+      .catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
+  }, [])
 
   // const data = questions.map((question, index) => {
   //   return (
@@ -104,7 +130,7 @@ const PreviousQuestionsDone = () => {
   ]
   return (
     <Box sx={{ p: 2 }}>
-      <Card flex={1} variant='outlined' sx={{ p: 2 }}>
+      <Card flex={1} variant='outlined' sx={{ p: 2 }} >
         <Typography
           variant='body'
           marginBottom='3rem'
@@ -112,13 +138,14 @@ const PreviousQuestionsDone = () => {
         >
           Previous questions done
         </Typography>
-
-        <Table
-          style={{ padding: '1%' }}
+        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+          <Table
+            style={{ padding: '1%' }}
             // dataSource={data}
-          columns={columns}
-          pagination={pagination}
-        />
+            columns={columns}
+            pagination={pagination}
+            size="small"
+          /></div>
       </Card>
     </Box>
   )
