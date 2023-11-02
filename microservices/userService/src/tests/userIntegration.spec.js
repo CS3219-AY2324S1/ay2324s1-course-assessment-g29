@@ -15,6 +15,7 @@ const testUser = {
 }
 const defaultLanguage = ['Python']
 const newLanguages = ['Java', 'C++']
+const history = ['abcd-efgh-xyz0']
 
 describe('Integration Test with firebase for /user', () => {
   before('before', () => {
@@ -71,6 +72,15 @@ describe('Integration Test with firebase for /user', () => {
       await userController.updateLanguage({ uid, languages: newLanguages })
       const languageData = await userController.getLanguage(uid)
       expect(languageData).to.deep.equal(newLanguages)
+    })
+  })
+
+  describe('Get room history on /history', () => {
+    it('User history should be retrieved correctly without error', async () => {
+      const { uid } = testUser
+      await admin.firestore().collection('useridToRoom').doc(uid).set({ roomId: history })
+      const roomHistory = await userController.getUserHistory(uid)
+      expect(roomHistory).to.deep.equal(history)
     })
   })
 

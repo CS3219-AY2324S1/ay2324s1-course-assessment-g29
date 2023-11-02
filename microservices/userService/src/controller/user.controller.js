@@ -3,6 +3,7 @@ const admin = require('firebase-admin')
 
 const db = admin.firestore()
 const userCollection = db.collection('users')
+const userHistoryCollection = db.collection('useridToRoom')
 
 const supportedLanguages = require('../utils/supportedLanguages')
 
@@ -105,10 +106,24 @@ exports.getUserInfo = async function (uid) {
   }
 }
 
+exports.getUserHistory = async function (uid) {
+  try {
+    const docRef = userHistoryCollection.doc(uid)
+    const doc = await docRef.get()
+    if (!doc.exists) {
+      return []
+    }
+    return doc.data().roomId
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 exports.deregisterUser = async function (uid) {
   try {
     await admin.auth().deleteUser(uid)
     await userCollection.doc(uid).delete()
+    await userHistoryCollection.doc(uid).delete()
     return 'OK'
   } catch (error) {
     return Promise.reject(error)

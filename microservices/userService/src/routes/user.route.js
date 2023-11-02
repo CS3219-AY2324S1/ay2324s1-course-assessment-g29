@@ -85,6 +85,17 @@ router.get('/:uid', async (req, res) => {
   }
 })
 
+router.get('/history/:uid', async (req, res) => {
+  console.log('Get User Info')
+  try {
+    const { uid } = req.params
+    const userHistory = await userController.getUserHistory(uid)
+    res.status(200).json({ history: userHistory })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+})
+
 router.delete('/deregister/:uid', tokenManager.authenticateJWT, async (req, res) => {
   console.log('Deregister User')
   try {

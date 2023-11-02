@@ -84,7 +84,8 @@ const saveHistory = async (req, res) => {
     console.log(questionData)
     console.log(code)
 
-    await historyCollection.doc(rid).set({ user1id, user2id, questionData, code, language, messages })
+    const timestamp = Date.now()
+    await historyCollection.doc(rid).set({ user1id, user2id, questionData, code, language, messages, timestamp })
 
     // Fetch the existing roomId data for user1id
     const user1Doc = await userToRoomCollection.doc(user1id).get()
@@ -106,6 +107,7 @@ const saveHistory = async (req, res) => {
 
     res.status(200).json({ message: 'Successfully save room history' })
   } catch (error) {
+    console.log(error.message)
     res.status(400).json({ error: error.message })
   }
 }
@@ -118,6 +120,20 @@ const updateHistory = async (req, res) => {
     console.log(code)
     await historyCollection.doc(rid).update({ questionData, code, language, messages })
     res.status(200).json({ message: 'Successfully save room history' })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+const getHistory = async (req, res) => {
+  try {
+    const { rid } = req.params
+    console.log('Get history for', rid)
+    const doc = await historyCollection.doc(rid).get()
+    if (!doc.exists) {
+      throw new Error(`Room does not exist: ${rid}`)
+    }
+    res.status(200).json({ roomInfo: doc.data() })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -150,6 +166,7 @@ module.exports = {
   checkRoom,
   saveHistory,
   updateHistory,
+  getHistory,
   changeQuestion,
   leaveRoom
 }
