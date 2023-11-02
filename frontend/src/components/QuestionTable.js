@@ -3,11 +3,10 @@ import { SearchOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
 
 const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
-
   const pagination = {
-    pageSize: 5, 
-    showSizeChanger: false, 
-  };
+    pageSize: 5,
+    showSizeChanger: false
+  }
 
   const columns = [
     {
@@ -147,7 +146,7 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
   })
 
   return (
-    <div style={{ justifyContent: 'start', alignItems: 'start', maxHeight: '70vh', overflowY: 'auto'}}>
+    <div style={{ justifyContent: 'start', alignItems: 'start', maxHeight: '70vh', overflowY: 'auto' }}>
       <Table
         style={{ padding: '1%' }}
         dataSource={data}
