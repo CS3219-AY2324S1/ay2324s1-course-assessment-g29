@@ -21,63 +21,62 @@ const testUser = {
 const defaultLanguage = ['Python']
 const newLanguages = ['Java', 'C++']
 
-// Stubs
-const collectionStub = sinon.stub(firestore, 'collection')
-collectionStub.withArgs('users').returns({
-  doc: sinon.stub().callsFake((uid) => {
-    return {
-      set: sinon.stub().resolves({ message: 'Language updated successfully!' }),
-      get: sinon.stub().resolves({
-        data: () => ({ language: defaultLanguage })
-      })
-    }
-  })
-})
-
-const createUserStub = sinon.stub(adminAuth, 'createUser')
-createUserStub.callsFake(async (user) => {
-  return { uid: testUser.uid, ...user }
-})
-
-const getUserStub = sinon.stub(adminAuth, 'getUser')
-getUserStub.callsFake(async (uid) => {
-  if (uid === testUser.uid) {
-    return { uid, email: testUser.email, displayName: testUser.displayName }
-  } else {
-    throw new Error('User not found')
-  }
-})
-
-const updateUserStub = sinon.stub(adminAuth, 'updateUser')
-updateUserStub.callsFake(async (uid, updatedUser) => {
-  if (uid === testUser.uid) {
-    return { uid, ...updatedUser }
-  } else {
-    throw new Error('User not found')
-  }
-})
-
-const deleteUserStub = sinon.stub(adminAuth, 'deleteUser')
-deleteUserStub.callsFake(async (uid) => {
-  if (uid === testUser.uid) {
-    return null
-  } else {
-    throw new Error('User not found')
-  }
-})
-
 describe('Unit Test for /user', () => {
+  let sandbox
+  let getUserStub
+
   before('before', () => {
     console.log('Running test suites for /user')
+    sandbox = sinon.createSandbox()
+
+    const collectionStub = sandbox.stub(firestore, 'collection')
+    collectionStub.withArgs('users').returns({
+      doc: sandbox.stub().callsFake((uid) => {
+        return {
+          set: sandbox.stub().resolves({ message: 'Language updated successfully!' }),
+          get: sandbox.stub().resolves({
+            data: () => ({ language: defaultLanguage })
+          })
+        }
+      })
+    })
+
+    const createUserStub = sandbox.stub(adminAuth, 'createUser')
+    createUserStub.callsFake(async (user) => {
+      return { uid: testUser.uid, ...user }
+    })
+
+    getUserStub = sandbox.stub(adminAuth, 'getUser')
+    getUserStub.callsFake(async (uid) => {
+      if (uid === testUser.uid) {
+        return { uid, email: testUser.email, displayName: testUser.displayName }
+      } else {
+        throw new Error('User not found')
+      }
+    })
+
+    const updateUserStub = sandbox.stub(adminAuth, 'updateUser')
+    updateUserStub.callsFake(async (uid, updatedUser) => {
+      if (uid === testUser.uid) {
+        return { uid, ...updatedUser }
+      } else {
+        throw new Error('User not found')
+      }
+    })
+
+    const deleteUserStub = sandbox.stub(adminAuth, 'deleteUser')
+    deleteUserStub.callsFake(async (uid) => {
+      if (uid === testUser.uid) {
+        return null
+      } else {
+        throw new Error('User not found')
+      }
+    })
   })
 
   after('after', () => {
     console.log('Ran all test suites for /user successfully')
-    createUserStub.restore()
-    getUserStub.restore()
-    updateUserStub.restore()
-    deleteUserStub.restore()
-    collectionStub.restore()
+    sandbox.restore()
   })
 
   describe('Register user on /registerUser', () => {

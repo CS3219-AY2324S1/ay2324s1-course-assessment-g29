@@ -9,8 +9,8 @@ app.use(cors())
 const server = createServer(app)
 const io = new Server(server)
 
-const RoomModel = require('./model/RoomModel')
-const RoomController = require('./controller/roomController')
+const RoomModel = require('./src/model/RoomModel')
+const RoomController = require('./src/controller/roomController')
 
 const roomModel = new RoomModel()
 const roomController = new RoomController(roomModel, io)
@@ -56,3 +56,5 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
   console.log(`server running at http://localhost:${port}`)
 })
+
+module.exports = io
