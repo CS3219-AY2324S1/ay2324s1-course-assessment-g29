@@ -17,7 +17,7 @@ class RoomController {
         this.roomModel.roomIdToMessages[roomid] = []
         this.roomModel.roomIdToCode[roomid] = 'Please choose a language to begin!\n'
         this.roomModel.roomIdToLanguage[roomid] = ''
-        callback()
+        return
       }
 
       const roomSockets = this.roomModel.roomIdToSocketId[roomid]
@@ -55,12 +55,9 @@ class RoomController {
         })
 
         console.log(`Match Success between ${userid} and ${this.roomModel.socketToUserId[socket1id]}`)
-        callback()
-      } else {
-        callback()
       }
     } catch (error) {
-      return callback(error)
+      console.log(error)
     }
   }
 
@@ -98,10 +95,8 @@ class RoomController {
           this.io.to(socket2id).emit('CodeChange', { code })
         }
       }
-
-      callback()
     } catch (error) {
-      return callback(error)
+      console.log(error)
     }
   }
 
@@ -117,10 +112,8 @@ class RoomController {
           this.io.to(socket2id).emit('CheckChangeEditorLanguage', { language })
         }
       }
-
-      callback()
     } catch (error) {
-      return callback(error)
+      console.log(error)
     }
   }
 
@@ -136,10 +129,40 @@ class RoomController {
           this.io.to(socket2id).emit('ConfirmChangeEditorLanguage', { agree, language })
         }
       }
-
-      callback()
     } catch (error) {
-      return callback(error)
+      console.log(error)
+    }
+  }
+
+  handleChangeQuestionData (socket, { question }, callback) {
+    try {
+      console.log(socket.id)
+      console.log(question)
+      const roomId = this.roomModel.socketToRoom[socket.id]
+      for (const index in this.roomModel.roomIdToSocketId[roomId]) {
+        const socket2id = this.roomModel.roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          this.io.to(socket2id).emit('CheckQuestionChange', { question })
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleConfirmChangeQuestionData (socket, { agree, question }, callback) {
+    try {
+      console.log(socket.id)
+      const roomId = this.roomModel.socketToRoom[socket.id]
+
+      for (const index in this.roomModel.roomIdToSocketId[roomId]) {
+        const socket2id = this.roomModel.roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          this.io.to(socket2id).emit('ConfirmChangeQuestion', { agree, question })
+        }
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 

@@ -138,8 +138,8 @@ function MatchingComponent () {
           ? (
             <Box flex={1}>
               <Box>
-                <Typography variant='h3' component='h2'>
-                  Already In Room
+                <Typography variant='h5' component='h2'>
+                  You're already in a room!
                 </Typography>
               </Box>
               <Box flex={1}>
