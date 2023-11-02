@@ -3,16 +3,12 @@ import { SearchOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
 
 const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
-  //   const [filteredQuestions, setFilteredQuestions] = useState([])
 
-  //   const handleFilterSearch = (column, value) => {
-  //     const filtered = questions.filter((question) =>
-  //       question[column].toLowerCase().includes(value.toLowerCase())
-  //     )
-  //     setFilteredQuestions(filtered)
-  //   }
+  const pagination = {
+    pageSize: 5, 
+    showSizeChanger: false, 
+  };
 
-  // header for table + able to filter data using filterDropdown
   const columns = [
     {
       title: 'Id',
@@ -25,7 +21,7 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
       key: 'title',
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
         return (
-          <>
+          <div>
             <Input
               autoFocus
               id='filter-title'
@@ -42,7 +38,7 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
                 confirm()
               }}
             />
-          </>
+          </div>
         )
       },
       filterIcon: () => {
@@ -97,7 +93,6 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
       ],
       onFilter: (value, record) => record.complexity.includes(value)
     },
-
     {
       title: 'Tags',
       dataIndex: 'tags',
@@ -152,16 +147,12 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
   })
 
   return (
-    <div style={{ justifyContent: 'start', alignItems: 'start' }}>
-      <div style={{ display: 'flex' }}>
-        <h2 style={{ paddingLeft: '1.5%', paddingTop: '1%' }}>
-          Question Table
-        </h2>
-      </div>
+    <div style={{ justifyContent: 'start', alignItems: 'start', maxHeight: '70vh', overflowY: 'auto'}}>
       <Table
         style={{ padding: '1%' }}
         dataSource={data}
         columns={columns}
+        pagination={pagination}
       />
     </div>
   )

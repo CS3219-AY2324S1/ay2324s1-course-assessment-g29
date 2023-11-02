@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
+import Typography from '@mui/material/Typography'
 import { selectChangeQuesitonAlertOpen, setChangeQuestionAlertOpen, setAwaitChangeQuestionOpen } from '../redux/EditorSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
 import QuestionTable from './QuestionTable'
+import { Button, Modal } from 'antd';
 
-export default function ChangeQuestionDialog ({ socket }) {
+export default function ChangeQuestionDialog({ socket }) {
+
   const dispatch = useDispatch()
   const changeQuestionAlertOpen = useSelector(selectChangeQuesitonAlertOpen)
   const [questions, setQuestions] = useState([])
@@ -37,21 +37,17 @@ export default function ChangeQuestionDialog ({ socket }) {
 
   return (
     <div>
-      <Dialog
+      <Modal
         open={changeQuestionAlertOpen}
-        onClose={handleClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-        fullWidth
-        maxWidth='xl'
+        onCancel={handleClose}
+        title="Choose a question to change to:"
+        width="90%"
+        centered
+        footer={null} 
       >
-        <DialogTitle id='alert-dialog-title'>
-          Choose your question:
-        </DialogTitle>
-        <DialogContent>
           <QuestionTable questions={questions} setQuestions={setQuestions} signalChangeQuestion={signalChangeQuestion} />
-        </DialogContent>
-      </Dialog>
+        
+      </Modal>
     </div>
   )
 }
