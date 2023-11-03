@@ -266,7 +266,7 @@ function CollabPage () {
         >
           <Box style={{ width: '50%' }} justifyContent='space-between'>
             <Box>
-              <QuestionComponent questionData={questionData}/>
+              <QuestionComponent questionData={questionData} />
               <Box marginBottom={1}>
                 <Typography variant='body2' component='h2'>
                   You're currently matched with {matchedUserid}
