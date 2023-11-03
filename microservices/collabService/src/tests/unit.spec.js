@@ -1,7 +1,30 @@
 /* global describe, before, after, it */
 const io = require('../../app.js')
 const ioc = require('socket.io-client')
-const { assert } = require('chai')
+const chai = require('chai')
+const chaiHttp = require('chai-http')
+const sinon = require('sinon')
+const axios = require('axios')
+const admin = require('firebase-admin')
+
+chai.use(chaiHttp)
+const expect = chai.expect
+
+const matchingLanguages = ['Python']
+
+const sandbox = sinon.createSandbox()
+
+const axiosStub = sandbox.stub(axios, 'post')
+axiosStub.withArgs('http://roomservice:8000/room/changeQuestion').resolves({
+  data: {
+    message: 'Change Question Successfully'
+  }
+})
+axiosStub.withArgs('http://roomservice:8000/room/savehistory').resolves({
+  data: {
+    message: 'Save Room History Successfully'
+  }
+})
 
 // Socket.io setup
 describe('Collab Service Unit Tests', () => {

@@ -27,7 +27,7 @@ const matchingLanguages = ['Python']
 const sandbox = sinon.createSandbox()
 
 const axiosStub = sandbox.stub(axios, 'get')
-axiosStub.withArgs('http://questionservice:3002/question/getRandom').resolves({
+axiosStub.withArgs('http://questionservice:3002/question/getOneByDifficulty/Easy').resolves({
   data: fakeQuestionData
 })
 
@@ -94,13 +94,13 @@ collectionStub.withArgs('useridToRoom').returns({
 // Import functions to test
 const { createRoom, checkRoom, saveHistory, updateHistory, changeQuestion, leaveRoom, getHistory } = require('../controller/roomController')
 
-describe('Unit Test for /collab', () => {
+describe('Unit Test for /room', () => {
   before('before', () => {
-    console.log('Running test suites for /collab')
+    console.log('Running test suites for /room')
   })
 
   after('after', () => {
-    console.log('Ran all test suites for /collab successfully')
+    console.log('Ran all test suites for /room successfully')
     // Restore the stub after the test
     sandbox.restore()
     firestoreStub.restore()
@@ -108,7 +108,7 @@ describe('Unit Test for /collab', () => {
 
   describe('Create room on /createroom', () => {
     it('should create a new room', async () => {
-      const req = { body: { user1id: 'user1', user2id: 'user2', matchingLanguages } }
+      const req = { body: { user1id: 'user1', user2id: 'user2', matchingLanguages, difficulty: 'Easy' } }
       const res = {
         status: (code) => {
           expect(code).to.equal(200)
