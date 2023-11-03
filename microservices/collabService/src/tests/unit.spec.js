@@ -1,16 +1,13 @@
 /* global describe, before, after, it */
 const io = require('../../app.js')
 const ioc = require('socket.io-client')
+const { assert } = require('chai')
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const sinon = require('sinon')
 const axios = require('axios')
-const admin = require('firebase-admin')
 
 chai.use(chaiHttp)
-const expect = chai.expect
-
-const matchingLanguages = ['Python']
 
 const sandbox = sinon.createSandbox()
 
