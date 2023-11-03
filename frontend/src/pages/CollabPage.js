@@ -1,5 +1,4 @@
 // TODO: check if commented out code is needed
-
 import { React, useEffect, useRef } from 'react'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -33,11 +32,11 @@ import {
   appendMessages,
   setMessages
 } from '../redux/MatchingSlice'
-import { 
-  setErrorMessage, 
+import {
+  setErrorMessage,
   setShowError,
   setShowSuccess,
-  setSucessMessage 
+  setSucessMessage
 } from '../redux/ErrorSlice'
 // import Fab from '@mui/material/Fab'
 import {
@@ -114,7 +113,6 @@ function CollabPage () {
 
     // disconnect from socket when component unmounts
     return () => {
-      dispatch(setQuestionData({}));
       if (socket.current) {
         socket.current.disconnect()
         socket.current.off()
@@ -133,19 +131,19 @@ function CollabPage () {
       dispatch(setCode(code.code))
     })
 
-    socket.current.on('CheckQuestionChange', ({ question }) => {
-      console.log(question)
-      dispatch(setChangeQuestionData(question))
+    socket.current.on('CheckQuestionChange', ({ questionData }) => {
+      console.log(questionData)
+      dispatch(setChangeQuestionData(questionData))
       dispatch(setCheckChangeQuestionData(true))
     })
 
-    socket.current.on('ConfirmChangeQuestion', ({ agree, question }) => {
+    socket.current.on('ConfirmChangeQuestion', ({ agree, questionData }) => {
       console.log('matched user has responded:')
       console.log(agree)
-      console.log(question)
+      console.log(questionData)
       if (agree) {
         dispatch(setCode('Please choose a language to begin!\n'))
-        dispatch(setQuestionData(question))
+        dispatch(setQuestionData(questionData))
         dispatch(setChangeQuestionData({}))
       } else {
         dispatch(
@@ -195,9 +193,8 @@ function CollabPage () {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
-    socket.current.emit('CloseRoom')
-    axios
-      .post('http://localhost:8000/room/savehistory', {
+    socket.current.emit('CloseRoom',
+      {
         rid: roomid,
         user1id: userid,
         user2id: matchedUserid,
@@ -206,20 +203,14 @@ function CollabPage () {
         language,
         messages
       })
-      .then((response) => {
-        const message = response.data.message
-        dispatch(setRoomId(''))
-        dispatch(setMatchingLanguages([]))
-        dispatch(setMatchedUserId(''))
-        dispatch(setMessages([]))
-        dispatch(setSucessMessage(message))
-        dispatch(setShowSuccess(true))
-        navigate('/')
-      })
-      .catch((error) => {
-        dispatch(setErrorMessage(error.message))
-        dispatch(setShowError(true))
-      })
+    dispatch(setRoomId(''))
+    dispatch(setMatchingLanguages([]))
+    dispatch(setMatchedUserId(''))
+    dispatch(setMessages([]))
+    dispatch(setSucessMessage('Room has been closed'))
+    dispatch(setShowSuccess(true))
+    navigate('/')
+    dispatch(setQuestionData({}))
   }
 
   const denyProgrammingLanguageChange = () => {
@@ -275,7 +266,7 @@ function CollabPage () {
         >
           <Box style={{ width: '50%' }} justifyContent='space-between'>
             <Box>
-              <QuestionComponent questionData={questionData} />
+              <QuestionComponent />
               <Box marginBottom={1}>
                 <Typography variant='body2' component='h2'>
                   You're currently matched with {matchedUserid}

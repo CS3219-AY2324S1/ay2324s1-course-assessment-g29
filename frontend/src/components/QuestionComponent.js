@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { Chip } from '@mui/material'
+import { selectQuestionData } from '../redux/MatchingSlice'
 
 function getColourbyDifficulty (difficulty) {
   switch (difficulty) {
@@ -14,9 +16,9 @@ function getColourbyDifficulty (difficulty) {
   }
 }
 
-export const QuestionComponent = (questionData) => {
-  console.log(questionData)
-  const data = questionData.questionData.question
+export const QuestionComponent = () => {
+  const questionData = useSelector(selectQuestionData)
+  const data = questionData || { description: '', displayName: '', topic: '', difficulty: '' }
   const [question, setQuestion] = useState(data.description || 'Question Description')
   const [questionNo] = useState(1) // TODO update QuestionService to support
   const [questionTitle, setQuestionTitle] = useState(data.displayName || 'Question Title')
@@ -24,7 +26,7 @@ export const QuestionComponent = (questionData) => {
   const [difficulty, setDifficulty] = useState(data.difficulty) // TODO update QuestionService to support
 
   useEffect(() => {
-    console.log(questionData.questionData.question)
+    console.log(questionData)
     console.log(data.description)
     setQuestion(data.description)
     setQuestionTitle(data.displayName)

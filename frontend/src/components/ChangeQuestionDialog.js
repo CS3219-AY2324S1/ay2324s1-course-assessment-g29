@@ -16,7 +16,7 @@ export default function ChangeQuestionDialog ({ socket }) {
   }
 
   const signalChangeQuestion = (question) => {
-    socket.current.emit('ChangeQuestionData', { question })
+    socket.current.emit('ChangeQuestionData', { questionData: question })
     dispatch(setChangeQuestionAlertOpen(false))
     dispatch(setAwaitChangeQuestionOpen(true))
   }

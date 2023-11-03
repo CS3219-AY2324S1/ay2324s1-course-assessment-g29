@@ -44,8 +44,9 @@ io.on('connection', (socket) => {
     collabController.handleConfirmChangeQuestionData(socket, data, callback)
   })
 
-  socket.on('CloseRoom', () => {
-    collabController.handleCloseRoom(socket)
+  socket.on('CloseRoom', (data, callback) => {
+    console.log(data)
+    collabController.handleCloseRoom(socket, data, callback)
   })
 
   socket.on('disconnect', () => {

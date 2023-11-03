@@ -38,9 +38,9 @@ const userToRoomCollection = db.collection('useridToRoom')
 
 const createRoom = async (req, res) => {
   try {
-    const { user1id, user2id, matchingLanguages } = req.body
+    const { user1id, user2id, matchingLanguages, difficulty } = req.body
     let questionData
-    await axios.get('http://questionservice:3002/question/getRandom')
+    await axios.get(`http://questionservice:3002/question/getOneByDifficulty/${difficulty}`)
       .then((response) => {
         questionData = response.data
       })

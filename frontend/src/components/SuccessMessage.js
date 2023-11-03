@@ -20,7 +20,7 @@ function SuccessMessageAlert () {
   return (
     <>
       {showSuccessAlert && (
-        <Alert severity='error' onClose={closeErrorAlert}>
+        <Alert severity='success' onClose={closeErrorAlert}>
           {successMessage}
         </Alert>
       )}

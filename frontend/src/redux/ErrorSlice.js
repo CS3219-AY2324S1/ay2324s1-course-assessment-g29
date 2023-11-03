@@ -24,7 +24,6 @@ export const errorSlice = createSlice({
   }
 })
 
-
 // Action creators are generated for each case reducer function
 export const { setErrorMessage, setShowError, setSucessMessage, setShowSuccess } = errorSlice.actions
 
