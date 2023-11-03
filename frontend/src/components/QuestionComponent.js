@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { Chip } from '@mui/material'
-import { selectQuestionData } from '../redux/MatchingSlice'
 
 function getColourbyDifficulty (difficulty) {
   switch (difficulty) {
@@ -16,8 +14,7 @@ function getColourbyDifficulty (difficulty) {
   }
 }
 
-export const QuestionComponent = () => {
-  const questionData = useSelector(selectQuestionData)
+export const QuestionComponent = (questionData) => {
   const data = questionData || { description: '', displayName: '', topic: '', difficulty: '' }
   const [question, setQuestion] = useState(data.description || 'Question Description')
   const [questionNo] = useState(1) // TODO update QuestionService to support
