@@ -208,6 +208,47 @@ class CollabController {
     }
   }
 
+  handleJoinVideoRoom (socket, { roomId }, callback) {
+    try {
+      console.log(`${socket.id} joining ${roomId}`)
+      socket.join(roomId)
+      const room = this.io.sockets.adapter.rooms.get(roomId)
+      if (room.size > 1) {
+        console.log('Both Users have joined')
+        socket.to(roomId).emit('VideoSignal')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleVideoInitiate (socket, { roomId }, callback) {
+    try {
+      console.log(`${socket.id} sending video initate to ${roomId}`)
+      socket.to(roomId).emit('VideoSignal')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleVideoSignal (socket, { roomId, data }, callback) {
+    try {
+      console.log(`${socket.id} sending video return signal to ${roomId}`)
+      socket.to(roomId).emit('VideoReturnSignal', data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleVideoReturnSignal (socket, { roomId, data }, callback) {
+    try {
+      console.log(`${socket.id} sending video signal to ${roomId}`)
+      socket.to(roomId).emit('VideoSignal', data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   handleDisconnect (socket) {
     this.roomModel.disconnectFromSocket(socket.id)
   }

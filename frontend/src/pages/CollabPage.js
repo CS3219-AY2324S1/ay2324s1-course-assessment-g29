@@ -58,6 +58,7 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
+import VideoChat from '../components/VideoChat'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -325,6 +326,7 @@ function CollabPage () {
       <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
+      <VideoChat />
     </Box>
   )
 }
