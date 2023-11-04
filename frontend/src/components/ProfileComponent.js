@@ -35,7 +35,7 @@ function Profile () {
   const displayName = useSelector(selectDisplayname)
   const preferredLanguages = useSelector(selectPreferredLanguages)
 
-  const ALL_LANGUAGES = ['Python', 'Java', 'C']
+  const ALL_LANGUAGES = ['Python', 'Java', 'C++']
 
   const [isLanguageChangeDialogOpen, setIsLanguageChangeDialogOpen] =
     useState(false)

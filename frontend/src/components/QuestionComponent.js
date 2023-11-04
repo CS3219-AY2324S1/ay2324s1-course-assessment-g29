@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Chip } from '@mui/material'
 
-function getColourbyDifficulty (difficulty) {
+function getColourbyDifficulty(difficulty) {
   switch (difficulty) {
     case 'Hard':
       return 'red'
@@ -24,7 +24,6 @@ export const QuestionComponent = (questionData) => {
   const [difficulty, setDifficulty] = useState(data.difficulty) // TODO update QuestionService to support
 
   useEffect(() => {
-    console.log(questionData)
     console.log(data.description)
     setQuestion(data.description)
     setQuestionTitle(data.displayName)
@@ -44,11 +43,12 @@ export const QuestionComponent = (questionData) => {
         </span>
       </h3>
       <div>
-        {tags.map((tag, index) => {
-          return (
-            <Chip key={index} label={tag} style={{ marginRight: '0.5rem' }} />
-          )
-        })}
+        {tags &&
+          tags.map((tag, index) => {
+            return (
+              <Chip key={index} label={tag} style={{ marginRight: '0.5rem' }} />
+            )
+          })}
       </div>
       <p>{question}</p>
     </div>

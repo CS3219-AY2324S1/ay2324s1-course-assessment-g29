@@ -54,7 +54,16 @@ const PreviousQuestionEditor = ({ code, programmingLanguage }) => {
                     </InputLabel>
                     <Select
                         disabled={true}
-                        value={programmingLanguage} />
+                        value={programmingLanguage} > 
+                        <MenuItem key={1} value={"Python"}>
+                            Python
+                        </MenuItem>
+                        <MenuItem key={2} value={"C++"}>
+                            C++
+                        </MenuItem>
+                        <MenuItem key={3} value={"Java"}>
+                            Java
+                        </MenuItem></Select>
                 </FormControl>
                 <CodeMirror
                     value={code}

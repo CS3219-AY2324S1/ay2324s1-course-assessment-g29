@@ -24,28 +24,36 @@ const MetricComponent = () => {
       return 0
     }
     console.log(previousQuestions)
-    return previousQuestions.filter((question) => question.attempt.questionData.question.difficulty === 'Easy').length;
+    return previousQuestions
+      .filter(attemptData => attemptData && attemptData.attempt)
+      .filter((question) => question.attempt.questionData.difficulty === 'Easy').length;
   }
 
   const getNormalQuestion = () => {
     if (previousQuestions === undefined) { 
       return 0
     }
-    return previousQuestions.filter((question) => question.attempt.questionData.question.difficulty === 'Medium').length;
+    return previousQuestions
+      .filter(attemptData => attemptData && attemptData.attempt)
+      .filter((question) => question.attempt.questionData.difficulty === 'Medium').length;
   }
 
   const getHardQuestion = () => { 
     if (previousQuestions === undefined) { 
       return 0
     }
-    return previousQuestions.filter((question) => question.attempt.questionData.question.difficulty === 'Hard').length;
+    return previousQuestions
+      .filter(attemptData => attemptData && attemptData.attempt)
+      .filter((question) => question.attempt.questionData.difficulty === 'Hard').length;
   }
 
   const getTotalQuestions = () => { 
     if (previousQuestions === undefined) {
       return 0
     }
-    return previousQuestions.length;
+    return previousQuestions
+      .filter(attemptData => attemptData && attemptData.attempt)
+      .length;
   }
 
   return (

@@ -10,31 +10,31 @@ import { Typography, Chip } from '@mui/material'
 
 
 const PreviousQuestionPage = () => {
-    const { roomId } = useParams()
-    console.log('room ID: ' + roomId)
+  const { roomId } = useParams()
+  console.log('room ID: ' + roomId)
 
-    const [questionData, setQuestionData] = useState(null);
-    const [programmingLanguage, setProgrammingLanguage] = useState('');
-    const [code, setCode] = useState('');
+  const [questionData, setQuestionData] = useState(null);
+  const [programmingLanguage, setProgrammingLanguage] = useState('');
+  const [code, setCode] = useState('');
 
-    // Define an asynchronous function to fetch question data
-    const getQuestionData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8000/room/getHistory/${roomId}`);
-            setQuestionData(response.data.roomInfo.questionData);
-            setProgrammingLanguage(response.data.roomInfo.language);
-            setCode(response.data.roomInfo.code)
-        } catch (error) {
-            console.error(error);
-        }
+  // Define an asynchronous function to fetch question data
+  const getQuestionData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/room/getHistory/${roomId}`);
+      setQuestionData(response.data.roomInfo.questionData);
+      setProgrammingLanguage(response.data.roomInfo.language);
+      setCode(response.data.roomInfo.code)
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    useEffect(() => {
-        getQuestionData();
-    }, [roomId]); // Re-run when roomId changes
+  useEffect(() => {
+    getQuestionData();
+  }, [roomId]); // Re-run when roomId changes
 
-    return (
-        <Box display='flex' flexDirection='column' alignContent='flex-start'>
+  return (
+    <Box display='flex' flexDirection='column' alignContent='flex-start'>
       <Navbar />
       <Box
         style={{ width: '100%', height: '70%', paddingTop: '1rem' }}
@@ -62,12 +62,12 @@ const PreviousQuestionPage = () => {
             <Box margin={1} flex={1}>
               <PreviousQuestionEditor code={code} programmingLanguage={programmingLanguage} />
             </Box>
-            
+
           </Box>
         </Box>
       </Box>
     </Box>
-    )
+  )
 }
 
 export default PreviousQuestionPage; 

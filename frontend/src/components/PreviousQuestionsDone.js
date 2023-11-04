@@ -79,14 +79,16 @@ const PreviousQuestionsDone = () => {
     }
 
     let result = []
-    result = previousQuestions.map((attemptData) => {
+    result = previousQuestions
+      .filter(attemptData => attemptData && attemptData.attempt)
+      .map((attemptData) => {
       return (
         {
           roomId: attemptData.roomId,
-          title: attemptData.attempt.questionData.question.displayName,
-          complexity: attemptData.attempt.questionData.question.difficulty,
+          title: attemptData.attempt.questionData.displayName,
+          complexity: attemptData.attempt.questionData.difficulty,
           timestamp: attemptData.attempt.timestamp,
-          question: attemptData.attempt.questionData.question,
+          question: attemptData.attempt.questionData,
           key: uuidv4()
         }
       )
