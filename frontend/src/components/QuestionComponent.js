@@ -15,7 +15,7 @@ function getColourbyDifficulty (difficulty) {
 }
 
 export const QuestionComponent = (questionData) => {
-  console.log(questionData)
+  console.log(questionData.questionData.question)
   const data = questionData.questionData.question
   const [question, setQuestion] = useState(data.description || 'Question Description')
   const [questionNo] = useState(1) // TODO update QuestionService to support

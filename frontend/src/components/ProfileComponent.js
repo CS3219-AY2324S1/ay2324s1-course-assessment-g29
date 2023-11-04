@@ -85,10 +85,10 @@ function Profile () {
   }
 
   return (
-    <Box component='span' sx={{ p: 2, width: 1 / 5 }}>
-      <Card flex={1} variant='outlined' sx={{ p: 2 }}>
-        <Box display='flex' flexDirection='row' justifyContent='space-between'>
-          <Box>
+    <Box component='span' sx={{ p: 2 }} flex={1}>
+      <Card flex={1} variant='outlined' sx={{ p: 2 }} >
+        <Box display='flex' flexDirection='row' justifyContent='space-between' flex={1}>
+          <Box flex={1}>
             <Typography
               variant='h5'
               marginBottom='0.5rem'
@@ -96,7 +96,7 @@ function Profile () {
             >
               {displayName}'s profile
             </Typography>
-            <Box display='flex'>
+            <Box display='flex' flex={1}>
               <Typography
                 variant='body2'
                 marginBottom='0.5rem'
@@ -109,7 +109,7 @@ function Profile () {
               </Typography>
             </Box>
 
-            <Box display='flex'>
+            <Box display='flex' flex={1}>
               <Typography
                 variant='body2'
                 marginBottom='0.5rem'
@@ -126,9 +126,12 @@ function Profile () {
               variant='body2'
               marginBottom='0.5rem'
               fontWeight='bold'
+              flex={1}
             >
               Preferred Languages:
-              <Stack direction='row' spacing={1}>
+              
+            </Typography>
+            <Stack display="flex" direction='row' spacing={1} flex={1}>
                 {preferredLanguages &&
                   preferredLanguages.map((language, index) => {
                     return (
@@ -136,10 +139,10 @@ function Profile () {
                     )
                   })}
               </Stack>
-            </Typography>
             <Link
               onClick={() => setIsLanguageChangeDialogOpen(true)}
               underline='hover'
+              flex={1}
             >
               <Typography variant='body2' marginBottom='0.5rem'>
                 change preferred languages

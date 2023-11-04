@@ -103,7 +103,7 @@ function LoginPage () {
               onChange={(e) => setEmail(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               autoFocus
-              fullWidth
+              fullWidth={true}
             />
             <TextField
               label='Password'
@@ -113,9 +113,9 @@ function LoginPage () {
               onChange={(e) => setPassword(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               error={LoginError}
-              fullWidth
+              fullWidth={true}
             />
-            <Button variant='contained' type='submit' fullWidth>
+            <Button variant='contained' type='submit' fullWidth={true}>
               <b>Login</b>
             </Button>
           </form>

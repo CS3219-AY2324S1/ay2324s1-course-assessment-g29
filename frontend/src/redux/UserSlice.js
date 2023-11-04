@@ -9,6 +9,7 @@ export const userSlice = createSlice({
     email: '',
     preferredLanguages: [],
     previousRooms: [],
+    previousQuestions: [],
     idToken: '',
     changeDeactivateAccountAlert: false
   },
@@ -36,13 +37,16 @@ export const userSlice = createSlice({
     },
     setChangeDeactivateAccountAlert: (state, action) => {
       state.changeDeactivateAccountAlert = action.payload
+    }, 
+    setPreviousQuestions: (state, action) => {
+      state.previousQuestions = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
 
-export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setPreviousRooms } = userSlice.actions
+export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setPreviousRooms, setPreviousQuestions } = userSlice.actions
 
 export const selectLoginstatus = (state) => state.user.loginStatus
 
@@ -59,5 +63,7 @@ export const selectIdToken = (state) => state.user.idToken
 export const selectPreviousRooms = (state) => state.user.previousRooms
 
 export const selectChangeDeactivateAccountAlert = (state) => state.user.changeDeactivateAccountAlert
+
+export const selectPreviousQuestions = (state) => state.user.previousQuestions
 
 export default userSlice.reducer

@@ -2,10 +2,51 @@ import { PieChart } from '@mui/x-charts/PieChart'
 import { Box, Card, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useDrawingArea } from '@mui/x-charts/hooks'
+import { useSelector} from 'react-redux'
+import {
+  selectPreviousQuestions,
+} from '../redux/UserSlice'
+import { useEffect } from 'react'
 
-const MetricComponent = ({ easyCount, normalCount, hardCount }) => {
-  const totalQuestions = easyCount + normalCount + hardCount
-  const hasQuestionDone = totalQuestions > 0
+const MetricComponent = () => {
+  const previousQuestions = useSelector(selectPreviousQuestions)
+
+  const hasQuestionDone = () => {
+    if (previousQuestions === undefined) { 
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const getEasyQuestion = () => {
+    if (previousQuestions === undefined) { 
+      return 0
+    }
+    console.log(previousQuestions)
+    return previousQuestions.filter((question) => question.attempt.questionData.question.difficulty === 'Easy').length;
+  }
+
+  const getNormalQuestion = () => {
+    if (previousQuestions === undefined) { 
+      return 0
+    }
+    return previousQuestions.filter((question) => question.attempt.questionData.question.difficulty === 'Medium').length;
+  }
+
+  const getHardQuestion = () => { 
+    if (previousQuestions === undefined) { 
+      return 0
+    }
+    return previousQuestions.filter((question) => question.attempt.questionData.question.difficulty === 'Hard').length;
+  }
+
+  const getTotalQuestions = () => { 
+    if (previousQuestions === undefined) {
+      return 0
+    }
+    return previousQuestions.length;
+  }
 
   return (
     <Box
@@ -18,21 +59,21 @@ const MetricComponent = ({ easyCount, normalCount, hardCount }) => {
         variant='outlined'
         sx={{ p: 2, marginLeft: 0, textAlign: 'left' }}
       >
-        <Typography variant='body2' marginBottom='0.5rem' fontWeight='bold'>
+        <Typography variant='body' marginBottom='0.5rem' fontWeight='bold'>
           Questions done by difficulty
         </Typography>
-        {hasQuestionDone
+        {getTotalQuestions() > 0
           ? (
-            <Box display='flex' flex={1} justifyContent='flex-start'>
+            <Box display='flex' flex={1} justifyContent='flex-start' sx={{ paddingTop: '3%' }}>
               <PieChart
                 series={[
                   {
                     data: [
-                      { id: 0, value: easyCount, label: 'Easy' },
-                      { id: 1, value: normalCount, label: 'Medium' },
+                      { id: 0, value: getEasyQuestion(), label: 'Easy' },
+                      { id: 1, value: getNormalQuestion(), label: 'Medium' },
                       {
                         id: 2,
-                        value: hardCount,
+                        value: getHardQuestion(),
                         label: 'Hard',
                         color: '#FF0000'
                       }
@@ -43,7 +84,7 @@ const MetricComponent = ({ easyCount, normalCount, hardCount }) => {
                 width={300}
                 height={140}
               >
-                <PieCenterLabel>{`Total: ${totalQuestions}`}</PieCenterLabel>
+                <PieCenterLabel>{`Total: ${getTotalQuestions()}`}</PieCenterLabel>
               </PieChart>
             </Box>
             )

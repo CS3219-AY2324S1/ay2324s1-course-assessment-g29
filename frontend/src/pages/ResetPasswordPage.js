@@ -62,9 +62,9 @@ function ResetPasswordPage () {
               error={emailError}
               helperText={emailError}
               autoFocus
-              fullWidth
+              fullWidth={true}
             />
-            <Button variant='contained' type='submit' fullWidth>
+            <Button variant='contained' type='submit' fullWidth={true}>
               <b>Login</b>
             </Button>
           </form>

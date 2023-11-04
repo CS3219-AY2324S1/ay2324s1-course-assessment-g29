@@ -5,7 +5,7 @@ import MatchingComponent from '../components/MatchingComponent'
 import MetricComponent from '../components/MetricComponent'
 import PreviousQuestionsDone from '../components/PreviousQuestionsDone'
 
-function HomePage () {
+function HomePage() {
   return (
     <Box
       display='flex'
@@ -20,7 +20,9 @@ function HomePage () {
         justifyContent='center'
         flex={1}
       >
-        <Profile />
+        <Box width="20%">
+          <Profile />
+        </Box>
         <Box display='flex' flexDirection='column' width='50%'>
           <Box display='flex' flexDirection='row'>
             <MetricComponent />

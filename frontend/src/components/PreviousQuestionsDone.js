@@ -1,60 +1,105 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Box } from '@mui/material'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import { Table, Tag, Space, Input } from 'antd'
+import { Link } from 'react-router-dom';
+import { Table, Input } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import {
   selectUserid,
   selectPreviousRooms,
   setPreviousRooms,
+  selectPreviousQuestions,
+  setPreviousQuestions
 } from '../redux/UserSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
+import { formatDistanceToNow } from 'date-fns'
 
 const PreviousQuestionsDone = () => {
   const dispatch = useDispatch()
   const userid = useSelector(selectUserid)
   const previousRooms = useSelector(selectPreviousRooms)
+  const previousQuestions = useSelector(selectPreviousQuestions)
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3001/user/history/${userid}`)
+      .then((response) => {
+        dispatch(setPreviousRooms(response.data.history))
+        let rooms = []
+        response.data.history.forEach((room) => {
+          rooms.push(room)
+        })
+        dispatch(setPreviousRooms(rooms))
+      })
+      .catch((error) => {
+        console.log(error)
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
+
+    const fetchPromises = previousRooms.map((room) => {
+      return axios
+        .get(`http://localhost:8000/room/getHistory/${room}`)
+        .then((response) => {
+          return {
+            roomId: room,
+            attempt: response.data.roomInfo
+          };
+        })
+        .catch((error) => {
+          dispatch(setErrorMessage(error.message));
+          dispatch(setShowError(true));
+        });
+    });
+
+    let attempts = []
+    Promise.all(fetchPromises)
+      .then((results) => {
+        attempts = results.filter((result) => result !== null);
+        dispatch(setPreviousQuestions(attempts))
+      })
+      .catch((error) => {
+        // Handle Promise.all errors here
+        console.error(error);
+      });
+  }, [])
 
   const pagination = {
     pageSize: 5,
     showSizeChanger: false
   }
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3001/user/history/${userid}`)
-      .then((response) => {
-        console.log(userid)
-        dispatch(setPreviousRooms(response.data.history))
-      })
-      .catch((error) => {
-        dispatch(setErrorMessage(error.message))
-        dispatch(setShowError(true))
-      })
-  }, [])
+  const data = () => {
+    if (previousQuestions === undefined) {
+      return []
+    }
 
-  // const data = questions.map((question, index) => {
-  //   return (
-  //     {
-  //       id: index + 1,
-  //       title: question.displayName,
-  //       description: question.description,
-  //       complexity: question.difficulty,
-  //       tags: question.topic,
-  //       originalRecord: question,
-  //       key: uuidv4()
-  //     }
-  //   )
-  // })
+    let result = []
+    result = previousQuestions.map((attemptData) => {
+      return (
+        {
+          roomId: attemptData.roomId,
+          title: attemptData.attempt.questionData.question.displayName,
+          complexity: attemptData.attempt.questionData.question.difficulty,
+          timestamp: attemptData.attempt.timestamp,
+          question: attemptData.attempt.questionData.question,
+          key: uuidv4()
+        }
+      )
+    })
+    return result
+  }
 
   const columns = [
     {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+      width: '50%',
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
         return (
           <div>
@@ -82,12 +127,16 @@ const PreviousQuestionsDone = () => {
       },
       onFilter: (value, record) => {
         return record.title.toLowerCase().includes(value.toLowerCase())
-      }
+      },
+      render: (text, record) => (
+        <Link to={`/previousAttempt/${record.roomId}`}>{text}</Link>
+      ),
     },
     {
       title: 'Complexity',
       dataIndex: 'complexity',
       key: 'complexity',
+      width: '20%',
       filters: [
         { text: 'Hard', value: 'Hard' },
         { text: 'Easy', value: 'Easy' },
@@ -96,36 +145,21 @@ const PreviousQuestionsDone = () => {
       onFilter: (value, record) => record.complexity.includes(value)
     },
     {
-      title: 'Tags',
-      dataIndex: 'tags',
-      key: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags &&
-            tags.map((tag) => {
-              return (
-                <Tag color='green' key={tag}>
-                  {tag}
-                </Tag>
-              )
-            })}
-        </>
-      ),
-      filters: [
-        { text: 'Algorithms', value: 'algorithms' },
-        { text: 'Data Structures', value: 'data structures' },
-        { text: 'Recursion', value: 'recursion' },
-        { text: 'Bit Manipulation', value: 'bit manipulation' }
-      ],
-      onFilter: (value, record) => record.tags.includes(value)
-    },
-    {
-      title: 'Actions',
-      dataIndex: 'actions',
-      key: 'actions',
-      render: (text, record, index) => (
-        <Space />
-      )
+      title: 'Time',
+      dataIndex: 'timestamp',
+      key: 'timestamp',
+      width: '20%',
+      sorter: (a, b) => b.timestamp - a.timestamp,
+      render: (text, record) => {
+        // Calculate the time difference in milliseconds
+        const timeDifference = Date.now() - record.timestamp;
+        // Format the time difference as 'X hours ago' or 'X days ago'
+        const formattedTime =
+          timeDifference < 24 * 60 * 60 * 1000
+            ? formatDistanceToNow(record.timestamp, { addSuffix: true })
+            : `on ${new Date(record.timestamp).toLocaleDateString()}`;
+        return <span>{formattedTime}</span>;
+      }
     }
   ]
   return (
@@ -138,10 +172,10 @@ const PreviousQuestionsDone = () => {
         >
           Previous questions done
         </Typography>
-        <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+        <div style={{ overflowY: 'auto', paddingTop: '1%' }}>
           <Table
             style={{ padding: '1%' }}
-            // dataSource={data}
+            dataSource={data()}
             columns={columns}
             pagination={pagination}
             size="small"
@@ -150,4 +184,5 @@ const PreviousQuestionsDone = () => {
     </Box>
   )
 }
+
 export default PreviousQuestionsDone

@@ -72,6 +72,10 @@ function SignupPage () {
         username,
         email,
         password
+      }).catch((error) => { 
+        console.log(error)
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
       })
       console.log('sign up success')
       const userCredentials = await signInWithEmailAndPassword(
@@ -139,7 +143,8 @@ function SignupPage () {
               onChange={(e) => setName(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={displayNameError}
-              fullWidth
+              fullWidth={true}
+
               required
             />
             <TextField
@@ -150,7 +155,7 @@ function SignupPage () {
               onChange={(e) => setUsername(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={usernameError}
-              fullWidth
+              fullWidth={true}
               required
             />
             <TextField
@@ -161,7 +166,7 @@ function SignupPage () {
               onChange={(e) => setEmail(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={emailError}
-              fullWidth
+              fullWidth={true}
               required
             />
             <TextField
@@ -172,7 +177,7 @@ function SignupPage () {
               onChange={(e) => setPassword(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={passwordError}
-              fullWidth
+              fullWidth={true}
               required
             />
             <TextField
@@ -184,10 +189,10 @@ function SignupPage () {
               sx={{ marginBottom: '1rem' }}
               error={passwordConfirmationError !== ''}
               helperText={passwordConfirmationError}
-              fullWidth
+              fullWidth={true}
               required
             />
-            <Button variant='contained' type='submit' fullWidth>
+            <Button variant='contained' type='submit' fullWidth={true}>
               <b>Sign up</b>
             </Button>
           </form>
