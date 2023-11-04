@@ -6,7 +6,7 @@ class MatchingController {
     this.io = io
   }
 
-  async handleJoinQueue (socket, collabServiceUrl) {
+  async handleJoinQueue (socket, roomServiceUrl) {
     socket.on('JoinQueue', async ({ userid, difficulty, languages }, callback) => {
       const secondAccount = this.matchingModel.checkNewLocation(userid)
       console.log(secondAccount)
@@ -39,7 +39,7 @@ class MatchingController {
           if (user2id) {
             try {
               const matchingLanguages = this.matchingModel.findMatchingLanguages(languages, user.languages)
-              const result = await axios.post(collabServiceUrl + 'createroom', { user1id, user2id, matchingLanguages })
+              const result = await axios.post(roomServiceUrl + 'createroom', { user1id, user2id, matchingLanguages, difficulty })
               this.io.to(socket.id).emit('MatchingSuccess', { matchedUserId: user1id, roomId: result.data.roomId, questionData: result.data.questionData, matchingLanguages })
               this.io.to(user1socket).emit('MatchingSuccess', { matchedUserId: user2id, roomId: result.data.roomId, questionData: result.data.questionData, matchingLanguages })
               callback()

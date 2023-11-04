@@ -44,7 +44,7 @@ jobs:
           FIREBASE_ADMIN_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_CLIENT_X509_CERT_URL }}
         run: npm run test-user
 
-      - name: Run Tests on Collab Service
+      - name: Run Tests on Room Service
         env:
           FIREBASE_ADMIN_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_ADMIN_PRIVATE_KEY_ID }}
           FIREBASE_ADMIN_PRIVATE_KEY: ${{ secrets.FIREBASE_ADMIN_PRIVATE_KEY }}
@@ -52,11 +52,11 @@ jobs:
           FIREBASE_ADMIN_CLIENT_ID: ${{ secrets.FIREBASE_ADMIN_CLIENT_ID }}
           FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL }}
           FIREBASE_ADMIN_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_CLIENT_X509_CERT_URL }}
-        run: npm run test-collab
+        run: npm run test-room
 
       - name: Run Tests on Matching Service
         run: npm run test-matching
 
-      - name: Run Tests on Websocket Server Service
-        run: npm run test-websocket
+      - name: Run Tests on Collab Service
+        run: npm run test-collab
       #   run: npm run test-ci # need to set up test-ci in package.json

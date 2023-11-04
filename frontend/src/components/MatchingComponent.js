@@ -54,6 +54,7 @@ function MatchingComponent () {
         if (roomid !== '') {
           setAlreadyInRoom(true)
           dispatch(setRoomId(roomid))
+          console.log(roomdata.questionData)
           dispatch(setMatchedUserId(roomdata.matchedUserId))
           dispatch(setQuestionData(roomdata.questionData))
           dispatch(setMatchingLanguages(roomdata.matchingLanguages))
