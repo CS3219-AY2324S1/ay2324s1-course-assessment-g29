@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux'
 import { selectLoginstatus } from './redux/UserSlice'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ErrorMessage from './components/ErrorMessage'
-import { selectShowError } from './redux/ErrorSlice'
+import SuccessMessageAlert from './components/SuccessMessage'
+import { selectShowError, selectShowSuccess } from './redux/ErrorSlice'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
@@ -15,12 +16,14 @@ import PreviousQuestionPage from './pages/PreviousQuestionPage'
 function App () {
   const loginStatus = useSelector(selectLoginstatus)
   const showErrorAlert = useSelector(selectShowError)
+  const showSuccessAlert = useSelector(selectShowSuccess)
 
   return (
     <>
       <Box display='flex' flexDirection='column' height='100vh'>
         <BrowserRouter>
           {showErrorAlert && <ErrorMessage />}
+          {showSuccessAlert && <SuccessMessageAlert />}
           <Routes>
             {loginStatus
               ? (

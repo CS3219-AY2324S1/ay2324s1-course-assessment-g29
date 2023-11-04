@@ -20,15 +20,14 @@ export default function CheckChangeQuestionDataDialog ({ socket, matchedUserId }
   const dispatch = useDispatch()
 
   const handleDisagree = () => {
-    socket.current.emit('ConfirmChangeQuestion', { agree: false, question: newQuestion })
+    socket.current.emit('ConfirmChangeQuestion', { agree: false, questionData: newQuestion })
     dispatch(setCheckChangeQuestionData(false))
     dispatch(setChangeQuestionData({}))
   }
 
   const handleAgree = () => {
-    const finalQuestion = { question: newQuestion }
-    socket.current.emit('ConfirmChangeQuestion', { agree: true, question: finalQuestion })
-    dispatch(setQuestionData(finalQuestion))
+    socket.current.emit('ConfirmChangeQuestion', { agree: true, questionData: newQuestion })
+    dispatch(setQuestionData(newQuestion))
     dispatch(setCheckChangeQuestionData(false))
     dispatch(setChangeQuestionData({}))
   }

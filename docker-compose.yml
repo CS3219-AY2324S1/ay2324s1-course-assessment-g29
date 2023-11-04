@@ -24,25 +24,25 @@ services:
       context: ./microservices/matchingService
       dockerfile: matchingService.Dockerfile
     depends_on:
-      - collabservice
+      - roomservice
     networks:
       - some-net
     ports:
       - '4000:4000' 
       
-  collabservice:
+  roomservice:
     build:
-      context: ./microservices/collabService
-      dockerfile: collabService.Dockerfile
+      context: ./microservices/roomService
+      dockerfile: roomService.Dockerfile
     networks:
       - some-net
     ports:
       - '8000:8000'
 
-  websocketserver:
+  collabservice:
     build:
-      context: ./microservices/websocketServer
-      dockerfile: websocketServer.Dockerfile
+      context: ./microservices/collabService
+      dockerfile: collabService.Dockerfile
     networks:
       - some-net
     ports:
@@ -54,7 +54,7 @@ services:
   #     dockerfile: frontend.Dockerfile
   #   depends_on:
   #     - collabservice
-  #     - websocketserver
+  #     - roomservice
   #     - matchingservice
   #     - userservice
   #   ports:

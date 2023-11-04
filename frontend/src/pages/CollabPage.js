@@ -1,5 +1,4 @@
 // TODO: check if commented out code is needed
-
 import { React, useEffect, useRef } from 'react'
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import io from 'socket.io-client'
@@ -34,7 +33,12 @@ import {
   appendMessages,
   setMessages
 } from '../redux/MatchingSlice'
-import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
+import {
+  setErrorMessage,
+  setShowError,
+  setShowSuccess,
+  setSucessMessage
+} from '../redux/ErrorSlice'
 // import Fab from '@mui/material/Fab'
 import {
   setAwaitAlertOpen,
@@ -129,19 +133,19 @@ function CollabPage() {
       dispatch(setCode(code.code))
     })
 
-    socket.current.on('CheckQuestionChange', ({ question }) => {
-      console.log(question)
-      dispatch(setChangeQuestionData(question))
+    socket.current.on('CheckQuestionChange', ({ questionData }) => {
+      console.log(questionData)
+      dispatch(setChangeQuestionData(questionData))
       dispatch(setCheckChangeQuestionData(true))
     })
 
-    socket.current.on('ConfirmChangeQuestion', ({ agree, question }) => {
+    socket.current.on('ConfirmChangeQuestion', ({ agree, questionData }) => {
       console.log('matched user has responded:')
       console.log(agree)
-      console.log(question)
+      console.log(questionData)
       if (agree) {
         dispatch(setCode('Please choose a language to begin!\n'))
-        dispatch(setQuestionData(question))
+        dispatch(setQuestionData(questionData))
         dispatch(setChangeQuestionData({}))
       } else {
         dispatch(
@@ -183,17 +187,6 @@ function CollabPage() {
     })
   }, [])
 
-  // const sendMessage = (event) => {
-  //   event.preventDefault()
-  //   const messageString = `${userid} : ${message}`
-  //   if (message) {
-  //     dispatch(appendMessages(messageString))
-  //     socket.current.emit('Message', { message: messageString }, () =>
-  //       setMessage('')
-  //     )
-  //   }
-  // }
-
   const LeaveRoom = (event) => {
     event.preventDefault()
     axios
@@ -202,9 +195,8 @@ function CollabPage() {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
-    socket.current.emit('CloseRoom')
-    axios
-      .post('http://localhost:8000/room/savehistory', {
+    socket.current.emit('CloseRoom',
+      {
         rid: roomid,
         user1id: userid,
         user2id: matchedUserid,
@@ -213,21 +205,14 @@ function CollabPage() {
         language,
         messages
       })
-      .then((response) => {
-        const message = response.data.message
-        dispatch(setRoomId(''))
-        dispatch(setMatchingLanguages([]))
-        dispatch(setMatchedUserId(''))
-        dispatch(setMessages([]))
-        dispatch(setQuestionData({}))
-        dispatch(setErrorMessage(message))
-        dispatch(setShowError(true))
-        navigate('/')
-      })
-      .catch((error) => {
-        dispatch(setErrorMessage(error.message))
-        dispatch(setShowError(true))
-      })
+    dispatch(setRoomId(''))
+    dispatch(setMatchingLanguages([]))
+    dispatch(setMatchedUserId(''))
+    dispatch(setMessages([]))
+    dispatch(setSucessMessage('Room has been closed'))
+    dispatch(setShowSuccess(true))
+    navigate('/')
+    dispatch(setQuestionData({}))
   }
 
   const denyProgrammingLanguageChange = () => {
