@@ -40,8 +40,10 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
         console.log(error.message)
       })
   };
-
-  const tagOptions = ["data structures", "recursion", "algorithms", "bit manipulation"]; // Define your tag options here
+  
+  const tagOptions = [
+    "data-tructures", "recursion", "bit-manipulation", "hash-table", "strings", "array", "algorithms", "brainteaser"
+  ];
   const complexityOptions = ["Easy", "Medium", "Hard"]; // Define your complexity options here
   const questionsID = questions.map((question) => question.id);
 
@@ -51,11 +53,6 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
         onBack={() => navigate("/admin/questions")}
         title="Creating New Question"
       />
-      
-      {/* <FloatButton
-        icon={<LeftOutlined />}
-        onClick={() => navigate("/questions")}
-      /> */}
       <Form
         style={{ padding: "2%" }}
         onFinish={(values) => {
@@ -91,32 +88,19 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
         >
           <Input placeholder="Input Description" />
         </Form.Item>
-        {/* <Form.Item
+        <Form.Item
           name="id"
           label="ID"
           rules={[
             {
               required: true,
             },
-            { whitespace: true },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (value.match(/^[0-9._-]+$/) === null) {
-                  return Promise.reject(
-                    new Error("ID only consists of numbers")
-                  );
-                }
-                if (questionsID.includes(parseInt(value, 10))) {
-                  return Promise.reject(new Error("ID already exists"));
-                }
-                return Promise.resolve();
-              },
-            }),
+            { whitespace: false },
           ]}
           hasFeedback
         >
           <Input placeholder="Input ID" />
-        </Form.Item> */}
+        </Form.Item>
         <Form.Item
           name="tags"
           label="Tags"

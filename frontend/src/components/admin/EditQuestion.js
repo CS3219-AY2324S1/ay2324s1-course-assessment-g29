@@ -19,7 +19,7 @@ const EditQuestion = () => {
   const [newId, setNewId] = useState(0);
 
   const tagOptions = [
-    "data-tructures", "recursion", "bit-manipulation", "hash-table", "strings", "array"
+    "data-tructures", "recursion", "bit-manipulation", "hash-table", "strings", "array", "algorithms", "brainteaser"
   ];
 
   useEffect(() => {

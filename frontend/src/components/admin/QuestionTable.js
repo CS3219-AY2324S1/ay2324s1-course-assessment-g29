@@ -106,7 +106,9 @@ const QuestionTable = ({ questions, setQuestions }) => {
         { text: "Easy", value: "Easy" },
         { text: "Medium", value: "Medium" },
       ],
-      onFilter: (value, record) => record.complexity.includes(value),
+      onFilter: (value, record) => {
+        return record.difficulty.includes(value)
+      },
     },
 
     {
@@ -135,9 +137,9 @@ const QuestionTable = ({ questions, setQuestions }) => {
         { text: "Hash Table", value: "hash-table" },
         { text: "Strings", value: "strings" },
         { text: "Array", value: "array" },
-        { text: "Recursion", value: "recursion" },
+        { text: "Brainteasers", value: "brainteasers" },
       ],
-      onFilter: (value, record) => record.tags.includes(value),
+      onFilter: (value, record) => record.topic.includes(value),
     },
     {
       title: "Actions",
