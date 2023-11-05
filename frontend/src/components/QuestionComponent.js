@@ -15,7 +15,6 @@ function getColourbyDifficulty(difficulty) {
 }
 
 export const QuestionComponent = (questionData) => {
-  console.log(questionData)
   const data = questionData.questionData || { description: '', displayName: '', topic: '', difficulty: '' }
   const [question, setQuestion] = useState(data.description || 'Question Description')
   const [questionNo] = useState(1) // TODO update QuestionService to support
@@ -24,8 +23,6 @@ export const QuestionComponent = (questionData) => {
   const [difficulty, setDifficulty] = useState(data.difficulty) // TODO update QuestionService to support
 
   useEffect(() => {
-    console.log(data.description)
-    setQuestion(data.description)
     setQuestionTitle(data.displayName)
     setTags(data.topic)
     setDifficulty(data.difficulty)

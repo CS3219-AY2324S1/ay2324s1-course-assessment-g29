@@ -6,8 +6,7 @@ import { QuestionComponent } from '../components/QuestionComponent'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import Navbar from '../components/Navbar'
-import { Typography, Chip } from '@mui/material'
-
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 
 const PreviousQuestionPage = () => {
   const { roomId } = useParams()
@@ -50,7 +49,7 @@ const PreviousQuestionPage = () => {
         >
           <Box style={{ width: '50%' }} justifyContent='space-between'>
             <Box>
-              {questionData && <QuestionComponent QuestionData={questionData} />}
+              {questionData && <QuestionComponent questionData={questionData} />}
             </Box>
           </Box>
           <Box

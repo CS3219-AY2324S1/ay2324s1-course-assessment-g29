@@ -109,7 +109,8 @@ const ChatComponent = ({ socket }) => {
                 <MessageList
                   referance={messageListReferance}
                   className='message-list'
-                  lockable
+                  lockable={true}
+                  downButtonBadge={true}
                   toBottomHeight='100%'
                   dataSource={messageListData(messages, userid)}
                 />

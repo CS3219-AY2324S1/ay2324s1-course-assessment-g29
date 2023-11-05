@@ -82,7 +82,7 @@ export const Editor = ({ socketRef }) => {
           flexDirection: 'column'
         }}
       >
-        <FormControl style={{ width: '50%' }}>
+        <FormControl style={{ width: '60%' }}>
           <InputLabel id='Programming language'>
             Choose programming language
           </InputLabel>

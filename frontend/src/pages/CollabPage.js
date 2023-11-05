@@ -59,6 +59,7 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
+import { setPreviousQuestions } from '../redux/UserSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -120,7 +121,7 @@ function CollabPage() {
         socket.current.off()
       }
     }
-  }, [SOCKETSERVER])
+  }, [dispatch, roomid, userid])
 
   useEffect(() => {
     socket.current.on('Message', (message) => {
@@ -185,12 +186,15 @@ function CollabPage() {
       dispatch(setErrorMessage('Peer has closed the room'))
       dispatch(setShowError(true))
     })
-  }, [])
+  }, [dispatch, matchedUserid])
 
   const LeaveRoom = (event) => {
     event.preventDefault()
     axios
       .post('http://localhost:8000/room/leaveroom', { rid: roomid })
+      .then((request) => {
+        console.log(request)
+      })
       .catch((error) => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
@@ -211,8 +215,8 @@ function CollabPage() {
     dispatch(setMessages([]))
     dispatch(setSucessMessage('Room has been closed'))
     dispatch(setShowSuccess(true))
-    navigate('/')
     dispatch(setQuestionData({}))
+    navigate('/')
   }
 
   const denyProgrammingLanguageChange = () => {
@@ -252,23 +256,24 @@ function CollabPage() {
   }
 
   return (
-    <Box display='flex' flexDirection='column' alignContent='flex-start'>
+    <Box display='flex' flexDirection='column' alignContent='flex-start' >
       <Navbar />
       <Box
-        style={{ width: '100%', height: '70%', paddingTop: '1rem' }}
         display='flex'
+        style={{ paddingTop: '1rem' }}
         justifyContent='center'
+        height= '100vh'
         padding='2rem'
       >
-        <PanelGroup direction="horizontal">
-          <Panel defaultSize={50} minSize={20}>
-            <div
+        <PanelGroup direction="horizontal" autoSaveId="example">
+          <Panel defaultSize={40} minSize={20} id="question">
+            <Box
               display='flex'
               flexDirection='row'
               justifyContent='center'
-              sx={{ p: 2, width: '80%' }}
+              sx={{ p: 2 }}
             >
-              <Box style={{ width: '50%' }} justifyContent='space-between'>
+              <Box justifyContent='center'>
                 <Box>
                   <QuestionComponent questionData={questionData} />
                   <Box marginBottom={1}>
@@ -285,14 +290,17 @@ function CollabPage() {
                   </Typography>
                 </Box>
               </Box>
-            </div>
+            </Box>
           </Panel>
           <PanelResizeHandle />
-          <Panel defaultSize={50} minSize={20}>
+          <Panel 
+          defaultSize={40} 
+          minSize={20} id='editor'>
             <div
               display='flex'
               flexDirection='column'
               flex={1}
+              height='100vh'
               alignContent='flex-end'
             >
               <Box margin={1} flex={1}>
