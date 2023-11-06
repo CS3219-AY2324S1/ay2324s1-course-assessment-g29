@@ -4,7 +4,7 @@ const Model = require('../models/model')
 // Post Method
 exports.postQuestion = async function (questionObj) {
   try {
-    const { displayName, name, description, topic, imagesArray, difficulty } = questionObj
+    const { displayName, name, description, topic, imagesArray, difficulty, id } = questionObj
     const data = new Model({
       name,
       displayName,
