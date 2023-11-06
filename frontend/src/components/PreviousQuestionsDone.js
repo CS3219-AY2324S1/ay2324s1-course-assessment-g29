@@ -28,7 +28,7 @@ const PreviousQuestionsDone = () => {
     axios
       .get(`http://localhost:3001/user/history/${userid}`)
       .then((response) => {
-        dispatch(setPreviousRooms(response.data.history))
+        console.log(response.data.history)
         let rooms = []
         response.data.history.forEach((room) => {
           rooms.push(room)
@@ -41,6 +41,9 @@ const PreviousQuestionsDone = () => {
         dispatch(setShowError(true))
       })
 
+  }, [])
+
+  useEffect(() => {
     const fetchPromises = previousRooms.map((room) => {
       return axios
         .get(`http://localhost:8000/room/getHistory/${room}`)
@@ -60,13 +63,16 @@ const PreviousQuestionsDone = () => {
     Promise.all(fetchPromises)
       .then((results) => {
         attempts = results.filter((result) => result !== null);
+
+        // Sort attempts by timestamp in descending order
+        attempts.sort((a, b) => b.attempt.timestamp - a.attempt.timestamp);
+
         dispatch(setPreviousQuestions(attempts))
       })
       .catch((error) => {
-        // Handle Promise.all errors here
         console.error(error);
       });
-  }, [])
+  }, [previousRooms])
 
   const pagination = {
     pageSize: 5,

@@ -59,7 +59,7 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
-import { setPreviousQuestions } from '../redux/UserSlice'
+import { setPreviousQuestions, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -84,6 +84,7 @@ function CollabPage() {
   const questionData = useSelector(selectQuestionData)
   const dispatch = useDispatch()
   const socket = useRef()
+  const previousRooms = useSelector(selectPreviousRooms)
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
@@ -209,6 +210,7 @@ function CollabPage() {
         language,
         messages
       })
+    dispatch(setPreviousRooms([...previousRooms, roomid]))
     dispatch(setRoomId(''))
     dispatch(setMatchingLanguages([]))
     dispatch(setMatchedUserId(''))

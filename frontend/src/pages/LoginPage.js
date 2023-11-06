@@ -78,7 +78,7 @@ function LoginPage () {
   }
 
   return (
-    <Box display='flex' flexDirection='row' height='100vh'>
+    <Box display='flex' flexDirection='row' flex={1} height="100%">
       <Box
         display='flex'
         flex={1}

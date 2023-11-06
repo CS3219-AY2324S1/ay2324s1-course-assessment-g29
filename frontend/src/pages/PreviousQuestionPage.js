@@ -36,7 +36,7 @@ const PreviousQuestionPage = () => {
     <Box display='flex' flexDirection='column' alignContent='flex-start'>
       <Navbar />
       <Box
-        style={{ width: '100%', height: '70%', paddingTop: '1rem' }}
+        style={{ height: '70%', paddingTop: '1rem' }}
         display='flex'
         justifyContent='center'
         padding='2rem'
