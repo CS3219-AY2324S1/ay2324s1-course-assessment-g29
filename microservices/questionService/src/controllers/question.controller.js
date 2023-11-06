@@ -47,6 +47,15 @@ exports.getByName = async function (name) {
   }
 }
 
+// Get by ID method
+exports.getById = async function (id) {
+  try {
+    return await Model.findOne({ id })
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
 // Get random one with difficulty
 exports.getOneByDifficulty = async function (difficulty) {
   try {
