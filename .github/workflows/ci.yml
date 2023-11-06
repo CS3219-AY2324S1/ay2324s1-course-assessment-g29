@@ -42,6 +42,9 @@ jobs:
           FIREBASE_ADMIN_CLIENT_ID: ${{ secrets.FIREBASE_ADMIN_CLIENT_ID }}
           FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL }}
           FIREBASE_ADMIN_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_ADMIN_CLIENT_X509_CERT_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PW: ${{ secrets.ADMIN_PW }}
         run: npm run test-user
 
       - name: Run Tests on Room Service
@@ -57,6 +60,12 @@ jobs:
       - name: Run Tests on Matching Service
         run: npm run test-matching
 
+      - name: Run Tests on Question Service
+        env:
+          DATABASE_URL: ${{ secrets.QUESTION_DB_URL }}
+        run: npm run test-question
+
       - name: Run Tests on Collab Service
         run: npm run test-collab
+
       #   run: npm run test-ci # need to set up test-ci in package.json
