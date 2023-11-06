@@ -1,10 +1,12 @@
 const axios = require('axios')
-const AccessToken = require('twilio').jwt.AccessToken;
-const VideoGrant = AccessToken.VideoGrant;
-const twilioAccountSid = 'ACd86ed47715e73752c93aceab57e9912c'
-const twilioApiKey = 'SKbf961ef113c506debf35fda290177c04'
-const twilioApiSecret = 'mB9NiaqjAiuh7G1YH36JVQlaSqqOg363'
-const identity = 'user';
+const AccessToken = require('twilio').jwt.AccessToken
+const VideoGrant = AccessToken.VideoGrant
+const path = require('path')
+const envPath = path.join(__dirname, '../../configs/.env')
+require('dotenv').config({ path: envPath })
+const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID
+const twilioApiKey = process.env.TWILIO_API_KEY
+const twilioApiSecret = process.env.TWILIO_API_SECRET
 
 class CollabController {
   constructor (roomModel, io) {
@@ -50,8 +52,8 @@ class CollabController {
 
         // Create Video Grant
         const videoGrant = new VideoGrant({
-          room: roomid,
-        });
+          room: roomid
+        })
 
         // Create an access token which we will sign and return to the client,
         // containing the grant we just created
@@ -59,14 +61,13 @@ class CollabController {
           twilioAccountSid,
           twilioApiKey,
           twilioApiSecret,
-          {identity: this.roomModel.socketToUserId[socket1id]}
-        );
-        token1.addGrant(videoGrant);
-
+          { identity: this.roomModel.socketToUserId[socket1id] }
+        )
+        token1.addGrant(videoGrant)
 
         const tokenString1 = token1.toJwt()
         // Serialize the token to a JWT string
-        console.log(tokenString1);
+        console.log(tokenString1)
 
         // Create an access token which we will sign and return to the client,
         // containing the grant we just created
@@ -74,14 +75,13 @@ class CollabController {
           twilioAccountSid,
           twilioApiKey,
           twilioApiSecret,
-          {identity: userid}
-        );
-        token2.addGrant(videoGrant);
-
+          { identity: userid }
+        )
+        token2.addGrant(videoGrant)
 
         const tokenString2 = token2.toJwt()
         // Serialize the token to a JWT string
-        console.log(tokenString2);
+        console.log(tokenString2)
 
         this.io.to(socket1id).emit('MatchSuccess', {
           matchedUserId: userid,
