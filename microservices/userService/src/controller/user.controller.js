@@ -4,8 +4,10 @@ const admin = require('firebase-admin')
 const db = admin.firestore()
 const userCollection = db.collection('users')
 const userHistoryCollection = db.collection('useridToRoom')
+const adminCollection = db.collection('admin')
 
-const supportedLanguages = require('../utils/supportedLanguages')
+const UserRoles = require('../utils/userRoles')
+const SupportedLanguages = require('../utils/supportedLanguages')
 
 // User registration route
 exports.registerUser = async function (userObj) {
@@ -20,7 +22,7 @@ exports.registerUser = async function (userObj) {
     })
     const docRef = userCollection.doc(username)
     await docRef.set({
-      language: [supportedLanguages[0]]
+      language: [SupportedLanguages[0]]
     })
     return userRecord
   } catch (error) {
@@ -56,7 +58,7 @@ exports.updateLanguage = async function (userObj) {
   try {
     const { uid, languages } = userObj
 
-    if (!languages.every(val => supportedLanguages.includes(val))) {
+    if (!languages.every(val => SupportedLanguages.includes(val))) {
       throw new Error('Languages chosen are not supported.')
     }
 
@@ -125,6 +127,19 @@ exports.deregisterUser = async function (uid) {
     await userCollection.doc(uid).delete()
     await userHistoryCollection.doc(uid).delete()
     return 'OK'
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+exports.generateJwt = async function (uid, generateToken) {
+  try {
+    const docRef = adminCollection.doc(uid)
+    const doc = await docRef.get()
+    if (doc.exists) {
+      return generateToken(UserRoles.admin)
+    }
+    return generateToken(UserRoles.user)
   } catch (error) {
     return Promise.reject(error)
   }

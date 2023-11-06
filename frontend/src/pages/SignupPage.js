@@ -86,7 +86,11 @@ function SignupPage () {
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
       const idToken = await userCredentials.user.getIdToken()
-      dispatch(setIdToken(idToken))
+      const tokenResult = await axios.post('http://localhost:3001/user/token', {
+        uid: userid,
+        idToken
+      })
+      dispatch(setIdToken(tokenResult.data.token))
       console.log('Signup successful')
       console.log('idToken', idToken)
       dispatch(setLoginStatus(true))

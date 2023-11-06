@@ -1,3 +1,3 @@
-const supportedLanguages = ['Python', 'Java', 'C', 'C++', 'C#', 'JavaScript']
+const SupportedLanguages = ['Python', 'Java', 'C', 'C++', 'C#', 'JavaScript']
 
-module.exports = supportedLanguages
+module.exports = SupportedLanguages
