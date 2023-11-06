@@ -3,4 +3,4 @@ WORKDIR /app
 COPY . .
 RUN yarn install --production
 EXPOSE 3002
-CMD ["node", "index.js"]
+CMD ["node", "server.js"]

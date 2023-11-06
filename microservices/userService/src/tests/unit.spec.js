@@ -8,6 +8,9 @@ const userController = require('../controller/user.controller')
 const admins = require('firebase-admin')
 const adminAuth = admins.auth()
 const firestore = admins.firestore()
+const TokenManager = require('../utils/tokenManager')
+const tokenManager = new TokenManager(admins)
+const jwt = require('jsonwebtoken')
 
 // Test user
 const testUser = {
@@ -18,6 +21,7 @@ const testUser = {
   displayName: 'John Doe',
   newDisplayName: 'John Smith'
 }
+const idToken = 'eyasdsadas'
 const defaultLanguage = ['Python']
 const newLanguages = ['Java', 'C++']
 
@@ -125,6 +129,22 @@ describe('Unit Test for /user', () => {
       await userController.updateLanguage({ uid, languages: newLanguages })
       const languageData = await userController.getLanguage(uid)
       expect(languageData).to.deep.equal(newLanguages)
+    })
+  })
+
+  describe('Generate token on /generateJwt', () => {
+    it('User token should be generated correctly', async () => {
+      const { uid } = testUser
+      const jwtToken = await userController.generateJwt(uid, (role) => tokenManager.generateToken(idToken, role))
+      const decoded = jwt.verify(jwtToken, tokenManager.secretKey)
+      expect(decoded.role).to.equal('user')
+    })
+
+    it('Admin token should be generated correctly', async () => {
+      const uid = 'admin'
+      const jwtToken = await userController.generateJwt(uid, (role) => tokenManager.generateToken(idToken, role))
+      const decoded = jwt.verify(jwtToken, tokenManager.secretKey)
+      expect(decoded.role).to.equal('admin')
     })
   })
 
