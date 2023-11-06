@@ -1,17 +1,27 @@
 import { Button } from 'antd'
 import React from 'react'
+import axios from 'axios'
 
-const DeleteQuestionButton = ({id, setQuestions, questions}) => {
+const DeleteQuestionButton = ({ name, setQuestions, questions, handleDelete }) => {
+  const deleteQuestion = async (qid) => {
+    console.log(qid)
+    await axios
+      .delete(`http://localhost:3002/question/delete/${qid}`)
+      .then((response) => {
+        // TODO: Add success message
+        console.log('Deleted successfully')
+        handleDelete()
+      })
+      .catch((error) => {
+        console.log(error.message)
+      })
+  }
 
-    const deleteQuestion = (name) => {
-        
-    }
-
-    return (
-        <Button type='primary' onClick={() => deleteQuestion(id)}>
-            Delete
-        </Button>
-    )
+  return (
+    <Button type='primary' onClick={() => deleteQuestion(name)}>
+      Delete
+    </Button>
+  )
 }
 
 export default DeleteQuestionButton

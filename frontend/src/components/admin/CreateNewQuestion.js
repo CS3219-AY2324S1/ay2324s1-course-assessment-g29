@@ -1,15 +1,13 @@
-import React, { useEffect, dispatch } from "react";
-import { LeftOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { Form, Button, Input } from "antd";
-import { Checkbox, Radio, FloatButton } from "antd";
-import { PageHeader } from '@ant-design/pro-layout';  
-import axios from "axios";
-import { setErrorMessage, setShowError } from "../../redux/ErrorSlice";
-
+import React, { useEffect, dispatch } from 'react'
+import { LeftOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
+import { Form, Button, Input, Checkbox, Radio, FloatButton } from 'antd'
+import { PageHeader } from '@ant-design/pro-layout'
+import axios from 'axios'
+import { setErrorMessage, setShowError } from '../../redux/ErrorSlice'
 
 const CreateNewQuestion = ({ questions, setQuestions }) => {
-  const navigate = useNavigate();   
+  const navigate = useNavigate()
 
   useEffect(() => {
     axios
@@ -23,116 +21,119 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
       })
   }, [setQuestions])
 
-  const addQuestion = (values) => {
+  const addQuestion = async (values) => {
     const QuestionObject = {
-      name: values.title.replace(/\s+/g, '-'),
+      name: values.title.replace(/\s+/g, '-').toLowerCase(),
       displayName: values.title,
       description: values.description,
-      difficulty: values.difficulty,
-      topic: values.topic,
-    };
+      difficulty: values.complexity,
+      topic: values.tags
+    }
+    console.log(QuestionObject)
 
-    axios
+    await axios
       .post('http://localhost:3002/question/post', QuestionObject)
       .then((response) => {
+        navigate('/admin/questions')
+        // TODO: Add success message
       })
       .catch((error) => {
         console.log(error.message)
       })
-  };
-  
+  }
+
   const tagOptions = [
-    "data-tructures", "recursion", "bit-manipulation", "hash-table", "strings", "array", "algorithms", "brainteaser"
-  ];
-  const complexityOptions = ["Easy", "Medium", "Hard"]; // Define your complexity options here
-  const questionsID = questions.map((question) => question.id);
+    'data-structures', 'recursion', 'bit-manipulation', 'hash-table', 'strings', 'array', 'algorithms', 'brainteaser'
+  ]
+  const complexityOptions = ['Easy', 'Medium', 'Hard'] // Define your complexity options here
+  const questionsID = questions.map((question) => question.id)
 
   return (
     <div>
       <PageHeader
-        onBack={() => navigate("/admin/questions")}
-        title="Creating New Question"
+        onBack={() => navigate('/admin/questions')}
+        title='Creating New Question'
       />
       <Form
-        style={{ padding: "2%" }}
+        style={{ padding: '2%' }}
         onFinish={(values) => {
-          addQuestion(values);
-          navigate("/questions");
+          addQuestion(values)
+          navigate('/questions')
         }}
-        autoComplete="off"
+        autoComplete='off'
         labelCol={{ span: 3 }}
       >
         <Form.Item
-          name="title"
-          label="Title"
+          name='title'
+          label='Title'
           rules={[
             {
-              required: true,
+              required: true
             },
-            { whitespace: true },
+            { whitespace: true }
           ]}
           hasFeedback
         >
-          <Input placeholder="Input Title" />
+          <Input placeholder='Input Title' />
         </Form.Item>
         <Form.Item
-          name="description"
-          label="Description"
+          name='description'
+          label='Description'
           rules={[
             {
-              required: true,
+              required: true
             },
-            { whitespace: true },
+            { whitespace: true }
           ]}
           hasFeedback
         >
-          <Input placeholder="Input Description" />
+          <Input placeholder='Input Description' />
         </Form.Item>
         <Form.Item
-          name="id"
-          label="ID"
+          name='id'
+          label='ID'
           rules={[
             {
-              required: true,
+              required: true
             },
-            { whitespace: false },
+            { whitespace: false }
           ]}
           hasFeedback
         >
-          <Input placeholder="Input ID" />
+          <Input placeholder='Input ID' />
         </Form.Item>
         <Form.Item
-          name="tags"
-          label="Tags"
+          name='tags'
+          label='Tags'
           rules={[
             {
               required: true,
-              message: "Please select at least one tag",
-            },
+              message: 'Please select at least one tag'
+            }
           ]}
         >
           <Checkbox.Group options={tagOptions} />
         </Form.Item>
         <Form.Item
-          name="complexity"
-          label="Complexity"
+          name='complexity'
+          label='Complexity'
           rules={[
             {
               required: true,
-              message: "Please select the complexity",
-            },
+              message: 'Please select the complexity'
+            }
           ]}
         >
           <Radio.Group options={complexityOptions} />
         </Form.Item>
         <Form.Item>
-          <Button block type="primary" htmlType="submit">
+          <Button block type='primary' htmlType='submit'>
             Add New
           </Button>
         </Form.Item>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default CreateNewQuestion;
+export default CreateNewQuestion

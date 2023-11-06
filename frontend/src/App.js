@@ -36,7 +36,7 @@ function App () {
                     element={<CodeEditorPage />}
                   />
                   <Route path='*' element={<Navigate to='/home' />} />
-                  <Route path='/admin/*' element={<AdminApp />} /> 
+                  <Route path='/admin/*' element={<AdminApp />} />
                 </>
                 )
               : (
