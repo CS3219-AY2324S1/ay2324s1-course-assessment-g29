@@ -57,6 +57,12 @@ jobs:
       - name: Run Tests on Matching Service
         run: npm run test-matching
 
+      - name: Run Tests on Question Service
+        env:
+          DATABASE_URL: ${{ secrets.QUESTION_DB_URL }}
+        run: npm run test-question
+
       - name: Run Tests on Collab Service
         run: npm run test-collab
+
       #   run: npm run test-ci # need to set up test-ci in package.json
