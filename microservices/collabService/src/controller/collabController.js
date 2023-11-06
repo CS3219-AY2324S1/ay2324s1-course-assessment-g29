@@ -46,14 +46,16 @@ class CollabController {
           matchedUserId: userid,
           messages: this.roomModel.roomIdToMessages[roomid],
           code: this.roomModel.roomIdToCode[roomid],
-          language: this.roomModel.roomIdToLanguage[roomid]
+          language: this.roomModel.roomIdToLanguage[roomid],
+          isInitiator: false
         })
 
         this.io.to(socket.id).emit('MatchSuccess', {
           matchedUserId: this.roomModel.socketToUserId[socket1id],
           messages: this.roomModel.roomIdToMessages[roomid],
           code: this.roomModel.roomIdToCode[roomid],
-          language: this.roomModel.roomIdToLanguage[roomid]
+          language: this.roomModel.roomIdToLanguage[roomid],
+          isInitiator: true
         })
 
         console.log(`Match Success between ${userid} and ${this.roomModel.socketToUserId[socket1id]}`)

@@ -1,103 +1,95 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import Peer from 'simple-peer';
-import io from 'socket.io-client';
-import Draggable from 'react-draggable';
-import { selectRoomid } from '../redux/MatchingSlice';
-import { Button } from '@mui/material';
-import { Typography } from '@mui/material';
+import React, { useEffect, useRef } from "react";
+import { Peer } from "peerjs";
+import Draggable from 'react-draggable'
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsInitiator, selectMatchedUserid, setIsInitiator } from "../redux/MatchingSlice";
+import { selectUserid } from "../redux/UserSlice";
 
-const connectionOptions = {
-    'force new connection': true,
-    reconnectionAttempts: 'Infinity',
-    timeout: 10000,
-    transports: ['websocket']
-  }
+function Video() {
+  const dispatch = useDispatch()
+  const isInitiator = useSelector(selectIsInitiator)
+  const userId = useSelector(selectUserid)
+  const matchedUserid = useSelector(selectMatchedUserid)
+  const peer = useRef(null)
+  const localVideo = useRef(null)
+  const remoteVideo = useRef(null)
 
-export default function VideoChat() {
-    const myStream = useRef();
-    const peerStream = useRef();
-    const peer = useRef();
-    const [connected, setConnected] = useState(false);
-    const socketRef = useRef();
-    const roomId = useSelector(selectRoomid)
+  useEffect(() => {
+    if (isInitiator !== 'awaiting') {
+      peer.current = new Peer(userId, {
+        host: "localhost",
+        port: 3003,
+        path: "/peerjs",
+      });
+      console.log(isInitiator)
+      if (isInitiator) {
+        const conn = peer.current.connect(matchedUserid);
+        conn.on('open', () => {
+          conn.send('handshake')
+        })
+        navigator.mediaDevices.getUserMedia(
+          { video: true, audio: true },
+          (stream) => {
+            localVideo.srcObject = stream
+            const call = peer.current.call(matchedUserid, stream);
+            call.on("stream", (remoteStream) => {
+              console.log('Stream received success')
+              remoteVideo.srcObject = remoteStream
+            })
+          },
+          (err) => {
+            console.error("Failed to get local stream", err);
+          },
+        )
+      } else {
+        peer.current.on('connection', (conn) => {
+          conn.on('handshake', (data) => {
+            console.log(data)
+          })
+          conn.on('open', () => {
+            conn.send('hello!');
+          })
+        })
 
-    useEffect(() => {
-        socketRef.current = io('http://localhost:2000', connectionOptions);
-        socketRef.current.emit('JoinVideoRoom', { roomId });
-        socketRef.current.on('VideoSignal', data => {
-            startPeer(true, data);
-        });
-        socketRef.current.on('VideoReturnSignal', (data) => {
-            peer.current.signal(data);
-        });
-    }, []);
+        peer.current.on("call", (call) => {
+          navigator.mediaDevices.getUserMedia(
+            { video: true, audio: true },
+            (stream) => {
+              localVideo.srcObject = stream
+              console.log('Stream received success')
+              call.answer(stream);
+              call.on("stream", (remoteStream) => {
+                remoteVideo.srcObject = remoteStream
+              })
+            },
+            (err) => {
+              console.error("Failed to get local stream", err);
+            },
+          );
+        })
+      }
+    }
 
-    const startMyVideo = async () => {
-        try {
-            myStream.current = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            socketRef.current.emit('VideoInitiate', { roomId });
-        } catch (error) {
-            console.error("Error accessing media devices.", error);
-        }
-    };    
-    
-    const startPeer = (initiator, signal) => {
-        peer.current = new Peer({
-            initiator,
-            trickle: false,
-            stream: myStream.current,
-        });
+    // disconnect from socket when component unmounts
+    return () => {
+      if (peer.current) {
+        peer.current.destroy();
+        dispatch(setIsInitiator('awaiting'))
+        
+      }
+    }
+  }, [isInitiator])
+  return (
+    <>
+    {isInitiator !== 'awaiting' && (
+      <>
+        {localVideo && <video ref={localVideo} muted={true}/>}
+        {remoteVideo && <video ref={remoteVideo}/>}
+      </>
+    )}
 
-        peer.current.on('signal', (data) => {
-            if (initiator) {
-                socketRef.current.emit('VideoSignal', data, { roomId });
-            } else {
-                socketRef.current.emit('VideoReturnSignal', data, { roomId });
-            }
-        });
-
-        peer.current.on('stream', (stream) => {
-            peerStream.current = stream;
-            setConnected(true);
-        });
-
-        if (!initiator) {
-            peer.current.signal(signal);
-        }
-    };
-
-    const stopVideo = () => {
-        myStream.current.getTracks().forEach(track => track.stop());
-        myStream.current = null;
-        if (peer.current) {
-            peer.current.destroy();
-            peer.current = null;
-            setConnected(false);
-        }
-        if (socketRef.current) {
-            socketRef.current.disconnect();
-        }
-    };
-
-    return (
-        <div>
-            {(connected || myStream.current) && (
-                <>
-                    <Draggable>
-                        <Typography>
-                            Hello Test
-                        </Typography>
-                        <video playsInline muted ref={video => video && (video.srcObject = myStream.current)} autoPlay />
-                        <video playsInline ref={video => video && (video.srcObject = peerStream.current)} autoPlay />
-                    </Draggable>
-                </>
-            )}
-            {myStream.current ? (
-                <Button onClick={stopVideo}>Stop My Video</Button>
-            ) : (
-                <Button onClick={startMyVideo}>Start My Video</Button>
-            )}
-        </div>
-    );
+    </>
+  );
 }
+
+export default Video;

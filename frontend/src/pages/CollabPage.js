@@ -30,7 +30,8 @@ import {
   setMatchedUserId,
   selectMessages,
   appendMessages,
-  setMessages
+  setMessages,
+  setIsInitiator
 } from '../redux/MatchingSlice'
 import {
   setErrorMessage,
@@ -100,7 +101,7 @@ function CollabPage () {
 
     socket.current.on(
       'MatchSuccess',
-      ({ matchedUserId, messages, code, language }) => {
+      ({ matchedUserId, messages, code, language, isInitiator }) => {
         console.log(matchedUserId)
         console.log(messages)
         console.log(code)
@@ -109,6 +110,7 @@ function CollabPage () {
         dispatch(setMessages(messages))
         dispatch(setCode(code))
         dispatch(setCodeEditorLanguage(language))
+        dispatch(setIsInitiator(isInitiator))
       }
     )
 

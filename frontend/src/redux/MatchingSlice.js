@@ -3,8 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const matchingSlice = createSlice({
   name: 'match',
   initialState: {
-    startVideoChat: false,
-    matchedUserStartVideoChat: false,
+    isInitiator: 'awaiting',
     awaitingMatching: false,
     difficulty: '',
     roomid: '',
@@ -14,11 +13,8 @@ export const matchingSlice = createSlice({
     questionData: {}
   },
   reducers: {
-    setStartVideoChat: (state, action) => {
-      state.startVideoChat = action.payload
-    },
-    setMatchedUserStartVideoChat: (state, action) => {
-      state.matchedUserStartVideoChat = action.payload
+    setIsInitiator: (state, action) => {
+      state.isInitiator = action.payload
     },
     setAwaitingMatching: (state, action) => {
       state.awaitingMatching = action.payload
@@ -48,11 +44,9 @@ export const matchingSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setStartVideoChat, setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setCodeEditorLanguage, setMessages, appendMessages } = matchingSlice.actions
+export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setIsInitiator } = matchingSlice.actions
 
-export const selectMatchedUserStartVideoChat = (state) => state.match.matchedUserStartVideoChat
-
-export const selectStartVideoChat = (state) => state.match.startVideoChat
+export const selectIsInitiator = (state) => state.match.isInitiator
 
 export const selectRoomid = (state) => state.match.roomid
 
