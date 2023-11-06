@@ -6,18 +6,17 @@ import { useSelector } from 'react-redux'
 import {
   selectPreviousQuestions
 } from '../redux/UserSlice'
-import { useEffect } from 'react'
 
 const MetricComponent = () => {
   const previousQuestions = useSelector(selectPreviousQuestions)
 
-  const hasQuestionDone = () => {
-    if (previousQuestions === undefined) {
-      return false
-    } else {
-      return true
-    }
-  }
+  // const hasQuestionDone = () => {
+  //   if (previousQuestions === undefined) {
+  //     return false
+  //   } else {
+  //     return true
+  //   }
+  // }
 
   const getEasyQuestion = () => {
     if (previousQuestions === undefined) {

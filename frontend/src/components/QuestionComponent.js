@@ -26,6 +26,7 @@ export const QuestionComponent = (questionData) => {
     setQuestionTitle(data.displayName)
     setTags(data.topic)
     setDifficulty(data.difficulty)
+    setQuestion(data.description)
   }, [data])
 
   return (

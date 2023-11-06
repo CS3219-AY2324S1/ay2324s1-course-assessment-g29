@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import CodeMirror from '@uiw/react-codemirror'
-import { EditorView } from '@codemirror/view'
-import { EditorState } from '@codemirror/state'
 import { materialLightInit } from '@uiw/codemirror-theme-material'
 import { python } from '@codemirror/lang-python'
 import { java } from '@codemirror/lang-java'

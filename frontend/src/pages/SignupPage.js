@@ -148,7 +148,6 @@ function SignupPage () {
               sx={{ marginBottom: '1rem' }}
               // error={displayNameError}
               fullWidth
-
               required
             />
             <TextField

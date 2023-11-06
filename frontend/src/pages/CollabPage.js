@@ -17,7 +17,7 @@ import SendIcon from '@mui/icons-material/Send'
 // import TextField from '@mui/material/TextField'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { Typography } from '@mui/material'
-import { selectUserid, setPreviousQuestions, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
+import { selectUserid, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
 import Navbar from '../components/Navbar'
 // import chatComponent from '../components/ChatComponent'
 import {

@@ -5,7 +5,6 @@ import { QuestionComponent } from '../components/QuestionComponent'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import Navbar from '../components/Navbar'
-import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 
 const PreviousQuestionPage = () => {
   const { roomId } = useParams()
