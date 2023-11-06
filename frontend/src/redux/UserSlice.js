@@ -31,13 +31,13 @@ export const userSlice = createSlice({
     },
     setIdToken: (state, action) => {
       state.idToken = action.payload
-    }, 
-    setPreviousRooms: (state, action) => {  
+    },
+    setPreviousRooms: (state, action) => {
       state.previousRooms = action.payload
     },
     setChangeDeactivateAccountAlert: (state, action) => {
       state.changeDeactivateAccountAlert = action.payload
-    }, 
+    },
     setPreviousQuestions: (state, action) => {
       state.previousQuestions = action.payload
     }

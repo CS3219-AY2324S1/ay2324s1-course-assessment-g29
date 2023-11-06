@@ -72,7 +72,7 @@ function SignupPage () {
         username,
         email,
         password
-      }).catch((error) => { 
+      }).catch((error) => {
         console.log(error)
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
@@ -147,7 +147,7 @@ function SignupPage () {
               onChange={(e) => setName(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={displayNameError}
-              fullWidth={true}
+              fullWidth
 
               required
             />
@@ -159,7 +159,7 @@ function SignupPage () {
               onChange={(e) => setUsername(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={usernameError}
-              fullWidth={true}
+              fullWidth
               required
             />
             <TextField
@@ -170,7 +170,7 @@ function SignupPage () {
               onChange={(e) => setEmail(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={emailError}
-              fullWidth={true}
+              fullWidth
               required
             />
             <TextField
@@ -181,7 +181,7 @@ function SignupPage () {
               onChange={(e) => setPassword(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               // error={passwordError}
-              fullWidth={true}
+              fullWidth
               required
             />
             <TextField
@@ -193,10 +193,10 @@ function SignupPage () {
               sx={{ marginBottom: '1rem' }}
               error={passwordConfirmationError !== ''}
               helperText={passwordConfirmationError}
-              fullWidth={true}
+              fullWidth
               required
             />
-            <Button variant='contained' type='submit' fullWidth={true}>
+            <Button variant='contained' type='submit' fullWidth>
               <b>Sign up</b>
             </Button>
           </form>

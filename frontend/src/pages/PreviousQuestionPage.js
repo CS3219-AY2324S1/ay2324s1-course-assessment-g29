@@ -1,5 +1,4 @@
-import { React } from 'react'
-import { useState, useEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import PreviousQuestionEditor from '../components/PreviousQuestionEditor'
 import { Box } from '@mui/system'
 import { QuestionComponent } from '../components/QuestionComponent'
@@ -12,25 +11,25 @@ const PreviousQuestionPage = () => {
   const { roomId } = useParams()
   console.log('room ID: ' + roomId)
 
-  const [questionData, setQuestionData] = useState(null);
-  const [programmingLanguage, setProgrammingLanguage] = useState('');
-  const [code, setCode] = useState('');
+  const [questionData, setQuestionData] = useState(null)
+  const [programmingLanguage, setProgrammingLanguage] = useState('')
+  const [code, setCode] = useState('')
 
   // Define an asynchronous function to fetch question data
   const getQuestionData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/room/getHistory/${roomId}`);
-      setQuestionData(response.data.roomInfo.questionData);
-      setProgrammingLanguage(response.data.roomInfo.language);
+      const response = await axios.get(`http://localhost:8000/room/getHistory/${roomId}`)
+      setQuestionData(response.data.roomInfo.questionData)
+      setProgrammingLanguage(response.data.roomInfo.language)
       setCode(response.data.roomInfo.code)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
   useEffect(() => {
-    getQuestionData();
-  }, [roomId]); // Re-run when roomId changes
+    getQuestionData()
+  }, [roomId]) // Re-run when roomId changes
 
   return (
     <Box display='flex' flexDirection='column' alignContent='flex-start'>
@@ -69,4 +68,4 @@ const PreviousQuestionPage = () => {
   )
 }
 
-export default PreviousQuestionPage; 
+export default PreviousQuestionPage

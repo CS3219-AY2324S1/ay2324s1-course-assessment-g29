@@ -144,7 +144,7 @@ function MatchingComponent () {
                 </Typography>
               </Box>
               <Box flex={1}>
-                <Button variant='contained' onClick={joinRoom} fullWidth={true}>
+                <Button variant='contained' onClick={joinRoom} fullWidth>
                   Join Room
                 </Button>
               </Box>
@@ -175,7 +175,7 @@ function MatchingComponent () {
                   )
                 : (
                   <Box flex={1} justifyContent='center' alignItems='center'>
-                    <FormControl fullWidth={true}>
+                    <FormControl fullWidth>
                       <RadioGroup
                         name='difficulty'
                         value={difficulty}
@@ -201,7 +201,7 @@ function MatchingComponent () {
                       </RadioGroup>
                     </FormControl>
                     <Box flex={1}>
-                      <Button variant='contained' onClick={joinQueue} fullWidth={true}>
+                      <Button variant='contained' onClick={joinQueue} fullWidth>
                         Start Match
                       </Button>
                     </Box>

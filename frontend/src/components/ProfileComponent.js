@@ -86,7 +86,7 @@ function Profile () {
 
   return (
     <Box component='span' sx={{ p: 2 }} flex={1}>
-      <Card flex={1} variant='outlined' sx={{ p: 2 }} >
+      <Card flex={1} variant='outlined' sx={{ p: 2 }}>
         <Box display='flex' flexDirection='row' justifyContent='space-between' flex={1}>
           <Box flex={1}>
             <Typography
@@ -129,16 +129,16 @@ function Profile () {
               flex={1}
             >
               Preferred Languages:
-              
+
             </Typography>
-            <Stack display="flex" direction='row' spacing={1} flex={1}>
-                {preferredLanguages &&
+            <Stack display='flex' direction='row' spacing={1} flex={1}>
+              {preferredLanguages &&
                   preferredLanguages.map((language, index) => {
                     return (
                       <Chip label={language} key={language} paddingLeft={0.5} />
                     )
                   })}
-              </Stack>
+            </Stack>
             <Link
               onClick={() => setIsLanguageChangeDialogOpen(true)}
               underline='hover'

@@ -6,13 +6,13 @@ const LoginPageBanner = () => {
       display='flex'
       flex={1}
       style={{
-        background: 'linear-gradient(#1976d2, #8dc3f7)',
+        background: 'linear-gradient(#1976d2, #8dc3f7)'
       }}
     >
       <Box
         display='flex'
         flex={1}
-        flexDirection="column"
+        flexDirection='column'
         style={{
           paddingLeft: '25%',
           paddingTop: '20%',

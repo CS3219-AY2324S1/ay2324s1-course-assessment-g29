@@ -78,7 +78,7 @@ function LoginPage () {
   }
 
   return (
-    <Box display='flex' flexDirection='row' flex={1} height="100%">
+    <Box display='flex' flexDirection='row' flex={1} height='100%'>
       <Box
         display='flex'
         flex={1}
@@ -108,7 +108,7 @@ function LoginPage () {
               onChange={(e) => setEmail(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               autoFocus
-              fullWidth={true}
+              fullWidth
             />
             <TextField
               label='Password'
@@ -118,9 +118,9 @@ function LoginPage () {
               onChange={(e) => setPassword(e.target.value)}
               sx={{ marginBottom: '1rem' }}
               error={LoginError}
-              fullWidth={true}
+              fullWidth
             />
-            <Button variant='contained' type='submit' fullWidth={true}>
+            <Button variant='contained' type='submit' fullWidth>
               <b>Login</b>
             </Button>
           </form>

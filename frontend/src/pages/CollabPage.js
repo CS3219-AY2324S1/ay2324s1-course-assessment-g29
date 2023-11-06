@@ -17,7 +17,7 @@ import SendIcon from '@mui/icons-material/Send'
 // import TextField from '@mui/material/TextField'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { Typography } from '@mui/material'
-import { selectUserid } from '../redux/UserSlice'
+import { selectUserid, setPreviousQuestions, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
 import Navbar from '../components/Navbar'
 // import chatComponent from '../components/ChatComponent'
 import {
@@ -59,7 +59,6 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
-import { setPreviousQuestions, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -70,7 +69,7 @@ const connectionOptions = {
   transports: ['websocket']
 }
 
-function CollabPage() {
+function CollabPage () {
   // const [message, setMessage] = useState('')
   const messages = useSelector(selectMessages)
   const navigate = useNavigate()
@@ -258,17 +257,17 @@ function CollabPage() {
   }
 
   return (
-    <Box display='flex' flexDirection='column' alignContent='flex-start' >
+    <Box display='flex' flexDirection='column' alignContent='flex-start'>
       <Navbar />
       <Box
         display='flex'
         style={{ paddingTop: '1rem' }}
         justifyContent='center'
-        height= '100vh'
+        height='100vh'
         padding='2rem'
       >
-        <PanelGroup direction="horizontal" autoSaveId="example">
-          <Panel defaultSize={40} minSize={20} id="question">
+        <PanelGroup direction='horizontal' autoSaveId='example'>
+          <Panel defaultSize={40} minSize={20} id='question'>
             <Box
               display='flex'
               flexDirection='row'
@@ -295,9 +294,10 @@ function CollabPage() {
             </Box>
           </Panel>
           <PanelResizeHandle />
-          <Panel 
-          defaultSize={40} 
-          minSize={20} id='editor'>
+          <Panel
+            defaultSize={40}
+            minSize={20} id='editor'
+          >
             <div
               display='flex'
               flexDirection='column'
@@ -333,7 +333,7 @@ function CollabPage() {
             </div>
           </Panel>
         </PanelGroup>
-      </Box >
+      </Box>
       <ProgrammingLanguageDialog
         matchedUserId={matchedUserid}
         language={newProgrammingLanguage}
@@ -344,7 +344,7 @@ function CollabPage() {
       <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
-    </Box >
+    </Box>
   )
 }
 

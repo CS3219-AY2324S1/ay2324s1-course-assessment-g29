@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Box } from '@mui/material'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import { Table, Input } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import {
@@ -29,7 +29,7 @@ const PreviousQuestionsDone = () => {
       .get(`http://localhost:3001/user/history/${userid}`)
       .then((response) => {
         console.log(response.data.history)
-        let rooms = []
+        const rooms = []
         response.data.history.forEach((room) => {
           rooms.push(room)
         })
@@ -40,7 +40,6 @@ const PreviousQuestionsDone = () => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
-
   }, [])
 
   useEffect(() => {
@@ -51,27 +50,27 @@ const PreviousQuestionsDone = () => {
           return {
             roomId: room,
             attempt: response.data.roomInfo
-          };
+          }
         })
         .catch((error) => {
-          dispatch(setErrorMessage(error.message));
-          dispatch(setShowError(true));
-        });
-    });
+          dispatch(setErrorMessage(error.message))
+          dispatch(setShowError(true))
+        })
+    })
 
     let attempts = []
     Promise.all(fetchPromises)
       .then((results) => {
-        attempts = results.filter((result) => result !== null);
+        attempts = results.filter((result) => result !== null)
 
         // Sort attempts by timestamp in descending order
-        attempts.sort((a, b) => b.attempt.timestamp - a.attempt.timestamp);
+        attempts.sort((a, b) => b.attempt.timestamp - a.attempt.timestamp)
 
         dispatch(setPreviousQuestions(attempts))
       })
       .catch((error) => {
-        console.error(error);
-      });
+        console.error(error)
+      })
   }, [previousRooms])
 
   const pagination = {
@@ -88,17 +87,17 @@ const PreviousQuestionsDone = () => {
     result = previousQuestions
       .filter(attemptData => attemptData && attemptData.attempt)
       .map((attemptData) => {
-      return (
-        {
-          roomId: attemptData.roomId,
-          title: attemptData.attempt.questionData.displayName,
-          complexity: attemptData.attempt.questionData.difficulty,
-          timestamp: attemptData.attempt.timestamp,
-          question: attemptData.attempt.questionData,
-          key: uuidv4()
-        }
-      )
-    })
+        return (
+          {
+            roomId: attemptData.roomId,
+            title: attemptData.attempt.questionData.displayName,
+            complexity: attemptData.attempt.questionData.difficulty,
+            timestamp: attemptData.attempt.timestamp,
+            question: attemptData.attempt.questionData,
+            key: uuidv4()
+          }
+        )
+      })
     return result
   }
 
@@ -138,7 +137,7 @@ const PreviousQuestionsDone = () => {
       },
       render: (text, record) => (
         <Link to={`/previousAttempt/${record.roomId}`}>{text}</Link>
-      ),
+      )
     },
     {
       title: 'Complexity',
@@ -160,19 +159,19 @@ const PreviousQuestionsDone = () => {
       sorter: (a, b) => b.timestamp - a.timestamp,
       render: (text, record) => {
         // Calculate the time difference in milliseconds
-        const timeDifference = Date.now() - record.timestamp;
+        const timeDifference = Date.now() - record.timestamp
         // Format the time difference as 'X hours ago' or 'X days ago'
         const formattedTime =
           timeDifference < 24 * 60 * 60 * 1000
             ? formatDistanceToNow(record.timestamp, { addSuffix: true })
-            : `on ${new Date(record.timestamp).toLocaleDateString()}`;
-        return <span>{formattedTime}</span>;
+            : `on ${new Date(record.timestamp).toLocaleDateString()}`
+        return <span>{formattedTime}</span>
       }
     }
   ]
   return (
     <Box sx={{ p: 2 }}>
-      <Card flex={1} variant='outlined' sx={{ p: 2 }} >
+      <Card flex={1} variant='outlined' sx={{ p: 2 }}>
         <Typography
           variant='body'
           marginBottom='3rem'
@@ -186,8 +185,9 @@ const PreviousQuestionsDone = () => {
             dataSource={data()}
             columns={columns}
             pagination={pagination}
-            size="small"
-          /></div>
+            size='small'
+          />
+        </div>
       </Card>
     </Box>
   )

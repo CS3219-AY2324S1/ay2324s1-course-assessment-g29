@@ -2,9 +2,9 @@ import { PieChart } from '@mui/x-charts/PieChart'
 import { Box, Card, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useDrawingArea } from '@mui/x-charts/hooks'
-import { useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import {
-  selectPreviousQuestions,
+  selectPreviousQuestions
 } from '../redux/UserSlice'
 import { useEffect } from 'react'
 
@@ -12,7 +12,7 @@ const MetricComponent = () => {
   const previousQuestions = useSelector(selectPreviousQuestions)
 
   const hasQuestionDone = () => {
-    if (previousQuestions === undefined) { 
+    if (previousQuestions === undefined) {
       return false
     } else {
       return true
@@ -20,40 +20,40 @@ const MetricComponent = () => {
   }
 
   const getEasyQuestion = () => {
-    if (previousQuestions === undefined) { 
+    if (previousQuestions === undefined) {
       return 0
     }
     console.log(previousQuestions)
     return previousQuestions
       .filter(attemptData => attemptData && attemptData.attempt)
-      .filter((question) => question.attempt.questionData.difficulty === 'Easy').length;
+      .filter((question) => question.attempt.questionData.difficulty === 'Easy').length
   }
 
   const getNormalQuestion = () => {
-    if (previousQuestions === undefined) { 
-      return 0
-    }
-    return previousQuestions
-      .filter(attemptData => attemptData && attemptData.attempt)
-      .filter((question) => question.attempt.questionData.difficulty === 'Medium').length;
-  }
-
-  const getHardQuestion = () => { 
-    if (previousQuestions === undefined) { 
-      return 0
-    }
-    return previousQuestions
-      .filter(attemptData => attemptData && attemptData.attempt)
-      .filter((question) => question.attempt.questionData.difficulty === 'Hard').length;
-  }
-
-  const getTotalQuestions = () => { 
     if (previousQuestions === undefined) {
       return 0
     }
     return previousQuestions
       .filter(attemptData => attemptData && attemptData.attempt)
-      .length;
+      .filter((question) => question.attempt.questionData.difficulty === 'Medium').length
+  }
+
+  const getHardQuestion = () => {
+    if (previousQuestions === undefined) {
+      return 0
+    }
+    return previousQuestions
+      .filter(attemptData => attemptData && attemptData.attempt)
+      .filter((question) => question.attempt.questionData.difficulty === 'Hard').length
+  }
+
+  const getTotalQuestions = () => {
+    if (previousQuestions === undefined) {
+      return 0
+    }
+    return previousQuestions
+      .filter(attemptData => attemptData && attemptData.attempt)
+      .length
   }
 
   return (

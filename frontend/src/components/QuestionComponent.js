@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Chip } from '@mui/material'
 
-function getColourbyDifficulty(difficulty) {
+function getColourbyDifficulty (difficulty) {
   switch (difficulty) {
     case 'Hard':
       return 'red'
