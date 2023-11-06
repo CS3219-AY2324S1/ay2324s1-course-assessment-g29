@@ -11,7 +11,8 @@ exports.postQuestion = async function (questionObj) {
       description,
       topic,
       imagesArray,
-      difficulty
+      difficulty,
+      id
     })
     return await data.save()
   } catch (error) {

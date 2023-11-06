@@ -25,6 +25,10 @@ const dataSchema = new mongoose.Schema({
     required: true,
     type: String,
     enum: ['Easy', 'Medium', 'Hard']
+  },
+  id: {
+    required: false,
+    type: Number
   }
 })
 
