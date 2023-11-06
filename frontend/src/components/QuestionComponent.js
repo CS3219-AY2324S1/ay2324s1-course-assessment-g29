@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Markdown from 'react-markdown'
 import { Chip } from '@mui/material'
 
 function getColourbyDifficulty (difficulty) {
@@ -49,7 +50,7 @@ export const QuestionComponent = (questionData) => {
           )
         })}
       </div>
-      <p>{question}</p>
+      <Markdown>{question}</Markdown>
     </div>
   )
 }
