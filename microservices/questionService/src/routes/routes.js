@@ -1,28 +1,13 @@
 // init router
 const express = require('express')
-
 const router = express.Router()
 
-module.exports = router
-
-// import model
-const Model = require('../models/model')
+const questionController = require('../controllers/question.controller')
 
 // Post Method
 router.post('/post', async (req, res) => {
-  const displayName = req.body.displayName
-  const name = req.body.name
-  const data = new Model({
-    name,
-    displayName,
-    description: req.body.description,
-    topic: req.body.topic,
-    imagesArray: req.body.imagesArray,
-    difficulty: req.body.difficulty
-  })
-
   try {
-    const dataToSave = await data.save()
+    const dataToSave = await questionController.postQuestion(req.body)
     res.status(200).json(dataToSave)
   } catch (error) {
     res.status(400).json({ message: error.message })
@@ -32,7 +17,7 @@ router.post('/post', async (req, res) => {
 // Get all Method
 router.get('/getAll', async (req, res) => {
   try {
-    const data = await Model.find()
+    const data = await questionController.getAllQuestion()
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -42,7 +27,7 @@ router.get('/getAll', async (req, res) => {
 // Get all by difficulty Method
 router.get('/getDifficulty/:difficulty', async (req, res) => {
   try {
-    const data = await Model.find({ difficulty: req.params.difficulty })
+    const data = await questionController.getAllByDifficulty(req.params.difficulty)
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -52,7 +37,7 @@ router.get('/getDifficulty/:difficulty', async (req, res) => {
 // Get by Name Method
 router.get('/getOneByName/:name', async (req, res) => {
   try {
-    const data = await Model.findOne({ name: req.params.name })
+    const data = await questionController.getByName(req.params.name)
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -62,9 +47,7 @@ router.get('/getOneByName/:name', async (req, res) => {
 // Get random one with difficulty
 router.get('/getOneByDifficulty/:difficulty', async (req, res) => {
   try {
-    const count = await Model.find({ difficulty: req.params.difficulty }).countDocuments()
-    const random = Math.floor(Math.random() * count)
-    const data = await Model.findOne({ difficulty: req.params.difficulty }).skip(random).exec()
+    const data = await questionController.getOneByDifficulty(req.params.difficulty)
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -74,7 +57,7 @@ router.get('/getOneByDifficulty/:difficulty', async (req, res) => {
 // Get all by Topic Method
 router.get('/getTopic/:topic', async (req, res) => {
   try {
-    const data = await Model.find({ topic: req.params.topic })
+    const data = await questionController.getAllByTopic(req.params.topic)
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -84,10 +67,7 @@ router.get('/getTopic/:topic', async (req, res) => {
 // Get random
 router.get('/getRandom', async (req, res) => {
   try {
-    let data
-    await Model.aggregate().sample(1).replaceRoot({ question: '$$ROOT' }).then((res) => {
-      data = res[0]
-    })
+    const data = await questionController.getRandom()
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -97,9 +77,7 @@ router.get('/getRandom', async (req, res) => {
 // Get random one with topic
 router.get('/getOneByTopic/:topic', async (req, res) => {
   try {
-    const count = await Model.find({ topic: req.params.topic }).countDocuments()
-    const random = Math.floor(Math.random() * count)
-    const data = await Model.findOne({ topic: req.params.topic }).skip(random).exec()
+    const data = await questionController.getOneByTopic(req.params.topic)
     res.json(data)
   } catch (error) {
     res.status(500).json({ message: error.message })
@@ -111,13 +89,8 @@ router.patch('/update/:name', async (req, res) => {
   try {
     const name = req.params.name
     const updatedData = req.body
-    const options = { new: true } // whether to return the updated data
 
-    const result = await Model.findOneAndUpdate(
-      { name },
-      updatedData,
-      options
-    )
+    const result = await questionController.updateName({ name, updatedData })
 
     res.send(result)
   } catch (error) {
@@ -128,10 +101,11 @@ router.patch('/update/:name', async (req, res) => {
 // Delete by Name Method
 router.delete('/delete/:name', async (req, res) => {
   try {
-    const name = req.params.name
-    const data = await Model.findOneAndDelete({ name })
+    const data = await questionController.deleteQuestion(req.params.name)
     res.send(`Document with ${data.name} has been deleted.`)
   } catch (error) {
     res.status(400).json({ message: error.message })
   }
 })
+
+module.exports = router

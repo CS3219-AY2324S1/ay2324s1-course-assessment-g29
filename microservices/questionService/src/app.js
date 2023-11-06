@@ -1,22 +1,26 @@
-require('dotenv').config()
-
-// Set up
+// Express + Set up port
 const express = require('express')
-const mongoose = require('mongoose')
-
 const app = express()
 app.use(express.json())
-
 const cors = require('cors')
 app.use(cors())
 
-const port = process.env.PORT || 3002
+const { routes } = require('./routes')
 
-app.listen(port, () => {
-  console.log(`Server Started at ${port}`)
+app.get('/', (req, res) => {
+  res.json({
+    status: true
+  })
 })
 
+app.use('/question', routes)
+
 // Connecting to MongoDB
+const mongoose = require('mongoose')
+const path = require('path')
+const envPath = path.join(__dirname, '../.env')
+require('dotenv').config({ path: envPath })
+
 const mongoString = process.env.DATABASE_URL
 mongoose.connect(mongoString)
 const database = mongoose.connection
@@ -29,7 +33,4 @@ database.once('connected', () => {
   console.log('Database Connected') // log if connection successful
 })
 
-// Import route file
-const routes = require('./routes/routes')
-
-app.use('/question', routes)
+module.exports = app
