@@ -8,7 +8,8 @@ export const userSlice = createSlice({
     displayname: '',
     email: '',
     preferredLanguages: [],
-    idToken: ''
+    idToken: '',
+    changeDeactivateAccountAlert: false
   },
   reducers: {
     setLoginStatus: (state, action) => {
@@ -28,12 +29,15 @@ export const userSlice = createSlice({
     },
     setIdToken: (state, action) => {
       state.idToken = action.payload
+    },
+    setChangeDeactivateAccountAlert: (state, action) => {
+      state.changeDeactivateAccountAlert = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken } = userSlice.actions
+export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert } = userSlice.actions
 
 export const selectLoginstatus = (state) => state.user.loginStatus
 
@@ -46,5 +50,7 @@ export const selectEmail = (state) => state.user.email
 export const selectPreferredLanguages = (state) => state.user.preferredLanguages
 
 export const selectIdToken = (state) => state.user.idToken
+
+export const selectChangeDeactivateAccountAlert = (state) => state.user.changeDeactivateAccountAlert
 
 export default userSlice.reducer

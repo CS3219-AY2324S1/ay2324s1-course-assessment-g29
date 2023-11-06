@@ -54,6 +54,7 @@ function MatchingComponent () {
         if (roomid !== '') {
           setAlreadyInRoom(true)
           dispatch(setRoomId(roomid))
+          console.log(roomdata.questionData)
           dispatch(setMatchedUserId(roomdata.matchedUserId))
           dispatch(setQuestionData(roomdata.questionData))
           dispatch(setMatchingLanguages(roomdata.matchingLanguages))
@@ -138,8 +139,8 @@ function MatchingComponent () {
           ? (
             <Box flex={1}>
               <Box>
-                <Typography variant='h3' component='h2'>
-                  Already In Room
+                <Typography variant='h5' component='h2'>
+                  You're already in a room!
                 </Typography>
               </Box>
               <Box flex={1}>

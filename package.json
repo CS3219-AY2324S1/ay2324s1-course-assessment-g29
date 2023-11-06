@@ -18,7 +18,7 @@
     "test-matching": "mocha ./microservices/matchingService/src/tests/*.js --timeout 50000",
     "test-question": "mocha ./microservices/questionService/src/tests/*.js --timeout 10000 --exit",
     "test-user": "mocha ./microservices/userService/src/tests/*.js --timeout 10000",
-    "test-websocket": "mocha ./microservices/websocketServer/src/tests/*.js --timeout 50000",
+    "test-room": "mocha ./microservices/roomService/src/tests/*.js --timeout 50000",
     "start": "react-scripts start"
   },
   "dependencies": {

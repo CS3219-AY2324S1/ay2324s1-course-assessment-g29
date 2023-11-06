@@ -1,4 +1,6 @@
-class RoomController {
+const axios = require('axios')
+
+class CollabController {
   constructor (roomModel, io) {
     this.roomModel = roomModel
     this.io = io
@@ -17,7 +19,7 @@ class RoomController {
         this.roomModel.roomIdToMessages[roomid] = []
         this.roomModel.roomIdToCode[roomid] = 'Please choose a language to begin!\n'
         this.roomModel.roomIdToLanguage[roomid] = ''
-        callback()
+        return
       }
 
       const roomSockets = this.roomModel.roomIdToSocketId[roomid]
@@ -55,12 +57,9 @@ class RoomController {
         })
 
         console.log(`Match Success between ${userid} and ${this.roomModel.socketToUserId[socket1id]}`)
-        callback()
-      } else {
-        callback()
       }
     } catch (error) {
-      return callback(error)
+      console.log(error)
     }
   }
 
@@ -98,10 +97,8 @@ class RoomController {
           this.io.to(socket2id).emit('CodeChange', { code })
         }
       }
-
-      callback()
     } catch (error) {
-      return callback(error)
+      console.log(error)
     }
   }
 
@@ -117,10 +114,8 @@ class RoomController {
           this.io.to(socket2id).emit('CheckChangeEditorLanguage', { language })
         }
       }
-
-      callback()
     } catch (error) {
-      return callback(error)
+      console.log(error)
     }
   }
 
@@ -136,14 +131,47 @@ class RoomController {
           this.io.to(socket2id).emit('ConfirmChangeEditorLanguage', { agree, language })
         }
       }
-
-      callback()
     } catch (error) {
-      return callback(error)
+      console.log(error)
     }
   }
 
-  handleCloseRoom (socket) {
+  handleChangeQuestionData (socket, { questionData }, callback) {
+    try {
+      console.log(socket.id)
+      console.log(questionData)
+      const roomId = this.roomModel.socketToRoom[socket.id]
+      for (const index in this.roomModel.roomIdToSocketId[roomId]) {
+        const socket2id = this.roomModel.roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          this.io.to(socket2id).emit('CheckQuestionChange', { questionData })
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleConfirmChangeQuestionData (socket, { agree, questionData }, callback) {
+    try {
+      console.log(socket.id)
+      const roomId = this.roomModel.socketToRoom[socket.id]
+      axios.post('http://roomservice:8000/room/changeQuestion', { rid: roomId, questionData })
+        .catch((error) => {
+          console.log(error)
+        })
+      for (const index in this.roomModel.roomIdToSocketId[roomId]) {
+        const socket2id = this.roomModel.roomIdToSocketId[roomId][index]
+        if (socket2id !== socket.id) {
+          this.io.to(socket2id).emit('ConfirmChangeQuestion', { agree, questionData })
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleCloseRoom (socket, { rid, user1id, user2id, questionData, code, language, messages }, callback) {
     console.log('disconnecting other peer')
     const roomId = this.roomModel.socketToRoom[socket.id]
     let socket2idres = ''
@@ -152,9 +180,24 @@ class RoomController {
       if (socket2id !== socket.id) {
         socket2idres = socket2id
         this.io.to(socket2id).emit('DisconnectPeer')
+        axios.post('http://roomservice:8000/room/savehistory', {
+          rid,
+          user1id,
+          user2id,
+          questionData,
+          code,
+          language,
+          messages
+        })
+          .then((response) => {
+            const message = response.data.message
+            console.log(message)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       }
     }
-
     this.roomModel.roomIdToMessages[roomId] = null
     this.roomModel.roomIdToCode[roomId] = null
     this.roomModel.roomIdToLanguage[roomId] = null
@@ -170,4 +213,4 @@ class RoomController {
   }
 }
 
-module.exports = RoomController
+module.exports = CollabController

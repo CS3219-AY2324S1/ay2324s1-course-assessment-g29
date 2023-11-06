@@ -1,226 +1,137 @@
-/* global describe, it, before, after */
-
+/* global describe, before, after, it */
+const io = require('../../app.js')
+const ioc = require('socket.io-client')
+const { assert } = require('chai')
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const sinon = require('sinon')
 const axios = require('axios')
-const admin = require('firebase-admin')
 
 chai.use(chaiHttp)
-const expect = chai.expect
-
-// Stubs
-const fakeQuestionData = {
-  _id: '653408cca7a26f448a0fc147',
-  name: 'roman-to-integer',
-  displayName: 'Roman To Integer',
-  description: 'Beep Boop',
-  topic: [
-    'algorithms'
-  ],
-  imagesArray: [],
-  difficulty: 'Easy',
-  __v: 0
-}
-const matchingLanguages = ['Python']
 
 const sandbox = sinon.createSandbox()
 
-const axiosStub = sandbox.stub(axios, 'get')
-axiosStub.withArgs('http://questionservice:3002/question/getRandom').resolves({
-  data: fakeQuestionData
+const axiosStub = sandbox.stub(axios, 'post')
+axiosStub.withArgs('http://roomservice:8000/room/changeQuestion').resolves({
+  data: {
+    message: 'Change Question Successfully'
+  }
 })
-
-const firestoreStub = sandbox.stub(admin, 'firestore')
-const collectionStub = sandbox.stub()
-
-firestoreStub.get(function () {
-  return function () {
-    return { collection: collectionStub }
+axiosStub.withArgs('http://roomservice:8000/room/savehistory').resolves({
+  data: {
+    message: 'Save Room History Successfully'
   }
 })
 
-collectionStub.withArgs('rooms').returns({
-  get: sandbox.stub().resolves(
-    [{
-      data: () => ({
-        user1id: 'user1',
-        user2id: 'user2',
-        questionData: fakeQuestionData,
-        matchingLanguages
-      })
-    }]
-  ),
-  doc: sandbox.stub().callsFake((rid) => {
-    return {
-      set: sandbox.stub().resolves({ message: 'Done!' }),
-      update: sandbox.stub().resolves({ message: 'Done!' }),
-      delete: sandbox.stub().resolves({ message: 'Done!' })
-    }
-  })
-})
+// Socket.io setup
+describe('Collab Service Unit Tests', () => {
+  let clientSocket, clientSocket2
+  // Set up the Socket.io server and client connections
+  before(async () => {
+    clientSocket = ioc('http://localhost:2000', {
+      reconnection: false
+    })
+    clientSocket2 = ioc('http://localhost:2000', {
+      reconnection: false
+    })
+    await new Promise((resolve) => {
+      clientSocket.on('connect', resolve)
+    })
 
-collectionStub.withArgs('history').returns({
-  doc: sandbox.stub().callsFake((rid) => {
-    return {
-      set: sandbox.stub().resolves({ message: 'Done!' }),
-      update: sandbox.stub().resolves({ message: 'Done!' })
-    }
-  })
-})
-
-collectionStub.withArgs('useridToRoom').returns({
-  doc: sandbox.stub().callsFake((uid) => {
-    return {
-      set: sandbox.stub().resolves({ message: 'Done!' }),
-      get: sandbox.stub().resolves({ data: () => ({ roomId: [] }) })
-    }
-  })
-})
-
-// Import functions to test
-const { createRoom, checkRoom, saveHistory, updateHistory, changeQuestion, leaveRoom } = require('../controller/roomController')
-
-describe('Unit Test for /collab', () => {
-  before('before', () => {
-    console.log('Running test suites for /collab')
-  })
-
-  after('after', () => {
-    console.log('Ran all test suites for /collab successfully')
-    // Restore the stub after the test
-    sandbox.restore()
-    firestoreStub.restore()
-  })
-
-  describe('Create room on /createroom', () => {
-    it('should create a new room', async () => {
-      const req = { body: { user1id: 'user1', user2id: 'user2', matchingLanguages } }
-      const res = {
-        status: (code) => {
-          expect(code).to.equal(200)
-          return {
-            json: (data) => {
-              expect(data).to.have.property('roomId')
-              expect(data).to.have.property('message')
-            }
-          }
-        }
-      }
-
-      // Test the createRoom function
-      await createRoom(req, res)
+    await new Promise((resolve) => {
+      clientSocket2.on('connect', resolve)
     })
   })
 
-  describe('Check for room on /checkroom', () => {
-    it('should check for an existing room', async () => {
-      const req = { body: { userid: 'user1' } }
-      const res = {
-        status: (code) => {
-          expect(code).to.equal(200)
-          return {
-            json: (data) => {
-              expect(data).to.have.property('room')
-              expect(data).to.have.property('roomdata')
-            }
-          }
-        }
-      }
+  after(() => {
+    // Close the clientSocket connection
+    io.close()
+    clientSocket.disconnect()
+    clientSocket2.disconnect()
+  })
 
-      await checkRoom(req, res)
+  it('should get matchsucess', (done) => {
+    // Keep track of how many times 'MatchingSuccess' event is received
+    const user1 = { userid: 'user123', roomid: 'room1' }
+    const user2 = { userid: 'user456', roomid: 'room1' }
+    let matchingSuccessCount = 0
+    clientSocket.emit('JoinRoom', user1, (response) => {
+    })
+
+    clientSocket2.emit('JoinRoom', user2, (response) => {
+    })
+
+    clientSocket.on('MatchSuccess', (response) => {
+      assert.equal(response.matchedUserId, user2.userid)
+      matchingSuccessCount++
+      if (matchingSuccessCount === 2) {
+        // Both clients have received the event
+        done()
+      }
+    })
+    // Listen for the 'MatchingSuccess' event on both client sockets
+    clientSocket2.on('MatchSuccess', (response) => {
+      assert.equal(response.matchedUserId, user1.userid)
+      matchingSuccessCount++
+      if (matchingSuccessCount === 2) {
+        // Both clients have received the event
+        done()
+      }
     })
   })
 
-  describe('Save room history on /savehistory', () => {
-    it('should save room history', async () => {
-      const req = {
-        body: {
-          rid: 'room_id',
-          user1id: 'user123',
-          user2id: 'user456',
-          questionData: 'your_question_data',
-          code: 'your_code',
-          language: 'your_language',
-          messages: ['message1', 'message2']
-        }
-      }
-      const res = {
-        status: (code) => {
-          expect(code).to.equal(200)
-          return {
-            json: (data) => {
-              expect(data).to.have.property('message')
-            }
-          }
-        }
-      }
-      await saveHistory(req, res)
+  it('should handle the Message event', (done) => {
+    const messageData = { message: 'Hello, World!' }
+
+    clientSocket.emit('Message', messageData, () => {
+    })
+    clientSocket2.on('Message', (response) => {
+      console.log(response)
+      assert.equal(response.message, messageData.message)
+      done()
     })
   })
 
-  describe('Update history on /updatehistory', () => {
-    it('should update room history', async () => {
-      const req = {
-        body: {
-          rid: 'room_id', // Provide a valid room ID
-          questionData: 'updated_question_data',
-          code: 'updated_code',
-          language: 'updated_language',
-          messages: ['updated_message1', 'updated_message2']
-        }
-      }
-      const res = {
-        status: (code) => {
-          expect(code).to.equal(200)
-          return {
-            json: (data) => {
-              expect(data).to.have.property('message')
-            }
-          }
-        }
-      }
-      await updateHistory(req, res)
+  it('should handle the CodeChange event', (done) => {
+    const codeData = { code: 'Hello, World!' }
+
+    clientSocket.emit('CodeChange', codeData, () => {
+    })
+    clientSocket2.on('CodeChange', (response) => {
+      assert.equal(response.code, codeData.code)
+      done()
     })
   })
 
-  describe('Change question on /changequestion', () => {
-    it('should change question in a room', async () => {
-      const req = {
-        body: {
-          rid: 'room_id',
-          questionData: 'new_question_data'
-        }
-      }
-      const res = {
-        status: (code) => {
-          expect(code).to.equal(200)
-          return {
-            json: (data) => {
-              expect(data).to.have.property('message')
-            }
-          }
-        }
-      }
+  it('should handle the ChangeEditorLanguage event', (done) => {
+    const languageData = { language: 'Python' }
 
-      await changeQuestion(req, res)
+    clientSocket.emit('ChangeEditorLanguage', languageData, () => {
+    })
+    clientSocket2.on('CheckChangeEditorLanguage', (response) => {
+      assert.equal(response.language, languageData.language)
+      done()
     })
   })
 
-  describe('Exit and delete room on /leaveroom', () => {
-    it('should delete a room', async () => {
-      const req = { body: { rid: 'room_id' } }
-      const res = {
-        status: (code) => {
-          expect(code).to.equal(200)
-          return {
-            json: (data) => {
-              expect(data).to.have.property('message')
-            }
-          }
-        }
-      }
-      await leaveRoom(req, res)
+  it('should handle the ConfirmChangeEditorLanguage event', (done) => {
+    const languageData = { agree: true, language: 'Python' }
+
+    clientSocket.emit('ConfirmChangeEditorLanguage', languageData, () => {
+    })
+    clientSocket2.on('ConfirmChangeEditorLanguage', (response) => {
+      assert.equal(response.agree, languageData.agree)
+      assert.equal(response.language, languageData.language)
+      done()
+    })
+  })
+
+  it('should handle the CloseRoom event', (done) => {
+    clientSocket.emit('CloseRoom', () => {
+    })
+    // Listen for the 'MatchingSuccess' event on both client sockets
+    clientSocket2.on('DisconnectPeer', (response) => {
+      done()
     })
   })
 })

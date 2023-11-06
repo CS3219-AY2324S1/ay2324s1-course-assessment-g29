@@ -15,17 +15,21 @@ function getColourbyDifficulty (difficulty) {
 }
 
 export const QuestionComponent = (questionData) => {
-  const data = questionData.questionData.question
-  const [question] = useState(data.description || 'Question Description')
+  const data = questionData.questionData || { description: '', displayName: '', topic: '', difficulty: '' }
+  const [question, setQuestion] = useState(data.description || 'Question Description')
   const [questionNo] = useState(1) // TODO update QuestionService to support
-  const [questionTitle] = useState(data.name || 'Question Title')
-  const [tags] = useState(data.tag || [])
-  const [difficulty] = useState('Easy') // TODO update QuestionService to support
+  const [questionTitle, setQuestionTitle] = useState(data.displayName || 'Question Title')
+  const [tags, setTags] = useState(data.topic || [])
+  const [difficulty, setDifficulty] = useState(data.difficulty) // TODO update QuestionService to support
 
   useEffect(() => {
-    console.log(questionData.questionData.question)
+    console.log(questionData)
     console.log(data.description)
-  }, [])
+    setQuestion(data.description)
+    setQuestionTitle(data.displayName)
+    setTags(data.topic)
+    setDifficulty(data.difficulty)
+  }, [data])
 
   return (
     <div style={{ padding: '1rem' }}>

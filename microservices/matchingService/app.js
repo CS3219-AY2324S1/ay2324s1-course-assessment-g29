@@ -17,12 +17,12 @@ const io = new Server(server)
 const matchingService = new MatchingService()
 const matchingController = new MatchingController(matchingService, io)
 
-const collabServiceUrl = 'http://collabservice:8000/room/'
+const roomServiceUrl = 'http://roomservice:8000/room/'
 
 io.on('connection', (socket) => {
   console.log(socket.id)
 
-  matchingController.handleJoinQueue(socket, collabServiceUrl)
+  matchingController.handleJoinQueue(socket, roomServiceUrl)
 
   socket.on('disconnect', async () => {
     console.log('Leaving Queue')
