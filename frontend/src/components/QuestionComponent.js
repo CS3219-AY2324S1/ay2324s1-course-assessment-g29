@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import Markdown from 'react-markdown'
 import { Chip } from '@mui/material'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
 function getColourbyDifficulty (difficulty) {
   switch (difficulty) {
@@ -50,7 +50,9 @@ export const QuestionComponent = (questionData) => {
           )
         })}
       </div>
-      <Markdown>{question}</Markdown>
+      <MarkdownPreview
+        source={question} wrapperElement={{ 'data-color-mode': 'light' }}
+      />
     </div>
   )
 }
