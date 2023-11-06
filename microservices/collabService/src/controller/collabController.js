@@ -1,4 +1,10 @@
 const axios = require('axios')
+const AccessToken = require('twilio').jwt.AccessToken;
+const VideoGrant = AccessToken.VideoGrant;
+const twilioAccountSid = 'ACd86ed47715e73752c93aceab57e9912c'
+const twilioApiKey = 'SKbf961ef113c506debf35fda290177c04'
+const twilioApiSecret = 'mB9NiaqjAiuh7G1YH36JVQlaSqqOg363'
+const identity = 'user';
 
 class CollabController {
   constructor (roomModel, io) {
@@ -42,12 +48,48 @@ class CollabController {
 
         console.log('Match')
 
+        // Create Video Grant
+        const videoGrant = new VideoGrant({
+          room: roomid,
+        });
+
+        // Create an access token which we will sign and return to the client,
+        // containing the grant we just created
+        const token1 = new AccessToken(
+          twilioAccountSid,
+          twilioApiKey,
+          twilioApiSecret,
+          {identity: this.roomModel.socketToUserId[socket1id]}
+        );
+        token1.addGrant(videoGrant);
+
+
+        const tokenString1 = token1.toJwt()
+        // Serialize the token to a JWT string
+        console.log(tokenString1);
+
+        // Create an access token which we will sign and return to the client,
+        // containing the grant we just created
+        const token2 = new AccessToken(
+          twilioAccountSid,
+          twilioApiKey,
+          twilioApiSecret,
+          {identity: userid}
+        );
+        token2.addGrant(videoGrant);
+
+
+        const tokenString2 = token2.toJwt()
+        // Serialize the token to a JWT string
+        console.log(tokenString2);
+
         this.io.to(socket1id).emit('MatchSuccess', {
           matchedUserId: userid,
           messages: this.roomModel.roomIdToMessages[roomid],
           code: this.roomModel.roomIdToCode[roomid],
           language: this.roomModel.roomIdToLanguage[roomid],
-          isInitiator: false
+          isInitiator: false,
+          twilioToken: tokenString1
         })
 
         this.io.to(socket.id).emit('MatchSuccess', {
@@ -55,7 +97,8 @@ class CollabController {
           messages: this.roomModel.roomIdToMessages[roomid],
           code: this.roomModel.roomIdToCode[roomid],
           language: this.roomModel.roomIdToLanguage[roomid],
-          isInitiator: true
+          isInitiator: true,
+          twilioToken: tokenString2
         })
 
         console.log(`Match Success between ${userid} and ${this.roomModel.socketToUserId[socket1id]}`)

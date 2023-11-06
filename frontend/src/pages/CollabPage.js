@@ -31,7 +31,8 @@ import {
   selectMessages,
   appendMessages,
   setMessages,
-  setIsInitiator
+  setIsInitiator,
+  setTwilioToken
 } from '../redux/MatchingSlice'
 import {
   setErrorMessage,
@@ -101,15 +102,17 @@ function CollabPage () {
 
     socket.current.on(
       'MatchSuccess',
-      ({ matchedUserId, messages, code, language, isInitiator }) => {
+      ({ matchedUserId, messages, code, language, isInitiator, twilioToken }) => {
         console.log(matchedUserId)
         console.log(messages)
         console.log(code)
         console.log(language)
+        console.log(twilioToken)
         console.log('Match Success')
         dispatch(setMessages(messages))
         dispatch(setCode(code))
         dispatch(setCodeEditorLanguage(language))
+        dispatch(setTwilioToken(twilioToken))
         dispatch(setIsInitiator(isInitiator))
       }
     )

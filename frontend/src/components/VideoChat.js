@@ -1,95 +1,84 @@
-import React, { useEffect, useRef } from "react";
-import { Peer } from "peerjs";
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Video from 'twilio-video';
 import Draggable from 'react-draggable'
-import { useDispatch, useSelector } from "react-redux";
-import { selectIsInitiator, selectMatchedUserid, setIsInitiator } from "../redux/MatchingSlice";
-import { selectUserid } from "../redux/UserSlice";
+import { selectRoomid, selectTwilioToken, setTwilioToken } from '../redux/MatchingSlice';
 
-function Video() {
-  const dispatch = useDispatch()
-  const isInitiator = useSelector(selectIsInitiator)
-  const userId = useSelector(selectUserid)
-  const matchedUserid = useSelector(selectMatchedUserid)
-  const peer = useRef(null)
-  const localVideo = useRef(null)
-  const remoteVideo = useRef(null)
+const VideoComponent = () => {
+  const dispatch = useDispatch();
+  const localVidRef = useRef();
+  const remoteVidRef = useRef();
+  const roomId = useSelector(selectRoomid)
+  const token = useSelector(selectTwilioToken)
+  const roomRef = useRef(null);
 
   useEffect(() => {
-    if (isInitiator !== 'awaiting') {
-      peer.current = new Peer(userId, {
-        host: "localhost",
-        port: 3003,
-        path: "/peerjs",
+    console.log(token)
+    if (token !== null) {
+      Video.connect(token, {
+        name: roomId
+      }).then(room => {
+        roomRef.current = room
+        Video.createLocalVideoTrack().then(track => {
+          localVidRef.current.appendChild(track.attach());
+        });
+        room.participants.forEach(participant => {
+          console.log(`Participant "${participant.identity}" in room`)
+          participant.tracks.forEach(publication => {
+            console.log(publication.track)
+            if (publication.track) {
+              console.log('attaching track')
+              const track = publication.track;
+              remoteVidRef.current.appendChild(track.attach());
+              //document.getElementById('remote-media-div').appendChild(publication.track.attach());
+            }
+          })
+
+          participant.on('trackSubscribed', track => {
+            remoteVidRef.current.appendChild(track.attach());
+            //document.getElementById('remote-media-div').appendChild(track.attach());
+          });
+        })
+
+        room.on('participantConnected', participant => {
+          console.log(`Participant "${participant.identity}" connected`);
+  
+          participant.tracks.forEach(publication => {
+            if (publication.isSubscribed) {
+              const track = publication.track;
+              remoteVidRef.current.appendChild(track.attach());
+            }
+          });
+  
+          participant.on('trackSubscribed', track => {
+            remoteVidRef.current.appendChild(track.attach());
+          });
+        });
+
+        room.on('disconnected', room => {
+          // Detach the local media elements
+          room.localParticipant.tracks.forEach(publication => {
+            const attachedElements = publication.track.detach();
+            attachedElements.forEach(element => element.remove());
+          });
+        });
       });
-      console.log(isInitiator)
-      if (isInitiator) {
-        const conn = peer.current.connect(matchedUserid);
-        conn.on('open', () => {
-          conn.send('handshake')
-        })
-        navigator.mediaDevices.getUserMedia(
-          { video: true, audio: true },
-          (stream) => {
-            localVideo.srcObject = stream
-            const call = peer.current.call(matchedUserid, stream);
-            call.on("stream", (remoteStream) => {
-              console.log('Stream received success')
-              remoteVideo.srcObject = remoteStream
-            })
-          },
-          (err) => {
-            console.error("Failed to get local stream", err);
-          },
-        )
-      } else {
-        peer.current.on('connection', (conn) => {
-          conn.on('handshake', (data) => {
-            console.log(data)
-          })
-          conn.on('open', () => {
-            conn.send('hello!');
-          })
-        })
-
-        peer.current.on("call", (call) => {
-          navigator.mediaDevices.getUserMedia(
-            { video: true, audio: true },
-            (stream) => {
-              localVideo.srcObject = stream
-              console.log('Stream received success')
-              call.answer(stream);
-              call.on("stream", (remoteStream) => {
-                remoteVideo.srcObject = remoteStream
-              })
-            },
-            (err) => {
-              console.error("Failed to get local stream", err);
-            },
-          );
-        })
-      }
     }
 
-    // disconnect from socket when component unmounts
     return () => {
-      if (peer.current) {
-        peer.current.destroy();
-        dispatch(setIsInitiator('awaiting'))
-        
+      if (token!== null) {
+        dispatch(setTwilioToken(null))
       }
     }
-  }, [isInitiator])
+  }, [token]);
+
   return (
-    <>
-    {isInitiator !== 'awaiting' && (
-      <>
-        {localVideo && <video ref={localVideo} muted={true}/>}
-        {remoteVideo && <video ref={remoteVideo}/>}
-      </>
-    )}
-
-    </>
+    <div>
+      <div ref={localVidRef} />
+      <h2>Remote Participants</h2>
+      <div id="remote-media-div"  ref={remoteVidRef} />
+    </div>
   );
-}
+};
 
-export default Video;
+export default VideoComponent;
