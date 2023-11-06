@@ -23,6 +23,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 // import { setErrorMessage, setShowError } from '../redux/ErrorSlice.js'
 import LoginPageBanner from '../components/FrontPageBanner.js'
+import axios from 'axios'
 
 function LoginPage () {
   initFirebase()
@@ -54,7 +55,11 @@ function LoginPage () {
       dispatch(setStateEmail(useremail))
       console.log(userCredentials)
       const idToken = await userCredentials.user.getIdToken()
-      dispatch(setIdToken(idToken))
+      const tokenResult = await axios.post('http://localhost:3001/user/token', {
+        uid: userid,
+        idToken
+      })
+      dispatch(setIdToken(tokenResult.data.token))
       console.log('Login successful')
       dispatch(setLoginStatus(true))
       navigate('/home')
