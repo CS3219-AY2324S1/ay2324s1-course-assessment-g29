@@ -96,7 +96,7 @@ router.get('/history/:uid', async (req, res) => {
   }
 })
 
-router.delete('/deregister/:uid', tokenManager.authenticateJWT, async (req, res) => {
+router.delete('/deregister/:uid', tokenManager.authenticateValidUser, async (req, res) => {
   console.log('Deregister User')
   try {
     const { uid } = req.params
@@ -104,6 +104,30 @@ router.delete('/deregister/:uid', tokenManager.authenticateJWT, async (req, res)
     res.status(200).json({ message: 'User deregistered successfully' })
   } catch (error) {
     res.status(400).json({ error: error.message })
+  }
+})
+
+router.post('/token', async (req, res) => {
+  console.log('Generate Token for User')
+  try {
+    const { uid, idToken } = req.body
+    const jwtToken = await userController.generateJwt(
+      uid,
+      (role) => tokenManager.generateToken(idToken, role)
+    )
+    res.status(200).json({ token: jwtToken })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+})
+
+router.get('/authorizeAdmin/:uid', async (req, res) => {
+  console.log('Authorization for admins')
+  try {
+    await tokenManager.authorizeAdmin(req, res, () => {})
+    res.status(200).json({ message: 'Authorized' })
+  } catch (error) {
+    return res
   }
 })
 
