@@ -115,7 +115,7 @@ const EditQuestion = () => {
           ]}
           hasFeedback
         >
-          <Input placeholder='Input Description' />
+          <TextArea placeholder='Input Description' rows='5' />
         </Form.Item>
         <Form.Item name='id' label='ID' hasFeedback>
           <Input />

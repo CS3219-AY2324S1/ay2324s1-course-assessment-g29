@@ -32,14 +32,16 @@ const QuestionTable = ({ questions, setQuestions }) => {
 
   const columns = [
     {
-      title: "Id",
-      dataIndex: "name",
-      key: "name",
+      title: 'Id',
+      dataIndex: 'name',
+      key: 'name', 
+      width: '6%'
     },
     {
       title: 'Title',
       dataIndex: 'displayName',
       key: 'displayName',
+      width: '10%',
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
         return (
           <>
@@ -73,6 +75,7 @@ const QuestionTable = ({ questions, setQuestions }) => {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      width: '60%',
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
         return (
           <>
@@ -107,6 +110,7 @@ const QuestionTable = ({ questions, setQuestions }) => {
       title: 'Difficulty',
       dataIndex: 'difficulty',
       key: 'difficulty',
+      width: '6%',
       filters: [
         { text: 'Hard', value: 'Hard' },
         { text: 'Easy', value: 'Easy' },
@@ -121,6 +125,7 @@ const QuestionTable = ({ questions, setQuestions }) => {
       title: 'Topic',
       dataIndex: 'topic',
       key: 'topic',
+      width: '6%', 
       render: (tags) => {
         return (
           <>
@@ -176,24 +181,24 @@ const QuestionTable = ({ questions, setQuestions }) => {
   })
 
   return (
-    <Box display='flex' flexDirection='column' flex={1} justifyContent='center'>
+    <Box display='flex' flexDirection='column' flex={1} justifyContent='center'
+      alignContent='flex-start' >
       <Navbar />
       <Box
-        display='flex'
-        flexDirection='column'
+        width='80%'
         justifyContent='center'
-        alignContent="center"
         flex={1}
+        margin='auto'
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2 style={{ paddingLeft: '1.5%', paddingTop: '1%' }}>
             Question Table
           </h2>
           <div style={{ marginLeft: 'auto', paddingRight: '1.5%', paddingTop: '1%' }}>
             <CreateQuestionButton />
           </div>
-        </div>
-        <Box justifyContent='center'>
+        </Box>
+        <Box>
           <Table
             style={{ padding: '1%' }}
             dataSource={data}

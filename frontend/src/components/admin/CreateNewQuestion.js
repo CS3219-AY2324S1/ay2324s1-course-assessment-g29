@@ -1,7 +1,6 @@
 import React, { useEffect, dispatch } from 'react'
-import { LeftOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { Form, Button, Input, Checkbox, Radio, FloatButton } from 'antd'
+import { Form, Button, Input, Checkbox, Radio } from 'antd'
 import { PageHeader } from '@ant-design/pro-layout'
 import axios from 'axios'
 import { setErrorMessage, setShowError } from '../../redux/ErrorSlice'
@@ -87,9 +86,9 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
             { whitespace: true }
           ]}
           hasFeedback
-          sx={{ width: "auto" }}
+          sx={{ width: 'auto' }}
         >
-          <TextArea placeholder='Input Description' rows='5'/>
+          <TextArea placeholder='Input Description' rows='5' />
         </Form.Item>
         <Form.Item
           name='id'
@@ -98,15 +97,15 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
             {
               required: true
             },
-            { whitespace: false }, 
+            { whitespace: false },
             ({ getFieldValue }) => ({
-              validator(_, value) {
+              validator (_, value) {
                 if (questionsID.includes(value)) {
-                  return Promise.reject(new Error("ID already exists"));
+                  return Promise.reject(new Error('ID already exists'))
                 }
-                return Promise.resolve();
-              },
-            }),
+                return Promise.resolve()
+              }
+            })
           ]}
           hasFeedback
         >
