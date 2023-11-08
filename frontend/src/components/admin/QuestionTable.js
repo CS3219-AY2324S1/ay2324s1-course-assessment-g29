@@ -66,7 +66,7 @@ const QuestionTable = ({ questions, setQuestions }) => {
         return <SearchOutlined />
       },
       onFilter: (value, record) => {
-        return record.title.toLowerCase().includes(value.toLowerCase())
+        return record.displayName.toLowerCase().includes(value.toLowerCase())
       }
     },
     {

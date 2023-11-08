@@ -110,9 +110,13 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
       ),
       filters: [
         { text: 'Algorithms', value: 'algorithms' },
-        { text: 'Data Structures', value: 'data structures' },
+        { text: 'Data Structures', value: 'data-structures' },
         { text: 'Recursion', value: 'recursion' },
-        { text: 'Bit Manipulation', value: 'bit manipulation' }
+        { text: 'Bit Manipulation', value: 'bit-manipulation' },
+        { text: 'Hash Table', value: 'hash-table' },
+        { text: 'Strings', value: 'strings' },
+        { text: 'Array', value: 'array' },
+        { text: 'Brainteasers', value: 'brainteasers' }
       ],
       onFilter: (value, record) => record.tags.includes(value)
     },
