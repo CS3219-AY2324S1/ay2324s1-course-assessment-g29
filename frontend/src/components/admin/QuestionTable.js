@@ -34,7 +34,7 @@ const QuestionTable = ({ questions, setQuestions }) => {
     {
       title: 'Id',
       dataIndex: 'name',
-      key: 'name', 
+      key: 'name',
       width: '6%'
     },
     {
@@ -125,7 +125,7 @@ const QuestionTable = ({ questions, setQuestions }) => {
       title: 'Topic',
       dataIndex: 'topic',
       key: 'topic',
-      width: '6%', 
+      width: '6%',
       render: (tags) => {
         return (
           <>
@@ -181,8 +181,10 @@ const QuestionTable = ({ questions, setQuestions }) => {
   })
 
   return (
-    <Box display='flex' flexDirection='column' flex={1} justifyContent='center'
-      alignContent='flex-start' >
+    <Box
+      display='flex' flexDirection='column' flex={1} justifyContent='center'
+      alignContent='flex-start'
+    >
       <Navbar />
       <Box
         width='80%'
