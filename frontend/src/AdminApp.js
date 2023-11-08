@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { selectUserid, selectIdToken } from './redux/UserSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectUserid, selectIdToken, selectIsAuthorized, setIsAuthorized } from './redux/UserSlice'
 import QuestionTable from './components/admin/QuestionTable'
 import CreateNewQuestion from './components/admin/CreateNewQuestion'
 import Question from './components/admin/Question'
@@ -10,29 +10,31 @@ import axios from 'axios'
 
 const AdminApp = () => {
   const [questions, setQuestions] = useState([])
-  const [isAuthorized, setIsAuthorized] = useState(null)
+  const isAuthorized = useSelector(selectIsAuthorized)
   const userId = useSelector(selectUserid)
   const idToken = useSelector(selectIdToken)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const config = {
       headers: { Authorization: `Bearer ${idToken}` }
     }
 
+    console.log("HELP")
     axios
       .get(`http://localhost:3001/user/authorizeAdmin/${userId}`, config)
       .then((response) => {
         if (response.status === 200) {
-          setIsAuthorized(true)
+          dispatch(setIsAuthorized(true))
         } else {
-          setIsAuthorized(false)
+          dispatch(setIsAuthorized(false))
         }
       })
       .catch((error) => {
         console.error('Error checking authorization:', error)
-        setIsAuthorized(false)
+        dispatch(setIsAuthorized(false))
       })
-  }, [])
+  }, [userId, idToken, dispatch])
 
   return (
     <>
