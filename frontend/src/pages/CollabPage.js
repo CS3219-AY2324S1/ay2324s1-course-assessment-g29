@@ -188,6 +188,7 @@ function CollabPage () {
     socket.current.on('DisconnectPeer', (message) => {
       dispatch(setErrorMessage('Peer has closed the room'))
       dispatch(setShowError(true))
+      navigate('/')
     })
   }, [])
 
