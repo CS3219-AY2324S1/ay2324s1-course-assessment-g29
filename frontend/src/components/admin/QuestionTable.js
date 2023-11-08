@@ -31,11 +31,11 @@ const QuestionTable = ({ questions, setQuestions }) => {
   }
 
   const columns = [
-    // {
-    //   title: "Id",
-    //   dataIndex: "id",
-    //   key: "id",
-    // },
+    {
+      title: "Id",
+      dataIndex: "name",
+      key: "name",
+    },
     {
       title: 'Title',
       dataIndex: 'displayName',
@@ -176,15 +176,16 @@ const QuestionTable = ({ questions, setQuestions }) => {
   })
 
   return (
-    <Box display='flex' flexDirection='column' alignContent='flex-start' flex={1} justifyContent='center'>
+    <Box display='flex' flexDirection='column' flex={1} justifyContent='center'>
       <Navbar />
       <Box
         display='flex'
         flexDirection='column'
-        justifyItems='center'
+        justifyContent='center'
+        alignContent="center"
         flex={1}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <h2 style={{ paddingLeft: '1.5%', paddingTop: '1%' }}>
             Question Table
           </h2>
@@ -192,11 +193,13 @@ const QuestionTable = ({ questions, setQuestions }) => {
             <CreateQuestionButton />
           </div>
         </div>
-        <Table
-          style={{ padding: '1%' }}
-          dataSource={data}
-          columns={columns}
-        />
+        <Box justifyContent='center'>
+          <Table
+            style={{ padding: '1%' }}
+            dataSource={data}
+            columns={columns}
+          />
+        </Box>
       </Box>
     </Box>
   )

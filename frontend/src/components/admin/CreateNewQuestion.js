@@ -5,6 +5,7 @@ import { Form, Button, Input, Checkbox, Radio, FloatButton } from 'antd'
 import { PageHeader } from '@ant-design/pro-layout'
 import axios from 'axios'
 import { setErrorMessage, setShowError } from '../../redux/ErrorSlice'
+import TextArea from 'antd/es/input/TextArea'
 
 const CreateNewQuestion = ({ questions, setQuestions }) => {
   const navigate = useNavigate()
@@ -23,7 +24,7 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
 
   const addQuestion = async (values) => {
     const QuestionObject = {
-      name: values.title.replace(/\s+/g, '-').toLowerCase(),
+      name: values.id,
       displayName: values.title,
       description: values.description,
       difficulty: values.complexity,
@@ -46,7 +47,7 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
     'data-structures', 'recursion', 'bit-manipulation', 'hash-table', 'strings', 'array', 'algorithms', 'brainteaser'
   ]
   const complexityOptions = ['Easy', 'Medium', 'Hard'] // Define your complexity options here
-  const questionsID = questions.map((question) => question.id)
+  const questionsID = questions.map((question) => question.name)
 
   return (
     <div>
@@ -86,8 +87,9 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
             { whitespace: true }
           ]}
           hasFeedback
+          sx={{ width: "auto" }}
         >
-          <Input placeholder='Input Description' />
+          <TextArea placeholder='Input Description' rows='5'/>
         </Form.Item>
         <Form.Item
           name='id'
@@ -96,7 +98,15 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
             {
               required: true
             },
-            { whitespace: false }
+            { whitespace: false }, 
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (questionsID.includes(value)) {
+                  return Promise.reject(new Error("ID already exists"));
+                }
+                return Promise.resolve();
+              },
+            }),
           ]}
           hasFeedback
         >
