@@ -58,5 +58,9 @@ jobs:
         run: npm run test-matching
 
       - name: Run Tests on Collab Service
+        env:
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+          TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
         run: npm run test-collab
       #   run: npm run test-ci # need to set up test-ci in package.json

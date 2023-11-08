@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Draggable from 'react-draggable'
 import Video from 'twilio-video'
 import { selectRoomid, selectTwilioToken, setTwilioToken } from '../redux/MatchingSlice'
+// import {ReactComponent as AvatarVideoChat }from '../images/AvatarVideoChat.svg'
 
 const VideoComponent = () => {
   const dispatch = useDispatch()
@@ -11,6 +12,8 @@ const VideoComponent = () => {
   const roomId = useSelector(selectRoomid)
   const token = useSelector(selectTwilioToken)
   const roomRef = useRef(null)
+  // const [displayLocalAvatar, setDisplayLocalAvatar] = useState(false)
+  // const [displayRemoteAvatar, setDisplayRemoteAvatar] = useState(false)
 
   useEffect(() => {
     console.log(token)
@@ -25,7 +28,6 @@ const VideoComponent = () => {
       }).then(room => {
         roomRef.current = room
         room.localParticipant.tracks.forEach(publication => {
-          console.log('test')
           localVidRef.current.appendChild(publication.track.attach())
         })
 
@@ -107,5 +109,45 @@ const VideoComponent = () => {
     </Draggable>
   )
 }
+
+// <div style={{ width: '400px', height: '500px' }}>
+// {displayLocalAvatar ? (
+//   <>
+//     <div style={{
+//       width: '320px',
+//       height: '180px',
+//       backgroundColor: '#5D5B5B',
+//       display: 'flex',
+//       justifyContent: 'center',
+//       alignItems: 'center'
+//     }}>
+//       <AvatarVideoChat />
+//     </div>
+//   </>
+// ) : (
+//   <>
+//     <div ref={localVidRef} muted />
+//   </>
+// )}
+// <h2>Remote Participants</h2>
+// {displayRemoteAvatar ? (
+//   <>
+//     <div style={{
+//       width: '320px',
+//       height: '180px',
+//       backgroundColor: '#5D5B5B',
+//       display: 'flex',
+//       justifyContent: 'center',
+//       alignItems: 'center'
+//     }}>
+//       <AvatarVideoChat />
+//     </div>
+//   </>
+// ) : (
+//   <>
+//     <div id='remote-media-div' ref={remoteVidRef} />
+//   </>
+// )}
+// </div>
 
 export default VideoComponent
