@@ -26,6 +26,7 @@ exports.registerUser = async function (userObj) {
     })
     return userRecord
   } catch (error) {
+    console.log(error)
     return Promise.reject(error)
   }
 }
