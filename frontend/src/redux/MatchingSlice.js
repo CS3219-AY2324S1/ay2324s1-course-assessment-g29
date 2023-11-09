@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 export const matchingSlice = createSlice({
   name: 'match',
   initialState: {
+    isInitiator: 'awaiting',
+    twilioToken: null,
     awaitingMatching: false,
     difficulty: '',
     roomid: '',
@@ -12,6 +14,12 @@ export const matchingSlice = createSlice({
     questionData: {}
   },
   reducers: {
+    setIsInitiator: (state, action) => {
+      state.isInitiator = action.payload
+    },
+    setTwilioToken: (state, action) => {
+      state.twilioToken = action.payload
+    },
     setAwaitingMatching: (state, action) => {
       state.awaitingMatching = action.payload
     },
@@ -40,7 +48,11 @@ export const matchingSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setCodeEditorLanguage, setMessages, appendMessages } = matchingSlice.actions
+export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setIsInitiator, setTwilioToken } = matchingSlice.actions
+
+export const selectTwilioToken = (state) => state.match.twilioToken
+
+export const selectIsInitiator = (state) => state.match.isInitiator
 
 export const selectRoomid = (state) => state.match.roomid
 

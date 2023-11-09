@@ -1,4 +1,12 @@
 const axios = require('axios')
+const AccessToken = require('twilio').jwt.AccessToken
+const VideoGrant = AccessToken.VideoGrant
+const path = require('path')
+const envPath = path.join(__dirname, '../../configs/.env')
+require('dotenv').config({ path: envPath })
+const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID
+const twilioApiKey = process.env.TWILIO_API_KEY
+const twilioApiSecret = process.env.TWILIO_API_SECRET
 
 class CollabController {
   constructor (roomModel, io) {
@@ -42,18 +50,55 @@ class CollabController {
 
         console.log('Match')
 
+        // Create Video Grant
+        const videoGrant = new VideoGrant({
+          room: roomid
+        })
+
+        // Create an access token which we will sign and return to the client,
+        // containing the grant we just created
+        const token1 = new AccessToken(
+          twilioAccountSid,
+          twilioApiKey,
+          twilioApiSecret,
+          { identity: this.roomModel.socketToUserId[socket1id] }
+        )
+        token1.addGrant(videoGrant)
+
+        const tokenString1 = token1.toJwt()
+        // Serialize the token to a JWT string
+        console.log(tokenString1)
+
+        // Create an access token which we will sign and return to the client,
+        // containing the grant we just created
+        const token2 = new AccessToken(
+          twilioAccountSid,
+          twilioApiKey,
+          twilioApiSecret,
+          { identity: userid }
+        )
+        token2.addGrant(videoGrant)
+
+        const tokenString2 = token2.toJwt()
+        // Serialize the token to a JWT string
+        console.log(tokenString2)
+
         this.io.to(socket1id).emit('MatchSuccess', {
           matchedUserId: userid,
           messages: this.roomModel.roomIdToMessages[roomid],
           code: this.roomModel.roomIdToCode[roomid],
-          language: this.roomModel.roomIdToLanguage[roomid]
+          language: this.roomModel.roomIdToLanguage[roomid],
+          isInitiator: false,
+          twilioToken: tokenString1
         })
 
         this.io.to(socket.id).emit('MatchSuccess', {
           matchedUserId: this.roomModel.socketToUserId[socket1id],
           messages: this.roomModel.roomIdToMessages[roomid],
           code: this.roomModel.roomIdToCode[roomid],
-          language: this.roomModel.roomIdToLanguage[roomid]
+          language: this.roomModel.roomIdToLanguage[roomid],
+          isInitiator: true,
+          twilioToken: tokenString2
         })
 
         console.log(`Match Success between ${userid} and ${this.roomModel.socketToUserId[socket1id]}`)
@@ -205,6 +250,47 @@ class CollabController {
 
     if (socket2idres !== '') {
       this.roomModel.disconnectFromSocket(socket2idres)
+    }
+  }
+
+  handleJoinVideoRoom (socket, { roomId }, callback) {
+    try {
+      console.log(`${socket.id} joining ${roomId}`)
+      socket.join(roomId)
+      const room = this.io.sockets.adapter.rooms.get(roomId)
+      if (room.size > 1) {
+        console.log('Both Users have joined')
+        socket.to(roomId).emit('VideoSignal')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleVideoInitiate (socket, { roomId }, callback) {
+    try {
+      console.log(`${socket.id} sending video initate to ${roomId}`)
+      socket.to(roomId).emit('VideoSignal')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleVideoSignal (socket, { roomId, data }, callback) {
+    try {
+      console.log(`${socket.id} sending video return signal to ${roomId}`)
+      socket.to(roomId).emit('VideoReturnSignal', data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  handleVideoReturnSignal (socket, { roomId, data }, callback) {
+    try {
+      console.log(`${socket.id} sending video signal to ${roomId}`)
+      socket.to(roomId).emit('VideoSignal', data)
+    } catch (error) {
+      console.log(error)
     }
   }
 

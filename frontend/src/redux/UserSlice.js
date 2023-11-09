@@ -4,6 +4,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: {
     loginStatus: false,
+    isAuthorized: null,
     userid: '',
     displayname: '',
     email: '',
@@ -40,13 +41,16 @@ export const userSlice = createSlice({
     },
     setPreviousQuestions: (state, action) => {
       state.previousQuestions = action.payload
+    },
+    setIsAuthorized: (state, action) => {
+      state.isAuthorized = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
 
-export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setPreviousRooms, setPreviousQuestions } = userSlice.actions
+export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setPreviousRooms, setPreviousQuestions, setIsAuthorized } = userSlice.actions
 
 export const selectLoginstatus = (state) => state.user.loginStatus
 
@@ -65,5 +69,7 @@ export const selectPreviousRooms = (state) => state.user.previousRooms
 export const selectChangeDeactivateAccountAlert = (state) => state.user.changeDeactivateAccountAlert
 
 export const selectPreviousQuestions = (state) => state.user.previousQuestions
+
+export const selectIsAuthorized = (state) => state.user.isAuthorized
 
 export default userSlice.reducer

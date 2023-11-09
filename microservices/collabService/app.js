@@ -20,6 +20,22 @@ io.on('connection', (socket) => {
     collabController.handleJoinRoom(socket, data, callback)
   })
 
+  socket.on('JoinVideoRoom', (data, callback) => {
+    collabController.handleJoinVideoRoom(socket, data, callback)
+  })
+
+  socket.on('VideoInitiate', (data, callback) => {
+    collabController.handleVideoInitiate(socket, data, callback)
+  })
+
+  socket.on('VideoSignal', (data, callback) => {
+    collabController.handleVideoSignal(socket, data, callback)
+  })
+
+  socket.on('VideoReturnSignal', (data, callback) => {
+    collabController.handleVideoReturnSignal(socket, data, callback)
+  })
+
   socket.on('Message', (data, callback) => {
     collabController.handleMessage(socket, data, callback)
   })
