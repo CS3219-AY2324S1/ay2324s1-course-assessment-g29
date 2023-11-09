@@ -72,6 +72,10 @@ function SignupPage () {
         username,
         email,
         password
+      }).catch((error) => {
+        console.log(error)
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
       })
       console.log('sign up success')
       const userCredentials = await signInWithEmailAndPassword(

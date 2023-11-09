@@ -9,6 +9,8 @@ export const userSlice = createSlice({
     displayname: '',
     email: '',
     preferredLanguages: [],
+    previousRooms: [],
+    previousQuestions: [],
     idToken: '',
     changeDeactivateAccountAlert: false
   },
@@ -31,8 +33,14 @@ export const userSlice = createSlice({
     setIdToken: (state, action) => {
       state.idToken = action.payload
     },
+    setPreviousRooms: (state, action) => {
+      state.previousRooms = action.payload
+    },
     setChangeDeactivateAccountAlert: (state, action) => {
       state.changeDeactivateAccountAlert = action.payload
+    },
+    setPreviousQuestions: (state, action) => {
+      state.previousQuestions = action.payload
     },
     setIsAuthorized: (state, action) => {
       state.isAuthorized = action.payload
@@ -41,7 +49,8 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setIsAuthorized } = userSlice.actions
+
+export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setPreviousRooms, setPreviousQuestions, setIsAuthorized } = userSlice.actions
 
 export const selectLoginstatus = (state) => state.user.loginStatus
 
@@ -55,7 +64,11 @@ export const selectPreferredLanguages = (state) => state.user.preferredLanguages
 
 export const selectIdToken = (state) => state.user.idToken
 
+export const selectPreviousRooms = (state) => state.user.previousRooms
+
 export const selectChangeDeactivateAccountAlert = (state) => state.user.changeDeactivateAccountAlert
+
+export const selectPreviousQuestions = (state) => state.user.previousQuestions
 
 export const selectIsAuthorized = (state) => state.user.isAuthorized
 

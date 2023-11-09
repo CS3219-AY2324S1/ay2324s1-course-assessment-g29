@@ -11,6 +11,7 @@ import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
 import CollabPage from './pages/CollabPage'
 import CodeEditorPage from './pages/CodeEditorPage'
+import PreviousQuestionPage from './pages/PreviousQuestionPage'
 import AdminApp from './AdminApp'
 
 function App () {
@@ -31,6 +32,7 @@ function App () {
                   <Route path='/' element={<Navigate to='/home' replace />} />
                   <Route path='/home' exact element={<HomePage />} />
                   <Route path='/collab' exact element={<CollabPage />} />
+                  <Route path='/previousAttempt/:roomId' exact element={<PreviousQuestionPage />} />
                   <Route
                     path='/question/:questionId'
                     element={<CodeEditorPage />}

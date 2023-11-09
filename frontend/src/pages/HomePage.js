@@ -20,7 +20,9 @@ function HomePage () {
         justifyContent='center'
         flex={1}
       >
-        <Profile />
+        <Box width='20%'>
+          <Profile />
+        </Box>
         <Box display='flex' flexDirection='column' width='50%'>
           <Box display='flex' flexDirection='row'>
             <MetricComponent />

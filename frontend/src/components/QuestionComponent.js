@@ -24,12 +24,10 @@ export const QuestionComponent = (questionData) => {
   const [difficulty, setDifficulty] = useState(data.difficulty) // TODO update QuestionService to support
 
   useEffect(() => {
-    console.log(questionData)
-    console.log(data.description)
-    setQuestion(data.description)
     setQuestionTitle(data.displayName)
     setTags(data.topic)
     setDifficulty(data.difficulty)
+    setQuestion(data.description)
   }, [data])
 
   return (
@@ -44,11 +42,12 @@ export const QuestionComponent = (questionData) => {
         </span>
       </h3>
       <div>
-        {tags.map((tag, index) => {
-          return (
-            <Chip key={index} label={tag} style={{ marginRight: '0.5rem' }} />
-          )
-        })}
+        {tags &&
+          tags.map((tag, index) => {
+            return (
+              <Chip key={index} label={tag} style={{ marginRight: '0.5rem' }} />
+            )
+          })}
       </div>
       <MarkdownPreview
         source={question} wrapperElement={{ 'data-color-mode': 'light' }}

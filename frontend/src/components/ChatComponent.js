@@ -110,6 +110,7 @@ const ChatComponent = ({ socket }) => {
                   referance={messageListReferance}
                   className='message-list'
                   lockable
+                  downButtonBadge
                   toBottomHeight='100%'
                   dataSource={messageListData(messages, userid)}
                 />

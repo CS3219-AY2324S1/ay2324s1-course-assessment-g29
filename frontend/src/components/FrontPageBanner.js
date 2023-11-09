@@ -6,11 +6,13 @@ const LoginPageBanner = () => {
       display='flex'
       flex={1}
       style={{
-        background: 'linear-gradient(#1976d2, #8dc3f7)',
-        width: '100%'
+        background: 'linear-gradient(#1976d2, #8dc3f7)'
       }}
     >
       <Box
+        display='flex'
+        flex={1}
+        flexDirection='column'
         style={{
           paddingLeft: '25%',
           paddingTop: '20%',
@@ -18,7 +20,7 @@ const LoginPageBanner = () => {
         }}
       >
         <Typography
-          variant='h1'
+          variant='h2'
           color='common.white'
           marginBottom='3rem'
           fontWeight='bold'
@@ -31,9 +33,9 @@ const LoginPageBanner = () => {
           marginBottom='15rem'
           fontWeight='bold'
         >
-          PrepPrep is a collaborative platform for you and your peers to ace
-          your next technical interview! Choose from across a wide array of
-          questions and start practicing with us today!
+          a collaborative platform for you and your peers to ace
+          your next technical interview! Choose from across 1000+
+          different coding questions
         </Typography>
         <Typography
           display='block'
