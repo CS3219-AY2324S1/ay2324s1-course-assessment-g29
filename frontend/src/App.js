@@ -11,6 +11,7 @@ import SignupPage from './pages/SignupPage'
 import HomePage from './pages/HomePage'
 import CollabPage from './pages/CollabPage'
 import CodeEditorPage from './pages/CodeEditorPage'
+import AdminApp from './AdminApp'
 
 function App () {
   const loginStatus = useSelector(selectLoginstatus)
@@ -35,6 +36,7 @@ function App () {
                     element={<CodeEditorPage />}
                   />
                   <Route path='*' element={<Navigate to='/home' />} />
+                  <Route path='/admin/*' element={<AdminApp />} />
                 </>
                 )
               : (

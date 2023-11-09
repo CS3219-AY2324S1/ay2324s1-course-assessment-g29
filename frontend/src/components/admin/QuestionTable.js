@@ -1,26 +1,50 @@
-import { Input, Table, Space, Tag, Button } from 'antd'
+import { Input, Table, Space, Tag } from 'antd'
+import { Box } from '@mui/system'
+import React, { useEffect, dispatch } from 'react'
+import EditQuestionButton from './buttons/EditQuestionButton'
+import CreateQuestionButton from './buttons/CreateQuestionButton'
+import DeleteQuestionButton from './buttons/DeleteQuestionButton'
+import ViewMoreButton from './buttons/ViewMoreButton'
 import { SearchOutlined } from '@ant-design/icons'
 import { v4 as uuidv4 } from 'uuid'
+import axios from 'axios'
+import { setErrorMessage, setShowError } from '../../redux/ErrorSlice'
+import Navbar from '../Navbar'
 
-const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
-  const pagination = {
-    pageSize: 5,
-    showSizeChanger: false
+const QuestionTable = ({ questions, setQuestions }) => {
+  useEffect(() => {
+    axios
+      .get('http://localhost:3002/question/getAll')
+      .then((response) => {
+        setQuestions(response.data)
+      })
+      .catch((error) => {
+        dispatch(setErrorMessage(error.message))
+        dispatch(setShowError(true))
+      })
+  }, [setQuestions])
+
+  const handleDelete = (questionName) => {
+    // Filter out the record to be deleted based on its key
+    const newData = questions.filter(item => item.name !== questionName)
+    setQuestions(newData)
   }
 
   const columns = [
     {
       title: 'Id',
-      dataIndex: 'id',
-      key: 'id'
+      dataIndex: 'name',
+      key: 'name',
+      width: '6%'
     },
     {
       title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
+      dataIndex: 'displayName',
+      key: 'displayName',
+      width: '10%',
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
         return (
-          <div>
+          <>
             <Input
               autoFocus
               id='filter-title'
@@ -37,20 +61,21 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
                 confirm()
               }}
             />
-          </div>
+          </>
         )
       },
       filterIcon: () => {
         return <SearchOutlined />
       },
       onFilter: (value, record) => {
-        return record.title.toLowerCase().includes(value.toLowerCase())
+        return record.displayName.toLowerCase().includes(value.toLowerCase())
       }
     },
     {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      width: '60%',
       filterDropdown: ({ setSelectedKeys, selectedKeys, confirm }) => {
         return (
           <>
@@ -82,23 +107,29 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
       }
     },
     {
-      title: 'Complexity',
-      dataIndex: 'complexity',
-      key: 'complexity',
+      title: 'Difficulty',
+      dataIndex: 'difficulty',
+      key: 'difficulty',
+      width: '6%',
       filters: [
         { text: 'Hard', value: 'Hard' },
         { text: 'Easy', value: 'Easy' },
         { text: 'Medium', value: 'Medium' }
       ],
-      onFilter: (value, record) => record.complexity.includes(value)
+      onFilter: (value, record) => {
+        return record.difficulty.includes(value)
+      }
     },
+
     {
-      title: 'Tags',
-      dataIndex: 'tags',
-      key: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags &&
+      title: 'Topic',
+      dataIndex: 'topic',
+      key: 'topic',
+      width: '6%',
+      render: (tags) => {
+        return (
+          <>
+            {tags &&
               tags.map((tag) => {
                 return (
                   <Tag color='green' key={tag}>
@@ -106,8 +137,9 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
                   </Tag>
                 )
               })}
-        </>
-      ),
+          </>
+        )
+      },
       filters: [
         { text: 'Algorithms', value: 'algorithms' },
         { text: 'Data Structures', value: 'data-structures' },
@@ -118,7 +150,7 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
         { text: 'Array', value: 'array' },
         { text: 'Brainteasers', value: 'brainteasers' }
       ],
-      onFilter: (value, record) => record.tags.includes(value)
+      onFilter: (value, record) => record.topic.includes(value)
     },
     {
       title: 'Actions',
@@ -126,38 +158,57 @@ const QuestionTable = ({ questions, setQuestions, signalChangeQuestion }) => {
       key: 'actions',
       render: (text, record, index) => (
         <Space>
-          <Button type='primary' onClick={() => signalChangeQuestion(record.originalRecord)}>
-            Change Question
-          </Button>
+          <ViewMoreButton question={record} />
+          <DeleteQuestionButton questions={questions} setQuestions={setQuestions} name={record.name} handleDelete={() => handleDelete(record.name)} />
+          <EditQuestionButton question={record} />
         </Space>
       )
     }
   ]
 
   // data to fill up the rows of the table
-  const data = questions.map((question, index) => {
+  const data = questions.map(question => {
     return (
       {
-        id: index + 1,
-        title: question.displayName,
+        displayName: question.displayName,
+        name: question.name,
         description: question.description,
-        complexity: question.difficulty,
-        tags: question.topic,
-        originalRecord: question,
+        difficulty: question.difficulty,
+        topic: question.topic,
         key: uuidv4()
       }
     )
   })
 
   return (
-    <div style={{ justifyContent: 'start', alignItems: 'start', maxHeight: '70vh', overflowY: 'auto' }}>
-      <Table
-        style={{ padding: '1%' }}
-        dataSource={data}
-        columns={columns}
-        pagination={pagination}
-      />
-    </div>
+    <Box
+      display='flex' flexDirection='column' flex={1} justifyContent='center'
+      alignContent='flex-start'
+    >
+      <Navbar />
+      <Box
+        width='80%'
+        justifyContent='center'
+        flex={1}
+        margin='auto'
+      >
+        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ paddingLeft: '1.5%', paddingTop: '1%' }}>
+            Question Table
+          </h2>
+          <div style={{ marginLeft: 'auto', paddingRight: '1.5%', paddingTop: '1%' }}>
+            <CreateQuestionButton />
+          </div>
+        </Box>
+        <Box>
+          <Table
+            style={{ padding: '1%' }}
+            dataSource={data}
+            columns={columns}
+          />
+        </Box>
+      </Box>
+    </Box>
   )
 }
 
