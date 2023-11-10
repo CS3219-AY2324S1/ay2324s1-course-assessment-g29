@@ -1,4 +1,4 @@
-class RoomController {
+class CollabController {
   constructor (roomModel, io) {
     this.roomModel = roomModel
     this.io = io
@@ -193,4 +193,4 @@ class RoomController {
   }
 }
 
-module.exports = RoomController
+module.exports = CollabController

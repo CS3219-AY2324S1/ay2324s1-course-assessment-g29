@@ -33,7 +33,12 @@ import {
   appendMessages,
   setMessages
 } from '../redux/MatchingSlice'
-import { setErrorMessage, setShowError } from '../redux/ErrorSlice'
+import { 
+  setErrorMessage, 
+  setShowError,
+  setShowSuccess,
+  setSucessMessage 
+} from '../redux/ErrorSlice'
 // import Fab from '@mui/material/Fab'
 import {
   setAwaitAlertOpen,
@@ -109,6 +114,7 @@ function CollabPage () {
 
     // disconnect from socket when component unmounts
     return () => {
+      dispatch(setQuestionData({}));
       if (socket.current) {
         socket.current.disconnect()
         socket.current.off()
@@ -181,17 +187,6 @@ function CollabPage () {
     })
   }, [])
 
-  // const sendMessage = (event) => {
-  //   event.preventDefault()
-  //   const messageString = `${userid} : ${message}`
-  //   if (message) {
-  //     dispatch(appendMessages(messageString))
-  //     socket.current.emit('Message', { message: messageString }, () =>
-  //       setMessage('')
-  //     )
-  //   }
-  // }
-
   const LeaveRoom = (event) => {
     event.preventDefault()
     axios
@@ -217,9 +212,8 @@ function CollabPage () {
         dispatch(setMatchingLanguages([]))
         dispatch(setMatchedUserId(''))
         dispatch(setMessages([]))
-        dispatch(setQuestionData({}))
-        dispatch(setErrorMessage(message))
-        dispatch(setShowError(true))
+        dispatch(setSucessMessage(message))
+        dispatch(setShowSuccess(true))
         navigate('/')
       })
       .catch((error) => {

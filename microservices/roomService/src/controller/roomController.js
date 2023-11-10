@@ -155,7 +155,7 @@ const leaveRoom = async (req, res) => {
     const { rid } = req.body
     console.log(`Deleting room ${rid}`)
     await roomCollection.doc(rid).delete()
-    res.status(200).json({ message: 'Room deleted successfully!' })
+    res.status(200).json({ message: 'Closed Room Successfully' })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
