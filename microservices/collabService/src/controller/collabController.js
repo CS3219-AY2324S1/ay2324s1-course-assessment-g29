@@ -154,7 +154,10 @@ class CollabController {
     try {
       console.log(socket.id)
       const roomId = this.roomModel.socketToRoom[socket.id]
-
+      axios.post('http://localhost:8000/room/changeQuestion', { rid: roomid, questionData: question })
+        .catch((error) => {
+          console.log(error)
+        })
       for (const index in this.roomModel.roomIdToSocketId[roomId]) {
         const socket2id = this.roomModel.roomIdToSocketId[roomId][index]
         if (socket2id !== socket.id) {
