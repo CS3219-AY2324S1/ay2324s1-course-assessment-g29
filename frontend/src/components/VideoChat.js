@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import Draggable from 'react-draggable'
 import Video from 'twilio-video'
 import { selectRoomid, selectStartVideoChat, selectTwilioToken, setStartVideoChat, setTwilioToken } from '../redux/MatchingSlice'
-import {ReactComponent as AvatarVideoChat }from '../images/AvatarVideoChat.svg'
-import IconButton from '@mui/material/IconButton';
-import MicIcon from '@mui/icons-material/Mic';
-import MicOffIcon from '@mui/icons-material/MicOff';
-import { setErrorMessage, setShowError, setShowSuccess, setSucessMessage } from '../redux/ErrorSlice'
+import { ReactComponent as AvatarVideoChat } from '../images/AvatarVideoChat.svg'
+import IconButton from '@mui/material/IconButton'
+import MicIcon from '@mui/icons-material/Mic'
+import MicOffIcon from '@mui/icons-material/MicOff'
 
-const VideoComponent = ({stopVideo, setStopVideo}) => {
+const VideoComponent = ({ stopVideo, setStopVideo }) => {
   const dispatch = useDispatch()
   const startVideoChat = useSelector(selectStartVideoChat)
   const localVidRef = useRef()
@@ -57,11 +56,11 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
         room.on('participantConnected', participant => {
           console.log(`Participant "${participant.identity}" connected`)
 
-          participant.tracks.forEach(publication => {setDisplayRemoteAvatar(false)
+          participant.tracks.forEach(publication => {
+            setDisplayRemoteAvatar(false)
             if (publication.isSubscribed) {
               const track = publication.track
               remoteVidRef.current.appendChild(track.attach())
-
             }
           })
 
@@ -130,7 +129,7 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
           publication.track.disable()
           console.log(publication.track)
         }
-      });
+      })
     }
     console.log(roomRef.current)
     setMicOn(false)
@@ -141,9 +140,9 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
     if (roomRef.current) {
       roomRef.current.localParticipant.audioTracks.forEach(publication => {
         if (publication.track) {
-          publication.track.enable();
+          publication.track.enable()
         }
-      });
+      })
     }
     console.log(roomRef.current)
     setMicOn(true)
@@ -159,32 +158,35 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
           >
             <div style={{ width: '400px', height: '500px' }}>
               <div style={{
-                      width: '320px',
-                      height: '200px',
-                      display: 'flex',
-                      backgroundColor: '#D2B48C',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}>
+                width: '320px',
+                height: '200px',
+                display: 'flex',
+                backgroundColor: '#D2B48C',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              >
                 <div ref={localVidRef} muted />
-                {micOn ? (
-                  <>
-                    <IconButton aria-label="delete" size="small" onClick={turnOffMic}>
-                      <MicIcon fontSize="inherit" />
-                    </IconButton>
-                  </>
-                ) : (
-                  <>
-                    <IconButton aria-label="delete" size="small" onClick={turnOnMic}>
-                      <MicOffIcon fontSize="inherit" />
-                    </IconButton>
-                  </>
-                )}
-              </ div>
-                
+                {micOn
+                  ? (
+                    <>
+                      <IconButton aria-label='delete' size='small' onClick={turnOffMic}>
+                        <MicIcon fontSize='inherit' />
+                      </IconButton>
+                    </>
+                    )
+                  : (
+                    <>
+                      <IconButton aria-label='delete' size='small' onClick={turnOnMic}>
+                        <MicOffIcon fontSize='inherit' />
+                      </IconButton>
+                    </>
+                    )}
+              </div>
+
               <h2>Remote Participants</h2>
-              {displayRemoteAvatar && 
+              {displayRemoteAvatar &&
                 <>
                   <div style={{
                     width: '320px',
@@ -193,11 +195,11 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center'
-                  }}>
+                  }}
+                  >
                     <AvatarVideoChat />
                   </div>
-                </>
-              }
+                </>}
               <div id='remote-media-div' ref={remoteVidRef} />
             </div>
           </Draggable>

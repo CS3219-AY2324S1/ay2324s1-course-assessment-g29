@@ -58,9 +58,9 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
-import VideocamIcon from '@mui/icons-material/Videocam';
+import VideocamIcon from '@mui/icons-material/Videocam'
 import VideoChat from '../components/VideoChat'
-import VideocamOffIcon from '@mui/icons-material/VideocamOff';
+import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -87,7 +87,7 @@ function CollabPage () {
   const dispatch = useDispatch()
   const socket = useRef()
   const previousRooms = useSelector(selectPreviousRooms)
-  const [turnOffVideo, setTurnOffVideo] = useState(false);
+  const [turnOffVideo, setTurnOffVideo] = useState(false)
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
@@ -349,27 +349,29 @@ function CollabPage () {
                   Change question
                 </Button>
                 <Box marginRight={1} />
-                {startVideoChat ? (
-                  <>
-                    <Button
-                    variant='contained'
-                    onClick={stopVideoComponent}
-                    endIcon={<VideocamOffIcon />}
-                  >
-                    Stop Video Chat
-                  </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                    variant='contained'
-                    onClick={startVideoComponent}
-                    endIcon={<VideocamIcon />}
-                  >
-                    Start Video Chat
-                  </Button>
-                  </>
-                )}
+                {startVideoChat
+                  ? (
+                    <>
+                      <Button
+                        variant='contained'
+                        onClick={stopVideoComponent}
+                        endIcon={<VideocamOffIcon />}
+                      >
+                        Stop Video Chat
+                      </Button>
+                    </>
+                    )
+                  : (
+                    <>
+                      <Button
+                        variant='contained'
+                        onClick={startVideoComponent}
+                        endIcon={<VideocamIcon />}
+                      >
+                        Start Video Chat
+                      </Button>
+                    </>
+                    )}
               </Box>
             </div>
           </Panel>
@@ -385,7 +387,7 @@ function CollabPage () {
       <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
-      <VideoChat stopVideo={turnOffVideo} setStopVideo={setTurnOffVideo}/>
+      <VideoChat stopVideo={turnOffVideo} setStopVideo={setTurnOffVideo} />
     </Box>
   )
 }
