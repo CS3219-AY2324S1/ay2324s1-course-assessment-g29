@@ -1,5 +1,5 @@
 // TODO: check if commented out code is needed
-import { React, useEffect, useRef } from 'react'
+import { React, useEffect, useRef, useState } from 'react'
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -28,7 +28,9 @@ import {
   appendMessages,
   setMessages,
   setIsInitiator,
-  setTwilioToken
+  setTwilioToken,
+  setStartVideoChat,
+  selectStartVideoChat
 } from '../redux/MatchingSlice'
 import {
   setErrorMessage,
@@ -56,7 +58,9 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
+import VideocamIcon from '@mui/icons-material/Videocam';
 import VideoChat from '../components/VideoChat'
+import VideocamOffIcon from '@mui/icons-material/VideocamOff';
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -70,6 +74,7 @@ const connectionOptions = {
 function CollabPage () {
   // const [message, setMessage] = useState('')
   const messages = useSelector(selectMessages)
+  const startVideoChat = useSelector(selectStartVideoChat)
   const navigate = useNavigate()
   const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage)
   const userid = useSelector(selectUserid)
@@ -82,6 +87,7 @@ function CollabPage () {
   const dispatch = useDispatch()
   const socket = useRef()
   const previousRooms = useSelector(selectPreviousRooms)
+  const [turnOffVideo, setTurnOffVideo] = useState(false);
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
@@ -258,6 +264,17 @@ function CollabPage () {
     dispatch(setChangeQuestionAlertOpen(true))
   }
 
+  const startVideoComponent = (event) => {
+    event.preventDefault()
+    dispatch(setStartVideoChat(true))
+  }
+
+  const stopVideoComponent = (event) => {
+    event.preventDefault()
+    dispatch(setStartVideoChat(false))
+    setTurnOffVideo(true)
+  }
+
   return (
     <Box display='flex' flexDirection='column' alignContent='flex-start'>
       <Navbar />
@@ -331,6 +348,28 @@ function CollabPage () {
                 >
                   Change question
                 </Button>
+                <Box marginRight={1} />
+                {startVideoChat ? (
+                  <>
+                    <Button
+                    variant='contained'
+                    onClick={stopVideoComponent}
+                    endIcon={<VideocamOffIcon />}
+                  >
+                    Stop Video Chat
+                  </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                    variant='contained'
+                    onClick={startVideoComponent}
+                    endIcon={<VideocamIcon />}
+                  >
+                    Start Video Chat
+                  </Button>
+                  </>
+                )}
               </Box>
             </div>
           </Panel>
@@ -346,7 +385,7 @@ function CollabPage () {
       <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
-      <VideoChat />
+      <VideoChat stopVideo={turnOffVideo} setStopVideo={setTurnOffVideo}/>
     </Box>
   )
 }
