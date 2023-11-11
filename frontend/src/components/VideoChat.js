@@ -154,7 +154,7 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
         <>
           <Draggable
             position={null}
-            defaultPosition={{ x: 20, y: 20 }}
+            positionOffset={{ x: '10%', y: '-170%' }}
           >
             <div style={{ width: '400px', height: '500px' }}>
               <div style={{
