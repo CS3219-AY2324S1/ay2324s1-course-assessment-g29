@@ -1,12 +1,11 @@
 import { React, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Select, MenuItem, InputLabel, FormControl } from '@mui/material'
+import { Select, MenuItem, InputLabel, FormControl, Container } from '@mui/material'
 import CodeMirror from '@uiw/react-codemirror'
 import { materialLightInit } from '@uiw/codemirror-theme-material'
 import { python } from '@codemirror/lang-python'
 import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
-import { Container } from '@mui/material/'
 import {
   selectCode,
   setCode,
@@ -16,7 +15,7 @@ import {
 import { selectMatchedUserid } from '../redux/MatchingSlice'
 import AwaitChangeProgrammingLanguageDialog from '../components/AwaitChangeProgrammingLanguageAlert'
 
-function determineLanguage(selectedLanguage) {
+function determineLanguage (selectedLanguage) {
   if (selectedLanguage === 'Python') {
     return [python({ jsx: true })]
   } else if (selectedLanguage === 'Java') {
@@ -84,12 +83,14 @@ export const Editor = ({ socketRef }) => {
         }}
       >
         <FormControl style={{ width: '20vw' }}>
-          {selectedLanguage ? (
-            <InputLabel id='Programming language'></InputLabel>
-          ) : (
-            <InputLabel id='Programming language'>
-              Choose programming language
-            </InputLabel>)}
+          {selectedLanguage
+            ? (
+              <InputLabel id='Programming language' />
+              )
+            : (
+              <InputLabel id='Programming language'>
+                Choose programming language
+              </InputLabel>)}
           <Select onChange={handleLanguageChange} value={selectedLanguage}>
             {languages.map((language, index) => (
               <MenuItem key={index} value={language}>

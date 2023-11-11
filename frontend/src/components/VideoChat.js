@@ -99,7 +99,7 @@ const VideoComponent = () => {
   return (
     <Draggable
       position={null}
-      defaultPosition={{ x: 20, y: 20}}
+      defaultPosition={{ x: 20, y: 20 }}
     >
       <div style={{ width: '400px', height: '500px', position: 'fixed' }}>
         <div ref={localVidRef} muted />

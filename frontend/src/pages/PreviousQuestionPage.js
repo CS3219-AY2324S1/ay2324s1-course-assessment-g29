@@ -9,19 +9,17 @@ import { useSelector } from 'react-redux'
 import { selectUserid } from '../redux/UserSlice'
 import Typography from 'antd/es/typography/Typography'
 
-
 const PreviousQuestionPage = () => {
-
   const userid = useSelector(selectUserid)
   const { roomId } = useParams()
   console.log('room ID: ' + roomId)
   const [questionData, setQuestionData] = useState(null)
   const [programmingLanguage, setProgrammingLanguage] = useState('')
   const [code, setCode] = useState('')
-  const [partnerId, setPartnerId] = useState('') 
+  const [partnerId, setPartnerId] = useState('')
 
   const getPartnerId = (user1id, user2id) => {
-    if (user1id !== userid) { 
+    if (user1id !== userid) {
       return user1id
     } else {
       return user2id
@@ -37,7 +35,7 @@ const PreviousQuestionPage = () => {
       if (response.data.roomInfo.language === '') {
         setProgrammingLanguage('none')
       } else {
-       setProgrammingLanguage(response.data.roomInfo.language)
+        setProgrammingLanguage(response.data.roomInfo.language)
       }
       setQuestionData(response.data.roomInfo.questionData)
       setCode(response.data.roomInfo.code)
@@ -46,7 +44,6 @@ const PreviousQuestionPage = () => {
       console.error(error)
     }
   }
-
 
   useEffect(() => {
     getQuestionData()
@@ -72,7 +69,7 @@ const PreviousQuestionPage = () => {
               {questionData && <QuestionComponent questionData={questionData} />}
               <Box marginBottom={1} marginTop={1}>
                 <Typography variant='body2' component='body2'>
-                  You completed this question with {partnerId}. 
+                  You completed this question with {partnerId}.
                 </Typography>
               </Box>
             </Box>

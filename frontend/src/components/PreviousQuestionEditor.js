@@ -46,9 +46,7 @@ const PreviousQuestionEditor = ({ code, programmingLanguage }) => {
         }}
       >
         <FormControl style={{ width: '50%' }}>
-          <InputLabel id='Programming language'>
-            
-          </InputLabel>
+          <InputLabel id='Programming language' />
           <Select
             disabled
             value={programmingLanguage}

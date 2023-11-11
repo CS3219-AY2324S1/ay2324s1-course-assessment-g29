@@ -137,17 +137,17 @@ const ChatComponent = ({ socket }) => {
               </Box>
             </Box>
           </Card>
-        )
+          )
         : (
           <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-              <Fab
-                color='primary'
-                onClick={toggleChat}
-              >
-                <ChatIcon />
-              </Fab>
+            <Fab
+              color='primary'
+              onClick={toggleChat}
+            >
+              <ChatIcon />
+            </Fab>
           </div>
-        )}
+          )}
     </Box>
   )
 }

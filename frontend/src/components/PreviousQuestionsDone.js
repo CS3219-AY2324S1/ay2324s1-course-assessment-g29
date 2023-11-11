@@ -153,7 +153,6 @@ const PreviousQuestionsDone = () => {
       )
     },
 
-    
     {
       title: 'Complexity',
       dataIndex: 'complexity',

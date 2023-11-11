@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Chip } from '@mui/material'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 function getColourbyDifficulty (difficulty) {

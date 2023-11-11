@@ -1,8 +1,8 @@
 // TODO: check if commented out code is needed
 import { React, useEffect, useRef } from 'react'
-import DragHandleIcon from '@mui/icons-material/DragHandle';
-import IconButton from '@mui/material/IconButton';
-import { Paper} from '@mui/material';
+import DragHandleIcon from '@mui/icons-material/DragHandle'
+import IconButton from '@mui/material/IconButton'
+import { Paper, Typography } from '@mui/material'
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -15,7 +15,6 @@ import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import SendIcon from '@mui/icons-material/Send'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
-import { Typography } from '@mui/material'
 import { selectUserid, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
 import Navbar from '../components/Navbar'
 import {
@@ -70,7 +69,7 @@ const connectionOptions = {
   transports: ['websocket']
 }
 
-function CollabPage() {
+function CollabPage () {
   // const [message, setMessage] = useState('')
   const messages = useSelector(selectMessages)
   const navigate = useNavigate()
@@ -264,7 +263,7 @@ function CollabPage() {
   return (
     <>
       <Navbar />
-      <PanelGroup direction='horizontal' style={{ display: 'flex', justifyItems: 'stretch', width: '100%', height: '100%', }}>
+      <PanelGroup direction='horizontal' style={{ display: 'flex', justifyItems: 'stretch', width: '100%', height: '100%' }}>
         <Panel defaultSize={50} minSize={30} id='question' style={{ height: '100%', width: '100%' }}>
           <Paper
             elevation={2}
@@ -274,7 +273,7 @@ function CollabPage() {
               padding: 3,
               marginBottom: 2,
               height: '90%',
-              marginTop: 1.5, 
+              marginTop: 1.5,
               marginRight: 1,
               marginLeft: 3
             }}
@@ -304,7 +303,7 @@ function CollabPage() {
               cursor: 'ew-resize',
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
           >
             <DragHandleIcon style={{ color: '#333', transform: 'rotate(90deg)', fontSize: '20px' }} />
@@ -312,7 +311,7 @@ function CollabPage() {
         </PanelResizeHandle>
         <Panel
           defaultSize={50}
-          minSize={30} 
+          minSize={30}
           id='editor'
         >
 
@@ -323,20 +322,22 @@ function CollabPage() {
               paddingTop: 2,
               marginBottom: 2,
               height: '84%',
-              margin: 1.5, 
+              margin: 1.5,
               marginRight: 3
             }}
           >
             <Editor socketRef={socket} />
           </Paper>
 
-          <Paper elevation={2}
+          <Paper
+            elevation={2}
             sx={{
               padding: 1,
               marginBottom: 2,
-              margin: 1.5, 
+              margin: 1.5,
               marginRight: 3
-            }}>
+            }}
+          >
             <Box
               margin={1}
               display='flex'
@@ -374,7 +375,7 @@ function CollabPage() {
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
 
-      <VideoChat /> 
+      <VideoChat />
     </>
   )
 }
