@@ -10,14 +10,6 @@ import {
 const MetricComponent = () => {
   const previousQuestions = useSelector(selectPreviousQuestions)
 
-  // const hasQuestionDone = () => {
-  //   if (previousQuestions === undefined) {
-  //     return false
-  //   } else {
-  //     return true
-  //   }
-  // }
-
   const getEasyQuestion = () => {
     if (previousQuestions === undefined) {
       return 0

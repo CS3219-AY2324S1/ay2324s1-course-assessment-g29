@@ -40,7 +40,7 @@ const PreviousQuestionsDone = () => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
-  }, [])
+  }, [dispatch, userid])
 
   useEffect(() => {
     const fetchPromises = previousRooms.map((room) => {
@@ -71,7 +71,7 @@ const PreviousQuestionsDone = () => {
       .catch((error) => {
         console.error(error)
       })
-  }, [previousRooms])
+  }, [previousRooms, dispatch])
 
   const pagination = {
     pageSize: 5,

@@ -1,5 +1,9 @@
 // TODO: check if commented out code is needed
 import { React, useEffect, useRef } from 'react'
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import IconButton from '@mui/material/IconButton';
+import { Paper, Container } from '@mui/material';
+
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -59,6 +63,8 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -69,7 +75,7 @@ const connectionOptions = {
   transports: ['websocket']
 }
 
-function CollabPage () {
+function CollabPage() {
   // const [message, setMessage] = useState('')
   const messages = useSelector(selectMessages)
   const navigate = useNavigate()
@@ -257,83 +263,102 @@ function CollabPage () {
   }
 
   return (
-    <Box display='flex' flexDirection='column' alignContent='flex-start'>
+    <>
       <Navbar />
-      <Box
-        display='flex'
-        style={{ paddingTop: '1rem' }}
-        justifyContent='center'
-        height='100vh'
-        padding='2rem'
-      >
-        <PanelGroup direction='horizontal' autoSaveId='example'>
-          <Panel defaultSize={40} minSize={20} id='question'>
+      <PanelGroup direction='horizontal' style={{ display: 'flex', justifyItems: 'stretch', width: '100%', height: '100%', }}>
+        <Panel defaultSize={50} minSize={20} id='question' style={{ height: '100%', width: '100%' }}>
+          <Paper
+            elevation={2}
+            sx={{
+              flex: 1,
+              overflow: 'auto',
+              padding: 3,
+              marginBottom: 2,
+              height: '90%',
+              margin: 2
+            }}
+          >
+            <QuestionComponent questionData={questionData} />
+            <Box marginBottom={1} marginTop={1}>
+              <Typography variant='body2' component='h2'>
+                You're currently matched with {matchedUserid}
+              </Typography>
+            </Box>
+            <Typography variant='body2' component='h2'>
+              Common Programming Languages:{' '}
+              {matchingLanguages.length > 0 &&
+                matchingLanguages.map((language, i) => (
+                  <Chip key={i} label={language} />
+                ))}
+            </Typography>
+          </Paper>
+        </Panel>
+        <PanelResizeHandle style={{ width: '0.5%', backgroundColor: 'transparent', cursor: 'ew-resize', border: 'none' }}>
+          <IconButton
+            style={{
+              width: '100%',
+              height: '100%',
+              background: 'none',
+              border: 'none',
+              cursor: 'ew-resize',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <DragHandleIcon style={{ color: '#333', transform: 'rotate(90deg)', fontSize: '20px' }} />
+          </IconButton>
+        </PanelResizeHandle>
+        <Panel
+          defaultSize={50}
+          minSize={20} id='editor'
+        >
+
+          <Paper
+            elevation={2}
+            sx={{
+              flex: 1,
+              padding: 1,
+              marginBottom: 2,
+              height: '85%',
+              margin: 2
+            }}
+          >
+            <Editor socketRef={socket} />
+          </Paper>
+
+          <Paper elevation={2}
+            sx={{
+              padding: 1,
+              marginBottom: 2,
+              margin: 2
+            }}>
             <Box
+              margin={1}
               display='flex'
               flexDirection='row'
-              justifyContent='center'
-              sx={{ p: 2 }}
-            >
-              <Box justifyContent='center'>
-                <Box>
-                  <QuestionComponent questionData={questionData} />
-                  <Box marginBottom={1}>
-                    <Typography variant='body2' component='h2'>
-                      You're currently matched with {matchedUserid}
-                    </Typography>
-                  </Box>
-                  <Typography variant='body2' component='h2'>
-                    Common Programming Languages:{' '}
-                    {matchingLanguages.length > 0 &&
-                      matchingLanguages.map((language, i) => (
-                        <Chip key={i} label={language} />
-                      ))}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Panel>
-          <PanelResizeHandle />
-          <Panel
-            defaultSize={40}
-            minSize={20} id='editor'
-          >
-            <div
-              display='flex'
-              flexDirection='column'
-              flex={1}
-              height='100vh'
               alignContent='flex-end'
             >
-              <Box margin={1} flex={1}>
-                <Editor socketRef={socket} />
-              </Box>
-              <Box
-                margin={1}
-                display='flex'
-                flexDirection='row'
-                alignContent='flex-end'
+              <Button
+                variant='contained'
+                onClick={LeaveRoom}
+                endIcon={<SendIcon />}
               >
-                <Button
-                  variant='contained'
-                  onClick={LeaveRoom}
-                  endIcon={<SendIcon />}
-                >
-                  Close room
-                </Button>
-                <Box marginRight={1} />
-                <Button
-                  variant='contained'
-                  onClick={changeQuestion}
-                  endIcon={<QuestionMarkIcon />}
-                >
-                  Change question
-                </Button>
-              </Box>
-            </div>
-          </Panel>
-        </PanelGroup>
-      </Box>
+                Close room
+              </Button>
+              <Box marginRight={1} />
+              <Button
+                variant='contained'
+                onClick={changeQuestion}
+                endIcon={<QuestionMarkIcon />}
+              >
+                Change question
+              </Button>
+            </Box>
+          </Paper>
+
+        </Panel>
+      </PanelGroup>
       <ProgrammingLanguageDialog
         matchedUserId={matchedUserid}
         language={newProgrammingLanguage}
@@ -344,7 +369,7 @@ function CollabPage () {
       <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
-    </Box>
+    </>
   )
 }
 

@@ -6,6 +6,7 @@ import { materialLightInit } from '@uiw/codemirror-theme-material'
 import { python } from '@codemirror/lang-python'
 import { java } from '@codemirror/lang-java'
 import { cpp } from '@codemirror/lang-cpp'
+import { Container } from '@mui/material/'
 import {
   selectCode,
   setCode,
@@ -74,7 +75,7 @@ export const Editor = ({ socketRef }) => {
       }}
     >
       <AwaitChangeProgrammingLanguageDialog matchedUserId={matchedUserid} />
-      <Card
+      <Container
         style={{
           width: '100%',
           height: '100%',
@@ -94,6 +95,7 @@ export const Editor = ({ socketRef }) => {
             ))}
           </Select>
         </FormControl>
+        <div style={{ flex: 1, overflow: 'auto' }}>
         <CodeMirror
           value={reduxCode}
           style={{ width: '100%', paddingTop: '1rem' }}
@@ -108,8 +110,8 @@ export const Editor = ({ socketRef }) => {
             }
           })}
           extensions={determineLanguage(selectedLanguage)}
-        />
-      </Card>
+        /></div>
+      </Container>
     </div>
   )
 }

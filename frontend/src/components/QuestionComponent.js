@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Chip } from '@mui/material'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 function getColourbyDifficulty (difficulty) {
@@ -18,7 +20,6 @@ function getColourbyDifficulty (difficulty) {
 export const QuestionComponent = (questionData) => {
   const data = questionData.questionData || { description: '', displayName: '', topic: '', difficulty: '' }
   const [question, setQuestion] = useState(data.description || 'Question Description')
-  const [questionNo] = useState(1) // TODO update QuestionService to support
   const [questionTitle, setQuestionTitle] = useState(data.displayName || 'Question Title')
   const [tags, setTags] = useState(data.topic || [])
   const [difficulty, setDifficulty] = useState(data.difficulty) // TODO update QuestionService to support
@@ -31,9 +32,9 @@ export const QuestionComponent = (questionData) => {
   }, [data])
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>
-        {questionNo}. {questionTitle}
+    <>
+      <h2 style={{ margin: 0, padding: 0 }}>
+        {questionTitle}
       </h2>
       <h3>
         <span style={{ color: getColourbyDifficulty(difficulty) }}>
@@ -52,6 +53,6 @@ export const QuestionComponent = (questionData) => {
       <MarkdownPreview
         source={question} wrapperElement={{ 'data-color-mode': 'light' }}
       />
-    </div>
+    </>
   )
 }
