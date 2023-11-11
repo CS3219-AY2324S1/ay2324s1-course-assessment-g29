@@ -25,7 +25,10 @@ import {
   selectDisplayname,
   selectEmail,
   selectPreferredLanguages,
-  setPreferredLanguages
+  setPreferredLanguages,
+  selectIdToken,
+  selectIsAuthorized,
+  setIsAuthorized
 } from '../redux/UserSlice'
 
 function Profile () {
@@ -34,8 +37,30 @@ function Profile () {
   const email = useSelector(selectEmail)
   const displayName = useSelector(selectDisplayname)
   const preferredLanguages = useSelector(selectPreferredLanguages)
+  const idToken = useSelector(selectIdToken)
+  const isAuthorized = useSelector(selectIsAuthorized)
 
-  const ALL_LANGUAGES = ['Python', 'Java', 'C++']
+  useEffect(() => {
+    const config = {
+      headers: { Authorization: `Bearer ${idToken}` }
+    }
+
+    axios
+      .get(`http://localhost:3001/user/authorizeAdmin/${userid}`, config)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(setIsAuthorized(true))
+        } else {
+          dispatch(setIsAuthorized(false))
+        }
+      })
+      .catch((error) => {
+        console.error('Error checking authorization:', error)
+        dispatch(setIsAuthorized(false))
+      })
+  }, [userid, idToken])
+
+  const ALL_LANGUAGES = ['Python', 'Java', 'C']
 
   const [isLanguageChangeDialogOpen, setIsLanguageChangeDialogOpen] =
     useState(false)
@@ -46,7 +71,6 @@ function Profile () {
     axios
       .get(`http://localhost:3001/user/getLanguage/${userid}`)
       .then((response) => {
-        console.log(response)
         const userLanguages = response.data.languages
         dispatch(setPreferredLanguages(userLanguages))
       })
@@ -148,6 +172,10 @@ function Profile () {
                 change preferred languages
               </Typography>
             </Link>
+
+            {isAuthorized
+              ? (<a href='/admin/questions'><Button variant='outlined'>View questions </Button></a>)
+              : <></>}
 
             <Dialog
               open={isLanguageChangeDialogOpen}

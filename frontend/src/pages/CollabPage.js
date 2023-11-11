@@ -12,18 +12,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Editor } from '../components/Editor'
 import { Box } from '@mui/system'
 import { QuestionComponent } from '../components/QuestionComponent'
-// import ScrollToBottom from 'react-scroll-to-bottom'
 import Button from '@mui/material/Button'
-// import Card from '@mui/material/Card'
-// import Grid from '@mui/material/Grid'
 import Chip from '@mui/material/Chip'
 import SendIcon from '@mui/icons-material/Send'
-// import TextField from '@mui/material/TextField'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { Typography } from '@mui/material'
 import { selectUserid, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
 import Navbar from '../components/Navbar'
-// import chatComponent from '../components/ChatComponent'
 import {
   selectRoomid,
   selectMatchedUserid,
@@ -35,7 +30,9 @@ import {
   setMatchedUserId,
   selectMessages,
   appendMessages,
-  setMessages
+  setMessages,
+  setIsInitiator,
+  setTwilioToken
 } from '../redux/MatchingSlice'
 import {
   setErrorMessage,
@@ -63,8 +60,7 @@ import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
 import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import VideoChat from '../components/VideoChat'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -107,16 +103,19 @@ function CollabPage() {
 
     socket.current.on(
       'MatchSuccess',
-      ({ matchedUserId, messages, code, language }) => {
+      ({ matchedUserId, messages, code, language, isInitiator, twilioToken }) => {
         console.log(matchedUserId)
         console.log(messages)
         console.log(code)
         console.log(language)
+        console.log(twilioToken)
         console.log('Match Success')
         dispatch(setMessages(messages))
         dispatch(setCode(code))
         dispatch(setCodeEditorLanguage(language))
         dispatch(setAwaitChangeQuestionOpen(false))
+        dispatch(setTwilioToken(twilioToken))
+        dispatch(setIsInitiator(isInitiator))
       }
     )
 
@@ -191,6 +190,7 @@ function CollabPage() {
     socket.current.on('DisconnectPeer', (message) => {
       dispatch(setErrorMessage('Peer has closed the room'))
       dispatch(setShowError(true))
+      navigate('/')
     })
   }, [dispatch, matchedUserid])
 
@@ -369,6 +369,8 @@ function CollabPage() {
       <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
+
+      <VideoChat />
     </>
   )
 }
