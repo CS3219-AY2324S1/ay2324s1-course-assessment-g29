@@ -2,8 +2,7 @@
 import { React, useEffect, useRef } from 'react'
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import IconButton from '@mui/material/IconButton';
-import { Paper, Container } from '@mui/material';
-
+import { Paper} from '@mui/material';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -266,7 +265,7 @@ function CollabPage() {
     <>
       <Navbar />
       <PanelGroup direction='horizontal' style={{ display: 'flex', justifyItems: 'stretch', width: '100%', height: '100%', }}>
-        <Panel defaultSize={50} minSize={20} id='question' style={{ height: '100%', width: '100%' }}>
+        <Panel defaultSize={50} minSize={30} id='question' style={{ height: '100%', width: '100%' }}>
           <Paper
             elevation={2}
             sx={{
@@ -275,7 +274,9 @@ function CollabPage() {
               padding: 3,
               marginBottom: 2,
               height: '90%',
-              margin: 2
+              marginTop: 1.5, 
+              marginRight: 1,
+              marginLeft: 3
             }}
           >
             <QuestionComponent questionData={questionData} />
@@ -311,17 +312,19 @@ function CollabPage() {
         </PanelResizeHandle>
         <Panel
           defaultSize={50}
-          minSize={20} id='editor'
+          minSize={30} 
+          id='editor'
         >
 
           <Paper
             elevation={2}
             sx={{
               flex: 1,
-              padding: 1,
+              paddingTop: 2,
               marginBottom: 2,
-              height: '85%',
-              margin: 2
+              height: '84%',
+              margin: 1.5, 
+              marginRight: 3
             }}
           >
             <Editor socketRef={socket} />
@@ -331,7 +334,8 @@ function CollabPage() {
             sx={{
               padding: 1,
               marginBottom: 2,
-              margin: 2
+              margin: 1.5, 
+              marginRight: 3
             }}>
             <Box
               margin={1}
@@ -370,7 +374,7 @@ function CollabPage() {
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
 
-      <VideoChat />
+      <VideoChat /> 
     </>
   )
 }

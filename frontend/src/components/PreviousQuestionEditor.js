@@ -47,12 +47,15 @@ const PreviousQuestionEditor = ({ code, programmingLanguage }) => {
       >
         <FormControl style={{ width: '50%' }}>
           <InputLabel id='Programming language'>
-            Choose programming language
+            
           </InputLabel>
           <Select
             disabled
             value={programmingLanguage}
           >
+            <MenuItem key={0} value='none'>
+              No specified language
+            </MenuItem>
             <MenuItem key={1} value='Python'>
               Python
             </MenuItem>

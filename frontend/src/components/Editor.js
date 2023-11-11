@@ -1,6 +1,6 @@
 import { React, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Select, MenuItem, InputLabel, FormControl, Card } from '@mui/material'
+import { Select, MenuItem, InputLabel, FormControl } from '@mui/material'
 import CodeMirror from '@uiw/react-codemirror'
 import { materialLightInit } from '@uiw/codemirror-theme-material'
 import { python } from '@codemirror/lang-python'
@@ -16,7 +16,7 @@ import {
 import { selectMatchedUserid } from '../redux/MatchingSlice'
 import AwaitChangeProgrammingLanguageDialog from '../components/AwaitChangeProgrammingLanguageAlert'
 
-function determineLanguage (selectedLanguage) {
+function determineLanguage(selectedLanguage) {
   if (selectedLanguage === 'Python') {
     return [python({ jsx: true })]
   } else if (selectedLanguage === 'Java') {
@@ -83,10 +83,13 @@ export const Editor = ({ socketRef }) => {
           flexDirection: 'column'
         }}
       >
-        <FormControl style={{ width: '60%' }}>
-          <InputLabel id='Programming language'>
-            Choose programming language
-          </InputLabel>
+        <FormControl style={{ width: '20vw' }}>
+          {selectedLanguage ? (
+            <InputLabel id='Programming language'></InputLabel>
+          ) : (
+            <InputLabel id='Programming language'>
+              Choose programming language
+            </InputLabel>)}
           <Select onChange={handleLanguageChange} value={selectedLanguage}>
             {languages.map((language, index) => (
               <MenuItem key={index} value={language}>
@@ -95,22 +98,23 @@ export const Editor = ({ socketRef }) => {
             ))}
           </Select>
         </FormControl>
-        <div style={{ flex: 1, overflow: 'auto' }}>
-        <CodeMirror
-          value={reduxCode}
-          style={{ width: '100%', paddingTop: '1rem' }}
-          onChange={handleCodeChange}
-          className='custom-codemirror'
-          theme={materialLightInit({
-            settings: {
-              caret: '#c6c6c6',
-              fontFamily: 'monospace',
-              foreground: '#75baff',
-              lineHighlight: '#8a91991a'
-            }
-          })}
-          extensions={determineLanguage(selectedLanguage)}
-        /></div>
+        <div style={{ flex: 1, flexGrow: 1, overflow: 'auto' }}>
+          <CodeMirror
+            value={reduxCode}
+            style={{ paddingTop: '1rem' }}
+            onChange={handleCodeChange}
+            theme={materialLightInit({
+              settings: {
+                caret: '#c6c6c6',
+                fontFamily: 'monospace',
+                foreground: '#75baff',
+                lineHighlight: '#8a91991a'
+              }
+            })}
+            extensions={determineLanguage(selectedLanguage)}
+          />
+        </div>
+
       </Container>
     </div>
   )

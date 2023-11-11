@@ -14,7 +14,6 @@ const MetricComponent = () => {
     if (previousQuestions === undefined) {
       return 0
     }
-    console.log(previousQuestions)
     return previousQuestions
       .filter(attemptData => attemptData && attemptData.attempt)
       .filter((question) => question.attempt.questionData.difficulty === 'Easy').length

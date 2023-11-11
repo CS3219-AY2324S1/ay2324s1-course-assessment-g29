@@ -58,9 +58,9 @@ function Profile () {
         console.error('Error checking authorization:', error)
         dispatch(setIsAuthorized(false))
       })
-  }, [userid, idToken])
+  }, [userid, idToken, dispatch])
 
-  const ALL_LANGUAGES = ['Python', 'Java', 'C']
+  const ALL_LANGUAGES = ['Python', 'Java', 'C++']
 
   const [isLanguageChangeDialogOpen, setIsLanguageChangeDialogOpen] =
     useState(false)
@@ -78,7 +78,7 @@ function Profile () {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
-  }, [])
+  }, [dispatch, userid])
 
   const handleLanguageChange = () => {
     console.log(selectedLanguages)
@@ -111,16 +111,17 @@ function Profile () {
   return (
     <Box component='span' sx={{ p: 2 }} flex={1}>
       <Card flex={1} variant='outlined' sx={{ p: 2 }}>
-        <Box display='flex' flexDirection='row' justifyContent='space-between' flex={1}>
+        <Box display='flex' flexDirection='row' justifyContent='space-between' flex={1} flexWrap='wrap'>
           <Box flex={1}>
             <Typography
               variant='h5'
               marginBottom='0.5rem'
               fontWeight='bold'
+              flexWrap='wrap'
             >
               {displayName}'s profile
             </Typography>
-            <Box display='flex' flex={1}>
+            <Box display='flex' flex={1} flexWrap='wrap'>
               <Typography
                 variant='body2'
                 marginBottom='0.5rem'
@@ -133,7 +134,7 @@ function Profile () {
               </Typography>
             </Box>
 
-            <Box display='flex' flex={1}>
+            <Box display='flex' flex={1} flexWrap='wrap'>
               <Typography
                 variant='body2'
                 marginBottom='0.5rem'
@@ -155,7 +156,7 @@ function Profile () {
               Preferred Languages:
 
             </Typography>
-            <Stack display='flex' direction='row' spacing={1} flex={1}>
+            <Stack display='flex' direction='row' spacing={1} flex={1} flexWrap='wrap'>
               {preferredLanguages &&
                   preferredLanguages.map((language, index) => {
                     return (
@@ -174,7 +175,7 @@ function Profile () {
             </Link>
 
             {isAuthorized
-              ? (<a href='/admin/questions'><Button variant='outlined'>View questions </Button></a>)
+              ? (<a href='/admin/questions'><Button variant='outlined'>Admin Console </Button></a>)
               : <></>}
 
             <Dialog

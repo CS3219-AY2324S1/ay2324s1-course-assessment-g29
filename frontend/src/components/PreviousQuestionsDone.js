@@ -28,7 +28,6 @@ const PreviousQuestionsDone = () => {
     axios
       .get(`http://localhost:3001/user/history/${userid}`)
       .then((response) => {
-        console.log(response.data.history)
         const rooms = []
         response.data.history.forEach((room) => {
           rooms.push(room)
@@ -78,6 +77,14 @@ const PreviousQuestionsDone = () => {
     showSizeChanger: false
   }
 
+  // const getPartnerId= (userid1, userid2) => {
+  //   if (userid === userid1) {
+  //     return userid2
+  //   } else {
+  //     return userid1
+  //   }
+  // }
+
   const data = () => {
     if (previousQuestions === undefined) {
       return []
@@ -102,6 +109,12 @@ const PreviousQuestionsDone = () => {
   }
 
   const columns = [
+    // {
+    //   title: 'Done with',
+    //   dataIndex: 'partnerId',
+    //   key: 'partnerId',
+    //   width: '15%',
+    // },
     {
       title: 'Title',
       dataIndex: 'title',
@@ -139,6 +152,8 @@ const PreviousQuestionsDone = () => {
         <Link to={`/previousAttempt/${record.roomId}`}>{text}</Link>
       )
     },
+
+    
     {
       title: 'Complexity',
       dataIndex: 'complexity',
