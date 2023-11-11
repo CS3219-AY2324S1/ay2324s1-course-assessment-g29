@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Draggable from 'react-draggable'
 import Video from 'twilio-video'
 import { selectRoomid, selectStartVideoChat, selectTwilioToken, setStartVideoChat, setTwilioToken } from '../redux/MatchingSlice'
-// import {ReactComponent as AvatarVideoChat }from '../images/AvatarVideoChat.svg'
+import {ReactComponent as AvatarVideoChat }from '../images/AvatarVideoChat.svg'
 
 const VideoComponent = ({stopVideo, setStopVideo}) => {
   const dispatch = useDispatch()
@@ -13,7 +13,7 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
   const roomId = useSelector(selectRoomid)
   const token = useSelector(selectTwilioToken)
   const roomRef = useRef(null)
-  const [displayRemoteAvatar, setDisplayRemoteAvatar] = useState(false)
+  const [displayRemoteAvatar, setDisplayRemoteAvatar] = useState(true)
 
   useEffect(() => {
     console.log(token)
@@ -38,21 +38,24 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
               console.log('attaching track')
               const track = publication.track
               remoteVidRef.current.appendChild(track.attach())
+              setDisplayRemoteAvatar(false)
             }
           })
 
           participant.on('trackSubscribed', track => {
             remoteVidRef.current.appendChild(track.attach())
+            setDisplayRemoteAvatar(false)
           })
         })
 
         room.on('participantConnected', participant => {
           console.log(`Participant "${participant.identity}" connected`)
 
-          participant.tracks.forEach(publication => {
+          participant.tracks.forEach(publication => {setDisplayRemoteAvatar(false)
             if (publication.isSubscribed) {
               const track = publication.track
               remoteVidRef.current.appendChild(track.attach())
+
             }
           })
 
@@ -61,11 +64,13 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
               remoteVidRef.current.removeChild(remoteVidRef.current.firstChild)
             }
             remoteVidRef.current.appendChild(track.attach())
+            setDisplayRemoteAvatar(false)
           })
         })
 
         room.on('participantDisconnected', participant => {
           console.log(`Participant "${participant.identity}" disconnected`)
+          setDisplayRemoteAvatar(true)
           participant.tracks.forEach(publication => {
             if (publication.track) {
               const attachedElements = publication.track.detach()
@@ -121,6 +126,20 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
             <div style={{ width: '400px', height: '500px' }}>
               <div ref={localVidRef} muted />
               <h2>Remote Participants</h2>
+              {displayRemoteAvatar && 
+                <>
+                  <div style={{
+                    width: '320px',
+                    height: '180px',
+                    backgroundColor: '#5D5B5B',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <AvatarVideoChat />
+                  </div>
+                </>
+              }
               <div id='remote-media-div' ref={remoteVidRef} />
             </div>
           </Draggable>
@@ -129,46 +148,6 @@ const VideoComponent = ({stopVideo, setStopVideo}) => {
     </>
   )
 }
-
-// <div style={{ width: '400px', height: '500px' }}>
-// {displayLocalAvatar ? (
-//   <>
-//     <div style={{
-//       width: '320px',
-//       height: '180px',
-//       backgroundColor: '#5D5B5B',
-//       display: 'flex',
-//       justifyContent: 'center',
-//       alignItems: 'center'
-//     }}>
-//       <AvatarVideoChat />
-//     </div>
-//   </>
-// ) : (
-//   <>
-//     <div ref={localVidRef} muted />
-//   </>
-// )}
-// <h2>Remote Participants</h2>
-// {displayRemoteAvatar ? (
-//   <>
-//     <div style={{
-//       width: '320px',
-//       height: '180px',
-//       backgroundColor: '#5D5B5B',
-//       display: 'flex',
-//       justifyContent: 'center',
-//       alignItems: 'center'
-//     }}>
-//       <AvatarVideoChat />
-//     </div>
-//   </>
-// ) : (
-//   <>
-//     <div id='remote-media-div' ref={remoteVidRef} />
-//   </>
-// )}
-// </div>
 
 export default VideoComponent
 
