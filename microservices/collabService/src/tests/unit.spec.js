@@ -108,20 +108,19 @@ describe('Collab Service Unit Tests', () => {
 
     clientSocket.emit('ChangeEditorLanguage', languageData, () => {
     })
-    clientSocket2.on('CheckChangeEditorLanguage', (response) => {
+    clientSocket2.on('ChangeEditorLanguage', (response) => {
       assert.equal(response.language, languageData.language)
       done()
     })
   })
 
-  it('should handle the ConfirmChangeEditorLanguage event', (done) => {
-    const languageData = { agree: true, language: 'Python' }
+  it('should handle the ChangeQuestionData event', (done) => {
+    const questionData = { checkField: 'test1' }
 
-    clientSocket.emit('ConfirmChangeEditorLanguage', languageData, () => {
+    clientSocket.emit('ChangeQuestionData', questionData, () => {
     })
-    clientSocket2.on('ConfirmChangeEditorLanguage', (response) => {
-      assert.equal(response.agree, languageData.agree)
-      assert.equal(response.language, languageData.language)
+    clientSocket2.on('ChangeQuestionData', (response) => {
+      assert.equal(response.questionData.checkField, questionData.checkField)
       done()
     })
   })
