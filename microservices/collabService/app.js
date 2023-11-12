@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
   socket.on('JoinRoom', (data, callback) => {
     collabController.handleJoinRoom(socket, data, callback)
   })
-  
+
   socket.on('Message', (data, callback) => {
     collabController.handleMessage(socket, data, callback)
   })
