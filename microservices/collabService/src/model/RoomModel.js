@@ -6,6 +6,7 @@ class RoomModel {
     this.roomIdToCode = {}
     this.roomIdToMessages = {}
     this.roomIdToLanguage = {}
+    this.roomIdToQuestionData = {}
   }
 
   disconnectFromSocket (socketId) {

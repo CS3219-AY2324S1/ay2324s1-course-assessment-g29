@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 export const matchingSlice = createSlice({
   name: 'match',
   initialState: {
-    isInitiator: 'awaiting',
     twilioToken: null,
     awaitingMatching: false,
     difficulty: '',
@@ -14,9 +13,6 @@ export const matchingSlice = createSlice({
     questionData: {}
   },
   reducers: {
-    setIsInitiator: (state, action) => {
-      state.isInitiator = action.payload
-    },
     setTwilioToken: (state, action) => {
       state.twilioToken = action.payload
     },
@@ -43,16 +39,24 @@ export const matchingSlice = createSlice({
     },
     appendMessages: (state, action) => {
       state.messages = [...state.messages, action.payload]
+    },
+    resetMatchingStore: (state, action) => {
+      state.twilioToken = null
+      state.awaitingMatching = false
+      state.difficulty = ''
+      state.roomid = ''
+      state.messages = []
+      state.matchedUserid = ''
+      state.matchingLanguages = []
+      state.questionData = {}
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setIsInitiator, setTwilioToken } = matchingSlice.actions
+export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setTwilioToken, resetMatchingStore } = matchingSlice.actions
 
 export const selectTwilioToken = (state) => state.match.twilioToken
-
-export const selectIsInitiator = (state) => state.match.isInitiator
 
 export const selectRoomid = (state) => state.match.roomid
 

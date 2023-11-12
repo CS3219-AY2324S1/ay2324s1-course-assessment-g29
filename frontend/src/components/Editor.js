@@ -10,10 +10,8 @@ import {
   selectCode,
   setCode,
   selectCodeEditorLanguage,
-  setAwaitAlertOpen
+  setCodeEditorLanguage
 } from '../redux/EditorSlice'
-import { selectMatchedUserid } from '../redux/MatchingSlice'
-import AwaitChangeProgrammingLanguageDialog from '../components/AwaitChangeProgrammingLanguageAlert'
 
 function determineLanguage (selectedLanguage) {
   if (selectedLanguage === 'Python') {
@@ -39,12 +37,11 @@ export const Editor = ({ socketRef }) => {
   const dispatch = useDispatch()
   const reduxCode = useSelector(selectCode)
   const [languages] = useState(['Python', 'Java', 'C++'])
-  const matchedUserid = useSelector(selectMatchedUserid)
   const selectedLanguage = useSelector(selectCodeEditorLanguage)
 
   const handleLanguageChange = (e) => {
     const selectedValue = e.target.value
-    dispatch(setAwaitAlertOpen(true))
+    dispatch(setCodeEditorLanguage(selectedValue))
     socketRef.current.emit(
       'ChangeEditorLanguage',
       { language: selectedValue },
@@ -52,7 +49,6 @@ export const Editor = ({ socketRef }) => {
         console.log(error)
       }
     )
-    // setSelectedLanguage(selectedValue) // Update the selected language state
   }
 
   const handleCodeChange = (value, data) => {
@@ -73,7 +69,6 @@ export const Editor = ({ socketRef }) => {
         justifyContent: 'center'
       }}
     >
-      <AwaitChangeProgrammingLanguageDialog matchedUserId={matchedUserid} />
       <Card
         style={{
           width: '100%',

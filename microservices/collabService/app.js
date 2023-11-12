@@ -19,23 +19,7 @@ io.on('connection', (socket) => {
   socket.on('JoinRoom', (data, callback) => {
     collabController.handleJoinRoom(socket, data, callback)
   })
-
-  socket.on('JoinVideoRoom', (data, callback) => {
-    collabController.handleJoinVideoRoom(socket, data, callback)
-  })
-
-  socket.on('VideoInitiate', (data, callback) => {
-    collabController.handleVideoInitiate(socket, data, callback)
-  })
-
-  socket.on('VideoSignal', (data, callback) => {
-    collabController.handleVideoSignal(socket, data, callback)
-  })
-
-  socket.on('VideoReturnSignal', (data, callback) => {
-    collabController.handleVideoReturnSignal(socket, data, callback)
-  })
-
+  
   socket.on('Message', (data, callback) => {
     collabController.handleMessage(socket, data, callback)
   })
@@ -48,16 +32,8 @@ io.on('connection', (socket) => {
     collabController.handleChangeEditorLanguage(socket, data, callback)
   })
 
-  socket.on('ConfirmChangeEditorLanguage', (data, callback) => {
-    collabController.handleConfirmChangeEditorLanguage(socket, data, callback)
-  })
-
   socket.on('ChangeQuestionData', (data, callback) => {
     collabController.handleChangeQuestionData(socket, data, callback)
-  })
-
-  socket.on('ConfirmChangeQuestion', (data, callback) => {
-    collabController.handleConfirmChangeQuestionData(socket, data, callback)
   })
 
   socket.on('CloseRoom', (data, callback) => {
