@@ -170,6 +170,7 @@ class CollabController {
   handleChangeQuestionData (socket, { questionData }, callback) {
     try {
       console.log(socket.id)
+      console.log('changing question data')
       console.log(questionData)
       const roomId = this.roomModel.socketToRoom[socket.id]
       this.roomModel.roomIdToQuestionData[roomId] = questionData

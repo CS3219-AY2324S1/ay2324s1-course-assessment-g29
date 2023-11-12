@@ -115,12 +115,13 @@ describe('Collab Service Unit Tests', () => {
   })
 
   it('should handle the ChangeQuestionData event', (done) => {
-    const questionData = { checkField: 'test1' }
+    const question = { questionData: 'test1' }
 
-    clientSocket.emit('ChangeQuestionData', questionData, () => {
+    clientSocket.emit('ChangeQuestionData', question, () => {
     })
     clientSocket2.on('ChangeQuestionData', (response) => {
-      assert.equal(response.questionData.checkField, questionData.checkField)
+      console.log(response.checkField)
+      assert.equal(response.questionData, question.questionData)
       done()
     })
   })
