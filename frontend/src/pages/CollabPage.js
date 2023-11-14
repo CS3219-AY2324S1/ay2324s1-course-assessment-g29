@@ -49,6 +49,7 @@ import {
 } from '../redux/EditorSlice'
 import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
+import VideocamIcon from '@mui/icons-material/Videocam'
 import VideoChat from '../components/VideoChat'
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 
