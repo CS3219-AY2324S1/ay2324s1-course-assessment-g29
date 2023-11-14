@@ -126,7 +126,7 @@ router.get('/authorizeAdmin/:uid', async (req, res) => {
     await tokenManager.authorizeAdmin(req, res, () => {})
     res.status(200).json({ message: 'Authorized' })
   } catch (error) {
-    return res
+    res.status(400).json({ message: 'Unauthorized' })
   }
 })
 
