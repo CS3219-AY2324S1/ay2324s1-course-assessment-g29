@@ -9,6 +9,7 @@ services:
       - some-net
     ports:
       - '3001:3001' 
+    restart: always
 
   questionservice:
     build:
@@ -18,6 +19,7 @@ services:
       - some-net
     ports:
       - '3002:3002' 
+    restart: always
 
   matchingservice:
     build:
@@ -29,6 +31,7 @@ services:
       - some-net
     ports:
       - '4000:4000' 
+    restart: always
       
   roomservice:
     build:
@@ -38,6 +41,7 @@ services:
       - some-net
     ports:
       - '8000:8000'
+    restart: always
 
   collabservice:
     build:
@@ -47,6 +51,7 @@ services:
       - some-net
     ports:
       - '2000:2000'  
+    restart: always
 
   # frontend:
   #   build:
@@ -61,6 +66,7 @@ services:
   #    - '3000:3000'  
   #   networks:
   #     - some-net
+  #   restart: always
 
 networks:
   some-net:
