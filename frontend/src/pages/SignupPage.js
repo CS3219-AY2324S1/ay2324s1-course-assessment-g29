@@ -64,6 +64,7 @@ function SignupPage () {
   const handleSignUp = async (e) => {
     e.preventDefault()
 
+    console.log('Trying to sign up')
     try {
       requireAllNonNull()
       checkPasswords(password, passwordConfirmation)
@@ -73,11 +74,12 @@ function SignupPage () {
         email,
         password
       }).catch((error) => {
-        console.log(error)
-        dispatch(setErrorMessage(error.message))
-        dispatch(setShowError(true))
+        if (error.response.status === 400) {
+          // Catch specific error
+          throw new Error(error.response.data.error)
+        }
       })
-      console.log('sign up success')
+      console.log('Sign up success')
       const userCredentials = await signInWithEmailAndPassword(
         auth,
         email,
@@ -95,11 +97,11 @@ function SignupPage () {
         idToken
       })
       dispatch(setIdToken(tokenResult.data.token))
-      console.log('Signup successful')
       console.log('idToken', idToken)
       dispatch(setLoginStatus(true))
       navigate('/home')
     } catch (error) {
+      console.log(error)
       dispatch(setErrorMessage(error.message))
       dispatch(setShowError(true))
     }
