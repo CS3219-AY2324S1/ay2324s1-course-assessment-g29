@@ -21,15 +21,19 @@ class TokenManager {
   }
 
   checkValidIdToken = async (uid, idToken, next) => {
-    this.admin
-      .auth()
-      .verifyIdToken(idToken)
-      .then(function (decodedToken) {
-        if (uid !== decodedToken.user_id) {
-          throw new Error('Invalid token for current user')
-        }
-        return next()
-      })
+    try {
+      this.admin
+        .auth()
+        .verifyIdToken(idToken)
+        .then(function (decodedToken) {
+          if (uid !== decodedToken.user_id) {
+            throw new Error('Invalid token for current user')
+          }
+          return next()
+        })
+    } catch (error) {
+      throw new Error('Expired id token')
+    }
   }
 
   checkExpired = async (decodedToken) => {
@@ -79,7 +83,6 @@ class TokenManager {
       try {
         this.checkValidIdToken(req.params.uid, decoded.idToken, next)
       } catch (error) {
-        console.log(error)
         return res.status(403).json({ error: 'Forbidden' })
       }
     } else {
