@@ -26,7 +26,7 @@ const PreviousQuestionsDone = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/user/history/${userid}`)
+      .get(`http://34.125.231.246:3001/user/history/${userid}`)
       .then((response) => {
         const rooms = []
         response.data.history.forEach((room) => {
@@ -44,7 +44,7 @@ const PreviousQuestionsDone = () => {
   useEffect(() => {
     const fetchPromises = previousRooms.map((room) => {
       return axios
-        .get(`http://localhost:8000/room/getHistory/${room}`)
+        .get(`http://34.125.231.246:8000/room/getHistory/${room}`)
         .then((response) => {
           return {
             roomId: room,

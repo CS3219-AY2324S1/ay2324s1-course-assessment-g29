@@ -55,7 +55,7 @@ function LoginPage () {
       dispatch(setStateEmail(useremail))
       console.log(userCredentials)
       const idToken = await userCredentials.user.getIdToken()
-      const tokenResult = await axios.post('http://localhost:3001/user/token', {
+      const tokenResult = await axios.post('http://34.125.231.246:3001/user/token', {
         uid: userid,
         idToken
       })

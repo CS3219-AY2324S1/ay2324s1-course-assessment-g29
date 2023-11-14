@@ -53,20 +53,21 @@ services:
       - '2000:2000'  
     restart: always
 
-  # frontend:
-  #   build:
-  #     context: ./frontend/
-  #     dockerfile: frontend.Dockerfile
-  #   depends_on:
-  #     - collabservice
-  #     - roomservice
-  #     - matchingservice
-  #     - userservice
-  #   ports:
-  #    - '3000:3000'  
-  #   networks:
-  #     - some-net
-  #   restart: always
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: frontend.Dockerfile
+    depends_on:
+      - collabservice
+      - roomservice
+      - matchingservice
+      - userservice
+      - questionservice
+    ports:
+     - '3000:3000'  
+    networks:
+      - some-net
+    restart: always
 
 networks:
   some-net:

@@ -11,7 +11,7 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3002/question/getAll')
+      .get('http://34.125.231.246:3002/question/getAll')
       .then((response) => {
         setQuestions(response.data)
       })
@@ -32,7 +32,7 @@ const CreateNewQuestion = ({ questions, setQuestions }) => {
     console.log(QuestionObject)
 
     await axios
-      .post('http://localhost:3002/question/post', QuestionObject)
+      .post('http://34.125.231.246:3002/question/post', QuestionObject)
       .then((response) => {
         navigate('/admin/questions')
         // TODO: Add success message

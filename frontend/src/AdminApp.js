@@ -18,7 +18,7 @@ const AdminApp = () => {
 
   //   console.log("HELPERINOS")
   //   axios
-  //     .get(`http://localhost:3001/user/authorizeAdmin/${userId}`, config)
+  //     .get(`http://34.125.231.246:3001/user/authorizeAdmin/${userId}`, config)
   //     .then((response) => {
   //       if (response.status === 200) {
   //         dispatch(setIsAuthorized(true))

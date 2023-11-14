@@ -53,7 +53,7 @@ import VideocamIcon from '@mui/icons-material/Videocam'
 import VideoChat from '../components/VideoChat'
 import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 
-const SOCKETSERVER = 'http://localhost:2000'
+const SOCKETSERVER = 'http://34.125.231.246:2000'
 
 const connectionOptions = {
   'force new connection': true,
@@ -151,7 +151,7 @@ function CollabPage () {
   const LeaveRoom = (event) => {
     event.preventDefault()
     axios
-      .post('http://localhost:8000/room/leaveroom', { rid: roomid })
+      .post('http://34.125.231.246:8000/room/leaveroom', { rid: roomid })
       .then((request) => {
         console.log(request)
       })
