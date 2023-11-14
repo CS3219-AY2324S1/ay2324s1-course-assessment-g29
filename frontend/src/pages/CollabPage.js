@@ -1,5 +1,8 @@
 // TODO: check if commented out code is needed
-import { React, useEffect, useRef } from 'react'
+import { React, useState, useEffect, useRef } from 'react'
+import DragHandleIcon from '@mui/icons-material/DragHandle'
+import IconButton from '@mui/material/IconButton'
+import { Paper, Typography } from '@mui/material'
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels'
 import io from 'socket.io-client'
 import axios from 'axios'
@@ -12,7 +15,6 @@ import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import SendIcon from '@mui/icons-material/Send'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
-import { Typography } from '@mui/material'
 import { selectUserid, setPreviousRooms, selectPreviousRooms } from '../redux/UserSlice'
 import Navbar from '../components/Navbar'
 import {
@@ -27,7 +29,9 @@ import {
   selectMessages,
   appendMessages,
   setMessages,
-  setTwilioToken
+  setTwilioToken,
+  setStartVideoChat,
+  selectStartVideoChat
 } from '../redux/MatchingSlice'
 import {
   setErrorMessage,
@@ -46,6 +50,7 @@ import {
 import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
 import VideoChat from '../components/VideoChat'
+import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 
 const SOCKETSERVER = 'http://localhost:2000'
 
@@ -58,6 +63,7 @@ const connectionOptions = {
 
 function CollabPage () {
   const messages = useSelector(selectMessages)
+  const startVideoChat = useSelector(selectStartVideoChat)
   const navigate = useNavigate()
   const userid = useSelector(selectUserid)
   const matchedUserid = useSelector(selectMatchedUserid)
@@ -69,6 +75,7 @@ function CollabPage () {
   const dispatch = useDispatch()
   const socket = useRef()
   const previousRooms = useSelector(selectPreviousRooms)
+  const [turnOffVideo, setTurnOffVideo] = useState(false)
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
@@ -169,6 +176,7 @@ function CollabPage () {
     dispatch(setSucessMessage('Room has been closed'))
     dispatch(setShowSuccess(true))
     dispatch(setQuestionData({}))
+    dispatch(setTwilioToken(null))
     navigate('/')
   }
 
@@ -177,88 +185,148 @@ function CollabPage () {
     dispatch(setChangeQuestionAlertOpen(true))
   }
 
+  const startVideoComponent = (event) => {
+    event.preventDefault()
+    dispatch(setStartVideoChat(true))
+  }
+
+  const stopVideoComponent = (event) => {
+    event.preventDefault()
+    dispatch(setStartVideoChat(false))
+    setTurnOffVideo(true)
+  }
+
   return (
-    <Box display='flex' flexDirection='column' alignContent='flex-start'>
+    <>
       <Navbar />
-      <Box
-        display='flex'
-        style={{ paddingTop: '1rem' }}
-        justifyContent='center'
-        height='100vh'
-        padding='2rem'
-      >
-        <PanelGroup direction='horizontal' autoSaveId='example'>
-          <Panel defaultSize={40} minSize={20} id='question'>
+      <PanelGroup direction='horizontal' style={{ display: 'flex', justifyItems: 'stretch', width: '100%', height: '100%' }}>
+        <Panel defaultSize={50} minSize={30} id='question' style={{ height: '100%', width: '100%' }}>
+          <Paper
+            elevation={2}
+            sx={{
+              flex: 1,
+              overflow: 'auto',
+              padding: 3,
+              marginBottom: 2,
+              height: '90%',
+              marginTop: 1.5,
+              marginRight: 1,
+              marginLeft: 3
+            }}
+          >
+            <QuestionComponent questionData={questionData} />
+            <Box marginBottom={1} marginTop={1}>
+              <Typography variant='body2' component='h2'>
+                You're currently matched with {matchedUserid}
+              </Typography>
+            </Box>
+            <Typography variant='body2' component='h2'>
+              Common Programming Languages:{' '}
+              {matchingLanguages.length > 0 &&
+                matchingLanguages.map((language, i) => (
+                  <Chip key={i} label={language} />
+                ))}
+            </Typography>
+          </Paper>
+        </Panel>
+        <PanelResizeHandle style={{ width: '0.5%', backgroundColor: 'transparent', cursor: 'ew-resize', border: 'none' }}>
+          <IconButton
+            style={{
+              width: '100%',
+              height: '100%',
+              background: 'none',
+              border: 'none',
+              cursor: 'ew-resize',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <DragHandleIcon style={{ color: '#333', transform: 'rotate(90deg)', fontSize: '20px' }} />
+          </IconButton>
+        </PanelResizeHandle>
+        <Panel
+          defaultSize={50}
+          minSize={30}
+          id='editor'
+        >
+
+          <Paper
+            elevation={2}
+            sx={{
+              flex: 1,
+              paddingTop: 2,
+              marginBottom: 2,
+              height: '84%',
+              margin: 1.5,
+              marginRight: 3
+            }}
+          >
+            <Editor socketRef={socket} />
+          </Paper>
+
+          <Paper
+            elevation={2}
+            sx={{
+              padding: 1,
+              marginBottom: 2,
+              margin: 1.5,
+              marginRight: 3
+            }}
+          >
             <Box
+              margin={1}
               display='flex'
               flexDirection='row'
-              justifyContent='center'
-              sx={{ p: 2 }}
-            >
-              <Box justifyContent='center'>
-                <Box>
-                  <QuestionComponent questionData={questionData} />
-                  <Box marginBottom={1}>
-                    <Typography variant='body2' component='h2'>
-                      You're currently matched with {matchedUserid}
-                    </Typography>
-                  </Box>
-                  <Typography variant='body2' component='h2'>
-                    Common Programming Languages:{' '}
-                    {matchingLanguages.length > 0 &&
-                      matchingLanguages.map((language, i) => (
-                        <Chip key={i} label={language} />
-                      ))}
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Panel>
-          <PanelResizeHandle />
-          <Panel
-            defaultSize={40}
-            minSize={20} id='editor'
-          >
-            <div
-              display='flex'
-              flexDirection='column'
-              flex={1}
-              height='100vh'
               alignContent='flex-end'
             >
-              <Box margin={1} flex={1}>
-                <Editor socketRef={socket} />
-              </Box>
-              <Box
-                margin={1}
-                display='flex'
-                flexDirection='row'
-                alignContent='flex-end'
+              <Button
+                variant='contained'
+                onClick={LeaveRoom}
+                endIcon={<SendIcon />}
               >
-                <Button
-                  variant='contained'
-                  onClick={LeaveRoom}
-                  endIcon={<SendIcon />}
-                >
-                  Close room
-                </Button>
-                <Box marginRight={1} />
-                <Button
-                  variant='contained'
-                  onClick={changeQuestion}
-                  endIcon={<QuestionMarkIcon />}
-                >
-                  Change question
-                </Button>
-              </Box>
-            </div>
-          </Panel>
-        </PanelGroup>
-      </Box>
+                Close room
+              </Button>
+              <Box marginRight={1} />
+              <Button
+                variant='contained'
+                onClick={changeQuestion}
+                endIcon={<QuestionMarkIcon />}
+              >
+                Change question
+              </Button>
+              <Box marginRight={1} />
+              {startVideoChat
+                ? (
+                  <>
+                    <Button
+                      variant='contained'
+                      onClick={stopVideoComponent}
+                      endIcon={<VideocamOffIcon />}
+                    >
+                      Stop Video Chat
+                    </Button>
+                  </>
+                  )
+                : (
+                  <>
+                    <Button
+                      variant='contained'
+                      onClick={startVideoComponent}
+                      endIcon={<VideocamIcon />}
+                    >
+                      Start Video Chat
+                    </Button>
+                  </>
+                  )}
+            </Box>
+          </Paper>
+        </Panel>
+      </PanelGroup>
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
-      <VideoChat />
-    </Box>
+      <VideoChat stopVideo={turnOffVideo} setStopVideo={setTurnOffVideo} />
+    </>
   )
 }
 

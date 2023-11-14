@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const matchingSlice = createSlice({
   name: 'match',
   initialState: {
+    startVideoChat: false,
     twilioToken: null,
     awaitingMatching: false,
     difficulty: '',
@@ -13,6 +14,9 @@ export const matchingSlice = createSlice({
     questionData: {}
   },
   reducers: {
+    setStartVideoChat: (state, action) => {
+      state.startVideoChat = action.payload
+    },
     setTwilioToken: (state, action) => {
       state.twilioToken = action.payload
     },
@@ -54,7 +58,10 @@ export const matchingSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setTwilioToken, resetMatchingStore } = matchingSlice.actions
+
+export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setTwilioToken, setStartVideoChat, resetMatchingStore } = matchingSlice.actions
+
+export const selectStartVideoChat = (state) => state.match.startVideoChat
 
 export const selectTwilioToken = (state) => state.match.twilioToken
 

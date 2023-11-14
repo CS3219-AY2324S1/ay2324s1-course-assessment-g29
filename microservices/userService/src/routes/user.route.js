@@ -14,7 +14,6 @@ router.post('/register', async (req, res) => {
     const userRecord = await userController.registerUser({ name, username, email, password })
     res.status(201).json({ message: 'User registered successfully', user: userRecord })
   } catch (error) {
-    console.log(error)
     res.status(400).json({ error: error.message })
   }
 })
@@ -127,7 +126,7 @@ router.get('/authorizeAdmin/:uid', async (req, res) => {
     await tokenManager.authorizeAdmin(req, res, () => {})
     res.status(200).json({ message: 'Authorized' })
   } catch (error) {
-    return res
+    res.status(400).json({ message: 'Unauthorized' })
   }
 })
 
