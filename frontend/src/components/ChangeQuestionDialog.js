@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { selectChangeQuesitonAlertOpen, setChangeQuestionAlertOpen, setAwaitChangeQuestionOpen } from '../redux/EditorSlice'
+import { selectChangeQuesitonAlertOpen, setChangeQuestionAlertOpen } from '../redux/EditorSlice'
 import { setShowError, setErrorMessage } from '../redux/ErrorSlice'
 import QuestionTable from './QuestionTable'
 import { Modal } from 'antd'
+import { setQuestionData } from '../redux/MatchingSlice'
 
 export default function ChangeQuestionDialog ({ socket }) {
   const dispatch = useDispatch()
@@ -18,7 +19,7 @@ export default function ChangeQuestionDialog ({ socket }) {
   const signalChangeQuestion = (question) => {
     socket.current.emit('ChangeQuestionData', { questionData: question })
     dispatch(setChangeQuestionAlertOpen(false))
-    dispatch(setAwaitChangeQuestionOpen(true))
+    dispatch(setQuestionData(question))
   }
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 // TODO: check if commented out code is needed
-import { React, useEffect, useRef } from 'react'
+import { React, useState, useEffect, useRef } from 'react'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import IconButton from '@mui/material/IconButton'
 import { Paper, Typography } from '@mui/material'
@@ -29,8 +29,9 @@ import {
   selectMessages,
   appendMessages,
   setMessages,
-  setIsInitiator,
-  setTwilioToken
+  setTwilioToken,
+  setStartVideoChat,
+  selectStartVideoChat
 } from '../redux/MatchingSlice'
 import {
   setErrorMessage,
@@ -40,25 +41,17 @@ import {
 } from '../redux/ErrorSlice'
 // import Fab from '@mui/material/Fab'
 import {
-  setAwaitAlertOpen,
-  selectNewProgrammingLanguage,
   selectCodeEditorLanguage,
   setCode,
   selectCode,
   setCodeEditorLanguage,
-  setNewProgrammingLanguage,
-  setChangeProgrammingLanguageAlert,
-  setChangeQuestionAlertOpen,
-  setCheckChangeQuestionData,
-  setChangeQuestionData,
-  setAwaitChangeQuestionOpen
+  setChangeQuestionAlertOpen
 } from '../redux/EditorSlice'
-import ProgrammingLanguageDialog from '../components/ChangeProgrammingLanguageAlert'
 import ChangeQuestionDialog from '../components/ChangeQuestionDialog'
 import ChatComponent from '../components/ChatComponent'
-import AwaitChangeQuestionDialog from '../components/AwaitChangeQuestionData'
-import CheckChangeQuestionDataDialog from '../components/CheckChangeQuestionDataDialog'
+import VideocamIcon from '@mui/icons-material/Videocam'
 import VideoChat from '../components/VideoChat'
+import VideocamOffIcon from '@mui/icons-material/VideocamOff'
 
 const SOCKETSERVER = 'http://34.125.231.246:2000'
 
@@ -70,10 +63,9 @@ const connectionOptions = {
 }
 
 function CollabPage () {
-  // const [message, setMessage] = useState('')
   const messages = useSelector(selectMessages)
+  const startVideoChat = useSelector(selectStartVideoChat)
   const navigate = useNavigate()
-  const newProgrammingLanguage = useSelector(selectNewProgrammingLanguage)
   const userid = useSelector(selectUserid)
   const matchedUserid = useSelector(selectMatchedUserid)
   const roomid = useSelector(selectRoomid)
@@ -84,13 +76,14 @@ function CollabPage () {
   const dispatch = useDispatch()
   const socket = useRef()
   const previousRooms = useSelector(selectPreviousRooms)
+  const [turnOffVideo, setTurnOffVideo] = useState(false)
 
   useEffect(() => {
     socket.current = io(SOCKETSERVER, connectionOptions)
 
     socket.current.on('connect', () => {
       console.log('connecting to websocket server')
-      socket.current.emit('JoinRoom', { userid, roomid }, (error) => {
+      socket.current.emit('JoinRoom', { userid, roomid, questionData }, (error) => {
         if (error) {
           dispatch(setErrorMessage(error))
           dispatch(setShowError(true))
@@ -101,7 +94,7 @@ function CollabPage () {
 
     socket.current.on(
       'MatchSuccess',
-      ({ matchedUserId, messages, code, language, isInitiator, twilioToken }) => {
+      ({ matchedUserId, messages, code, language, twilioToken, questionData }) => {
         console.log(matchedUserId)
         console.log(messages)
         console.log(code)
@@ -111,9 +104,8 @@ function CollabPage () {
         dispatch(setMessages(messages))
         dispatch(setCode(code))
         dispatch(setCodeEditorLanguage(language))
-        dispatch(setAwaitChangeQuestionOpen(false))
+        dispatch(setQuestionData(questionData))
         dispatch(setTwilioToken(twilioToken))
-        dispatch(setIsInitiator(isInitiator))
       }
     )
 
@@ -137,52 +129,16 @@ function CollabPage () {
       dispatch(setCode(code.code))
     })
 
-    socket.current.on('CheckQuestionChange', ({ questionData }) => {
+    socket.current.on('ChangeQuestionData', ({ questionData }) => {
+      console.log('Changing Question Data')
       console.log(questionData)
-      dispatch(setChangeQuestionData(questionData))
-      dispatch(setCheckChangeQuestionData(true))
+      dispatch(setCode('Please choose a language to begin!\n'))
+      dispatch(setQuestionData(questionData))
     })
 
-    socket.current.on('ConfirmChangeQuestion', ({ agree, questionData }) => {
-      console.log('matched user has responded:')
-      console.log(agree)
-      console.log(questionData)
-      if (agree) {
-        dispatch(setCode('Please choose a language to begin!\n'))
-        dispatch(setQuestionData(questionData))
-        dispatch(setChangeQuestionData({}))
-      } else {
-        dispatch(
-          setErrorMessage(
-            `${matchedUserid} has declined to change the question`
-          )
-        )
-        dispatch(setShowError(true))
-      }
-      dispatch(setAwaitChangeQuestionOpen(false))
-    })
-
-    socket.current.on('CheckChangeEditorLanguage', ({ language }) => {
-      dispatch(setNewProgrammingLanguage(language))
-      dispatch(setChangeProgrammingLanguageAlert(true))
-    })
-
-    socket.current.on('ConfirmChangeEditorLanguage', ({ agree, language }) => {
-      console.log('matched user has responded:')
-      console.log(agree)
-      console.log(language)
-      if (agree) {
-        dispatch(setCodeEditorLanguage(language))
-        dispatch(setAwaitAlertOpen(false))
-      } else {
-        dispatch(setAwaitAlertOpen(false))
-        dispatch(
-          setErrorMessage(
-            `${matchedUserid} has declined to change the programming language`
-          )
-        )
-        dispatch(setShowError(true))
-      }
+    socket.current.on('ChangeEditorLanguage', ({ language }) => {
+      console.log('Changing Editor Language')
+      dispatch(setCodeEditorLanguage(language))
     })
 
     socket.current.on('DisconnectPeer', (message) => {
@@ -221,43 +177,24 @@ function CollabPage () {
     dispatch(setSucessMessage('Room has been closed'))
     dispatch(setShowSuccess(true))
     dispatch(setQuestionData({}))
+    dispatch(setTwilioToken(null))
     navigate('/')
-  }
-
-  const denyProgrammingLanguageChange = () => {
-    console.log('disagree change')
-    socket.current.emit(
-      'ConfirmChangeEditorLanguage',
-      { agree: false, language: newProgrammingLanguage },
-      (error) => {
-        if (error) {
-          dispatch(setErrorMessage(error))
-          dispatch(setShowError(true))
-        }
-      }
-    )
-    dispatch(setNewProgrammingLanguage(''))
-  }
-
-  const agreeProgrammingLanguageChange = () => {
-    console.log('agree change')
-    socket.current.emit(
-      'ConfirmChangeEditorLanguage',
-      { agree: true, language: newProgrammingLanguage },
-      (error) => {
-        if (error) {
-          dispatch(setErrorMessage(error))
-          dispatch(setShowError(true))
-        }
-      }
-    )
-    dispatch(setNewProgrammingLanguage(''))
-    dispatch(setCodeEditorLanguage(newProgrammingLanguage))
   }
 
   const changeQuestion = (event) => {
     event.preventDefault()
     dispatch(setChangeQuestionAlertOpen(true))
+  }
+
+  const startVideoComponent = (event) => {
+    event.preventDefault()
+    dispatch(setStartVideoChat(true))
+  }
+
+  const stopVideoComponent = (event) => {
+    event.preventDefault()
+    dispatch(setStartVideoChat(false))
+    setTurnOffVideo(true)
   }
 
   return (
@@ -359,23 +296,37 @@ function CollabPage () {
               >
                 Change question
               </Button>
+              <Box marginRight={1} />
+              {startVideoChat
+                ? (
+                  <>
+                    <Button
+                      variant='contained'
+                      onClick={stopVideoComponent}
+                      endIcon={<VideocamOffIcon />}
+                    >
+                      Stop Video Chat
+                    </Button>
+                  </>
+                  )
+                : (
+                  <>
+                    <Button
+                      variant='contained'
+                      onClick={startVideoComponent}
+                      endIcon={<VideocamIcon />}
+                    >
+                      Start Video Chat
+                    </Button>
+                  </>
+                  )}
             </Box>
           </Paper>
-
         </Panel>
       </PanelGroup>
-      <ProgrammingLanguageDialog
-        matchedUserId={matchedUserid}
-        language={newProgrammingLanguage}
-        denyChange={denyProgrammingLanguageChange}
-        agreeChange={agreeProgrammingLanguageChange}
-      />
-      <AwaitChangeQuestionDialog matchedUserId={matchedUserid} />
-      <CheckChangeQuestionDataDialog socket={socket} matchedUserId={matchedUserid} />
       <ChangeQuestionDialog socket={socket} />
       <ChatComponent socket={socket} />
-
-      <VideoChat />
+      <VideoChat stopVideo={turnOffVideo} setStopVideo={setTurnOffVideo} />
     </>
   )
 }

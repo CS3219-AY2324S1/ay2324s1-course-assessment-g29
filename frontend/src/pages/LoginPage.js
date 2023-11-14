@@ -64,9 +64,6 @@ function LoginPage () {
       dispatch(setLoginStatus(true))
       navigate('/home')
     } catch (error) {
-      // dispatch(setErrorMessage(error.message)); // TODO handle firebase errors (give better descriptions)
-      // dispatch(setShowError(true));
-
       setLoginError(true)
       setIsDialogOpen(true)
     }
@@ -140,7 +137,7 @@ function LoginPage () {
           <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
             <DialogContent>
               <Typography variant='body1'>
-                Incorrect Password or email. Please try again.
+                Incorrect email or password. Please try again.
               </Typography>
             </DialogContent>
             <DialogActions>

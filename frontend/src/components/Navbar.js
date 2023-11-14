@@ -5,14 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import {
   selectLoginstatus,
   selectDisplayname,
-  setUserid,
-  setStateEmail,
-  setDisplayname,
-  setLoginStatus,
   selectEmail,
   selectIdToken,
   selectUserid,
-  setChangeDeactivateAccountAlert
+  setChangeDeactivateAccountAlert,
+  resetUserStore
 } from '../redux/UserSlice'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -29,8 +26,10 @@ import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import { Dialog, DialogActions } from '@mui/material'
 import DialogContent from '@mui/material/DialogContent'
-import { setShowError, setErrorMessage } from '../redux/ErrorSlice.js'
+import { setShowError, setErrorMessage, resetErrorStore } from '../redux/ErrorSlice.js'
 import DeactivateAccountDialog from './DeactivateAccountAlert'
+import { resetEditorStore } from '../redux/EditorSlice'
+import { resetMatchingStore } from '../redux/MatchingSlice'
 
 const pages = []
 
@@ -49,10 +48,10 @@ function Navbar () {
     useState(false)
 
   const handleLogout = (event) => {
-    dispatch(setUserid(''))
-    dispatch(setDisplayname(''))
-    dispatch(setStateEmail(''))
-    dispatch(setLoginStatus(false))
+    dispatch(resetUserStore())
+    dispatch(resetEditorStore())
+    dispatch(resetMatchingStore())
+    dispatch(resetErrorStore())
     setAnchorElUser(null)
     navigate('/')
   }
