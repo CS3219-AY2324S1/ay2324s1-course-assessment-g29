@@ -44,13 +44,25 @@ export const userSlice = createSlice({
     },
     setIsAuthorized: (state, action) => {
       state.isAuthorized = action.payload
+    },
+    resetUserStore: (state, action) => {
+      state.loginStatus = false
+      state.isAuthorized = null
+      state.userid = ''
+      state.displayname = ''
+      state.email = ''
+      state.preferredLanguages = []
+      state.previousRooms = []
+      state.previousQuestions = []
+      state.idToken = ''
+      state.changeDeactivateAccountAlert = false
     }
   }
 })
 
 // Action creators are generated for each case reducer function
 
-export const { setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setPreviousRooms, setPreviousQuestions, setIsAuthorized } = userSlice.actions
+export const { resetUserStore, setStateEmail, setUserid, setDisplayname, setLoginStatus, setPreferredLanguages, setIdToken, setChangeDeactivateAccountAlert, setPreviousRooms, setPreviousQuestions, setIsAuthorized } = userSlice.actions
 
 export const selectLoginstatus = (state) => state.user.loginStatus
 

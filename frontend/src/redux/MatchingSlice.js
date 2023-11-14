@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 export const matchingSlice = createSlice({
   name: 'match',
   initialState: {
-    isInitiator: 'awaiting',
     startVideoChat: false,
     twilioToken: null,
     awaitingMatching: false,
@@ -15,9 +14,6 @@ export const matchingSlice = createSlice({
     questionData: {}
   },
   reducers: {
-    setIsInitiator: (state, action) => {
-      state.isInitiator = action.payload
-    },
     setStartVideoChat: (state, action) => {
       state.startVideoChat = action.payload
     },
@@ -47,18 +43,27 @@ export const matchingSlice = createSlice({
     },
     appendMessages: (state, action) => {
       state.messages = [...state.messages, action.payload]
+    },
+    resetMatchingStore: (state, action) => {
+      state.twilioToken = null
+      state.awaitingMatching = false
+      state.difficulty = ''
+      state.roomid = ''
+      state.messages = []
+      state.matchedUserid = ''
+      state.matchingLanguages = []
+      state.questionData = {}
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setIsInitiator, setTwilioToken, setStartVideoChat } = matchingSlice.actions
+
+export const { setRoomId, setMatchedUserId, setQuestionData, setAwaitingMatching, setDifficulty, setMatchingLanguages, setMessages, appendMessages, setTwilioToken, setStartVideoChat, resetMatchingStore } = matchingSlice.actions
 
 export const selectStartVideoChat = (state) => state.match.startVideoChat
 
 export const selectTwilioToken = (state) => state.match.twilioToken
-
-export const selectIsInitiator = (state) => state.match.isInitiator
 
 export const selectRoomid = (state) => state.match.roomid
 
