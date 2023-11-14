@@ -10,19 +10,10 @@ import {
 const MetricComponent = () => {
   const previousQuestions = useSelector(selectPreviousQuestions)
 
-  // const hasQuestionDone = () => {
-  //   if (previousQuestions === undefined) {
-  //     return false
-  //   } else {
-  //     return true
-  //   }
-  // }
-
   const getEasyQuestion = () => {
     if (previousQuestions === undefined) {
       return 0
     }
-    console.log(previousQuestions)
     return previousQuestions
       .filter(attemptData => attemptData && attemptData.attempt)
       .filter((question) => question.attempt.questionData.difficulty === 'Easy').length

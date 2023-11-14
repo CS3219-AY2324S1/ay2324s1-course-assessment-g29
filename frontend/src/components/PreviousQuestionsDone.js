@@ -28,7 +28,6 @@ const PreviousQuestionsDone = () => {
     axios
       .get(`http://localhost:3001/user/history/${userid}`)
       .then((response) => {
-        console.log(response.data.history)
         const rooms = []
         response.data.history.forEach((room) => {
           rooms.push(room)
@@ -40,7 +39,7 @@ const PreviousQuestionsDone = () => {
         dispatch(setErrorMessage(error.message))
         dispatch(setShowError(true))
       })
-  }, [])
+  }, [dispatch, userid])
 
   useEffect(() => {
     const fetchPromises = previousRooms.map((room) => {
@@ -71,12 +70,20 @@ const PreviousQuestionsDone = () => {
       .catch((error) => {
         console.error(error)
       })
-  }, [previousRooms])
+  }, [previousRooms, dispatch])
 
   const pagination = {
     pageSize: 5,
     showSizeChanger: false
   }
+
+  // const getPartnerId= (userid1, userid2) => {
+  //   if (userid === userid1) {
+  //     return userid2
+  //   } else {
+  //     return userid1
+  //   }
+  // }
 
   const data = () => {
     if (previousQuestions === undefined) {
@@ -102,6 +109,12 @@ const PreviousQuestionsDone = () => {
   }
 
   const columns = [
+    // {
+    //   title: 'Done with',
+    //   dataIndex: 'partnerId',
+    //   key: 'partnerId',
+    //   width: '15%',
+    // },
     {
       title: 'Title',
       dataIndex: 'title',
@@ -139,6 +152,7 @@ const PreviousQuestionsDone = () => {
         <Link to={`/previousAttempt/${record.roomId}`}>{text}</Link>
       )
     },
+
     {
       title: 'Complexity',
       dataIndex: 'complexity',

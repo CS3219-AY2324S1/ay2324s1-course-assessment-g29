@@ -148,7 +148,7 @@ const QuestionTable = ({ questions, setQuestions }) => {
         { text: 'Hash Table', value: 'hash-table' },
         { text: 'Strings', value: 'strings' },
         { text: 'Array', value: 'array' },
-        { text: 'Brainteasers', value: 'brainteasers' }
+        { text: 'Brainteaser', value: 'brainteaser' }
       ],
       onFilter: (value, record) => record.topic.includes(value)
     },
