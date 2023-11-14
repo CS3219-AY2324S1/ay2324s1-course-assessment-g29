@@ -46,7 +46,7 @@ function Profile () {
     }
 
     axios
-      .get(`http://localhost:3001/user/authorizeAdmin/${userid}`, config)
+      .get(`http://34.125.231.246:3001/user/authorizeAdmin/${userid}`, config)
       .then((response) => {
         if (response.status === 200) {
           dispatch(setIsAuthorized(true))
@@ -69,7 +69,7 @@ function Profile () {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/user/getLanguage/${userid}`)
+      .get(`http://34.125.231.246:3001/user/getLanguage/${userid}`)
       .then((response) => {
         const userLanguages = response.data.languages
         dispatch(setPreferredLanguages(userLanguages))
@@ -83,7 +83,7 @@ function Profile () {
   const handleLanguageChange = () => {
     console.log(selectedLanguages)
     axios
-      .post('http://localhost:3001/user/updateLanguage/', {
+      .post('http://34.125.231.246:3001/user/updateLanguage/', {
         uid: userid,
         languages: selectedLanguages
       })

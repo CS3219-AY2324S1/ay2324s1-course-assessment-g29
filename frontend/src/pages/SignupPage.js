@@ -67,7 +67,7 @@ function SignupPage () {
     try {
       requireAllNonNull()
       checkPasswords(password, passwordConfirmation)
-      await axios.post('http://localhost:3001/user/register', {
+      await axios.post('http://34.125.231.246:3001/user/register', {
         name,
         username,
         email,
@@ -90,7 +90,7 @@ function SignupPage () {
       const useremail = userCredentials.user.email
       dispatch(setStateEmail(useremail))
       const idToken = await userCredentials.user.getIdToken()
-      const tokenResult = await axios.post('http://localhost:3001/user/token', {
+      const tokenResult = await axios.post('http://34.125.231.246:3001/user/token', {
         uid: userid,
         idToken
       })

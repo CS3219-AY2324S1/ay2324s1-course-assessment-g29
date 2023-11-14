@@ -17,7 +17,7 @@ function ResetPasswordPage () {
 
   const handleResetPassword = (e) => {
     axios
-      .post('http://localhost:3001/user/resetPassword', { email })
+      .post('http://34.125.231.246:3001/user/resetPassword', { email })
       .then((response) => {
         setIsDialogOpen(true)
         navigate('/')

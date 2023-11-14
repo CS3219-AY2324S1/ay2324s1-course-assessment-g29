@@ -29,7 +29,7 @@ const PreviousQuestionPage = () => {
   // Define an asynchronous function to fetch question data
   const getQuestionData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/room/getHistory/${roomId}`)
+      const response = await axios.get(`http://34.125.231.246:8000/room/getHistory/${roomId}`)
       console.log(response.data.roomInfo.language)
 
       if (response.data.roomInfo.language === '') {

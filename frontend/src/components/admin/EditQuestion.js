@@ -24,7 +24,7 @@ const EditQuestion = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3002/question/getOneByName/${nameId}`)
+      .get(`http://34.125.231.246:3002/question/getOneByName/${nameId}`)
       .then((question) => {
         console.log(question.data)
         setNewTitle(question.data.displayName)
@@ -49,7 +49,7 @@ const EditQuestion = () => {
       topic: values.tags
     }
     axios
-      .patch(`http://localhost:3002/question/update/${nameId}`, questionObject)
+      .patch(`http://34.125.231.246:3002/question/update/${nameId}`, questionObject)
   }
 
   return (

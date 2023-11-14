@@ -60,7 +60,7 @@ function Navbar () {
   const handleResetPassword = (event) => {
     console.log(email)
     axios
-      .post('http://localhost:3001/user/resetPassword', { email })
+      .post('http://34.125.231.246:3001/user/resetPassword', { email })
       .then((response) => {
         setIsPasswordResetDialogOpen(true)
       })
@@ -80,7 +80,7 @@ function Navbar () {
     }
 
     axios
-      .delete(`http://localhost:3001/user/deregister/${userId}`, config)
+      .delete(`http://34.125.231.246:3001/user/deregister/${userId}`, config)
       .then((response) => {
         handleLogout()
       })

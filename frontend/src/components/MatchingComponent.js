@@ -23,7 +23,7 @@ import { selectPreferredLanguages, selectUserid } from '../redux/UserSlice'
 import { setCode } from '../redux/EditorSlice'
 import Card from '@mui/material/Card'
 
-const MATCHINGSERVER = 'http://localhost:4000'
+const MATCHINGSERVER = 'http://34.125.231.246:4000'
 
 const connectionOptions = {
   reconnectionAttempts: 'Infinity',
@@ -47,7 +47,7 @@ function MatchingComponent () {
 
   useEffect(() => {
     axios
-      .post('http://localhost:8000/room/checkroom', { userid })
+      .post('http://34.125.231.246:8000/room/checkroom', { userid })
       .then((response) => {
         const roomid = response.data.room
         const roomdata = response.data.roomdata

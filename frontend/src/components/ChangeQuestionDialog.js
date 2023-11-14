@@ -23,7 +23,7 @@ export default function ChangeQuestionDialog ({ socket }) {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3002/question/getAll')
+      .get('http://34.125.231.246:3002/question/getAll')
       .then((response) => {
         setQuestions(response.data)
       })
