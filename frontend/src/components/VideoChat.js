@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Draggable from 'react-draggable'
-import Video from 'twilio-video'
+import Video, { createLocalVideoTrack } from 'twilio-video'
 import { selectRoomid, selectStartVideoChat, selectTwilioToken, setStartVideoChat, setTwilioToken } from '../redux/MatchingSlice'
 import { ReactComponent as AvatarVideoChat } from '../images/AvatarVideoChat.svg'
+import { Box } from '@mui/system'
 import IconButton from '@mui/material/IconButton'
 import MicIcon from '@mui/icons-material/Mic'
 import MicOffIcon from '@mui/icons-material/MicOff'
@@ -21,13 +22,19 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
 
   useEffect(() => {
     console.log(token)
+    if (token === null && startVideoChat) {
+      console.log('hi')
+      createLocalVideoTrack({ width: 200, height: 120}).then(track => {
+        localVidRef.current.appendChild(track.attach())
+      });
+    }
     if (token !== null && startVideoChat) {
       Video.connect(token, {
         name: roomId,
         audio: true,
         video: {
-          width: 320,
-          height: 180
+          width: 200,
+          height: 120
         }
       }).then(room => {
         roomRef.current = room
@@ -102,17 +109,16 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
 
   useEffect(() => {
     if (stopVideo) {
-      roomRef.current.disconnect()
-      setDisplayRemoteAvatar(true)
-      setStopVideo(false)
+      if (token !== null) {
+        roomRef.current.disconnect()
+        setDisplayRemoteAvatar(true)
+        setStopVideo(false)
+      }
     }
   }, [stopVideo])
 
   useEffect(() => {
     return () => {
-      if (token !== null) {
-        dispatch(setTwilioToken(null))
-      }
       if (roomRef.current) {
         roomRef.current.disconnect()
       }
@@ -154,12 +160,19 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
         <>
           <Draggable
             position={null}
-            positionOffset={{ x: '10%', y: '-170%' }}
+            scale={1}
+            defaultPosition={{x: 0, y: 0}}
           >
-            <div style={{ width: '400px', height: '500px' }}>
+            <div
+              style={{
+                display: 'flex',
+                height: '150px',
+                width: '500px' 
+              }}
+            >
               <div style={{
-                width: '320px',
-                height: '200px',
+                width: '200px',
+                height: '150px',
                 display: 'flex',
                 backgroundColor: '#D2B48C',
                 flexDirection: 'column',
@@ -184,13 +197,12 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
                     </>
                     )}
               </div>
-
-              <h2>Remote Participants</h2>
+              <Box marginRight={2} />
               {displayRemoteAvatar &&
                 <>
                   <div style={{
-                    width: '320px',
-                    height: '180px',
+                    width: '200px',
+                    height: '150px',
                     backgroundColor: '#5D5B5B',
                     display: 'flex',
                     justifyContent: 'center',
@@ -201,7 +213,7 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
                   </div>
                 </>}
               <div id='remote-media-div' ref={remoteVidRef} />
-            </div>
+            </ div>
           </Draggable>
         </>
       )}

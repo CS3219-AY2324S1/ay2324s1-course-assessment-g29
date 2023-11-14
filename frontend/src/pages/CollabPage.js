@@ -227,6 +227,7 @@ function CollabPage () {
     dispatch(setSucessMessage('Room has been closed'))
     dispatch(setShowSuccess(true))
     dispatch(setQuestionData({}))
+    dispatch(setTwilioToken(null))
     navigate('/')
   }
 
