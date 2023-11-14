@@ -375,34 +375,34 @@ function CollabPage () {
                 onClick={changeQuestion}
                 endIcon={<QuestionMarkIcon />}
               >
-                  Change question
+                Change question
               </Button>
-                <Box marginRight={1} />
-                {startVideoChat
-                  ? (
-                    <>
-                      <Button
-                        variant='contained'
-                        onClick={stopVideoComponent}
-                        endIcon={<VideocamOffIcon />}
-                      >
-                        Stop Video Chat
-                      </Button>
-                    </>
-                    )
-                  : (
-                    <>
-                      <Button
-                        variant='contained'
-                        onClick={startVideoComponent}
-                        endIcon={<VideocamIcon />}
-                      >
-                        Start Video Chat
-                      </Button>
-                    </>
-                    )}
-              </Box>
-            </Paper>
+              <Box marginRight={1} />
+              {startVideoChat
+                ? (
+                  <>
+                    <Button
+                      variant='contained'
+                      onClick={stopVideoComponent}
+                      endIcon={<VideocamOffIcon />}
+                    >
+                      Stop Video Chat
+                    </Button>
+                  </>
+                  )
+                : (
+                  <>
+                    <Button
+                      variant='contained'
+                      onClick={startVideoComponent}
+                      endIcon={<VideocamIcon />}
+                    >
+                      Start Video Chat
+                    </Button>
+                  </>
+                  )}
+            </Box>
+          </Paper>
         </Panel>
       </PanelGroup>
       <ProgrammingLanguageDialog

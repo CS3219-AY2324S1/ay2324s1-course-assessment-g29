@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Draggable from 'react-draggable'
 import Video, { createLocalVideoTrack } from 'twilio-video'
-import { selectRoomid, selectStartVideoChat, selectTwilioToken, setStartVideoChat, setTwilioToken } from '../redux/MatchingSlice'
+import { selectRoomid, selectStartVideoChat, selectTwilioToken, setStartVideoChat } from '../redux/MatchingSlice'
 import { ReactComponent as AvatarVideoChat } from '../images/AvatarVideoChat.svg'
 import { Box } from '@mui/system'
 import IconButton from '@mui/material/IconButton'
@@ -24,9 +24,9 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
     console.log(token)
     if (token === null && startVideoChat) {
       console.log('hi')
-      createLocalVideoTrack({ width: 200, height: 120}).then(track => {
+      createLocalVideoTrack({ width: 200, height: 120 }).then(track => {
         localVidRef.current.appendChild(track.attach())
-      });
+      })
     }
     if (token !== null && startVideoChat) {
       Video.connect(token, {
@@ -161,13 +161,13 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
           <Draggable
             position={null}
             scale={1}
-            defaultPosition={{x: 0, y: 0}}
+            defaultPosition={{ x: 0, y: 0 }}
           >
             <div
               style={{
                 display: 'flex',
                 height: '150px',
-                width: '500px' 
+                width: '500px'
               }}
             >
               <div style={{
@@ -213,7 +213,7 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
                   </div>
                 </>}
               <div id='remote-media-div' ref={remoteVidRef} />
-            </ div>
+            </div>
           </Draggable>
         </>
       )}
