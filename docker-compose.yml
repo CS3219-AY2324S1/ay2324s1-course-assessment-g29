@@ -1,0 +1,73 @@
+version: '3.7'
+
+services:
+  userservice:
+    build:
+      context: ./microservices/userService
+      dockerfile: userService.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '3001:3001' 
+    restart: always
+
+  questionservice:
+    build:
+      context: ./microservices/questionService
+      dockerfile: questionService.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '3002:3002' 
+    restart: always
+
+  matchingservice:
+    build:
+      context: ./microservices/matchingService
+      dockerfile: matchingService.Dockerfile
+    depends_on:
+      - roomservice
+    networks:
+      - some-net
+    ports:
+      - '4000:4000' 
+    restart: always
+      
+  roomservice:
+    build:
+      context: ./microservices/roomService
+      dockerfile: roomService.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '8000:8000'
+    restart: always
+
+  collabservice:
+    build:
+      context: ./microservices/collabService
+      dockerfile: collabService.Dockerfile
+    networks:
+      - some-net
+    ports:
+      - '2000:2000'  
+    restart: always
+
+  # frontend:
+  #   build:
+  #     context: ./frontend/
+  #     dockerfile: frontend.Dockerfile
+  #   depends_on:
+  #     - collabservice
+  #     - roomservice
+  #     - matchingservice
+  #     - userservice
+  #   ports:
+  #    - '3000:3000'  
+  #   networks:
+  #     - some-net
+  #   restart: always
+
+networks:
+  some-net:
+    name: peerprep_network
