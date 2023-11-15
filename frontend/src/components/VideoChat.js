@@ -72,9 +72,6 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
           })
 
           participant.on('trackSubscribed', track => {
-            if (remoteVidRef.current && remoteVidRef.current.firstChild) {
-              remoteVidRef.current.removeChild(remoteVidRef.current.firstChild)
-            }
             remoteVidRef.current.appendChild(track.attach())
             setDisplayRemoteAvatar(false)
           })
@@ -110,7 +107,9 @@ const VideoComponent = ({ stopVideo, setStopVideo }) => {
   useEffect(() => {
     if (stopVideo) {
       if (token !== null) {
-        roomRef.current.disconnect()
+        if (roomRef.current) {
+          roomRef.current.disconnect()
+        }
         setDisplayRemoteAvatar(true)
         setStopVideo(false)
       }
